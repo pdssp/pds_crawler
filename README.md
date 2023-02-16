@@ -8,7 +8,21 @@
 
 ETL to index PDS data to pdssp
 
-`` `mermaid graph TD     A[PDS ODE Web Service - collection] --> |JSON| D(Extraction)     B[PDS ODE Web Service - records] --> |JSON| E(Extraction)     C[PDS ODE Web Site] --> |REFERENCE_CATALOG, MISSION_CATALOG,<br>PERSONNEL_CATALOG, INSTRUMENT_CATALOG,<br>INSTRUMENT_HOST_CATALOG,DATA_SET_CATALOG,<br>VOL_DESC, DATA_SET_MAP_PROJECTION_CATALOG| F(Extraction)     E(Extraction) --> |Files| H[Storage File System]     F(Extraction) --> |Files| M[Storage File System]     D(Extraction) --> |JSON PdsRegistryModel| I[HDF5]     I[HDF5] --> |PdsRegistryModel| N[Transform]     M[Storage File System] --> |PdsRecordsModel, DataSetMapProjectionModel,<br>MissionModel, ReferencesModel,<br>PersonnelsModel, VolumeModel,<br>InstrumentModel, InstrumentHostModel,<br>DataSetModel| L[Transform]     H[Storage File System] --> |PdsRecordModel| N[Transform]     I[HDF5] --> |PdsRegistryModel| L[Transform]     N[Transform] --> |STAC Item, STAC Collection, STAC Catalog| O[STAC repository]     L[Transform] --> |STAC Collection, STAC Catalog| O[STAC repository] ``\`
+```mermaid 
+graph TD     
+  A[PDS ODE Web Service - collection] --> |JSON| D(Extraction)     
+  B[PDS ODE Web Service - records] --> |JSON| E(Extraction)     
+  C[PDS ODE Web Site] --> |REFERENCE_CATALOG, MISSION_CATALOG,<br>PERSONNEL_CATALOG, INSTRUMENT_CATALOG,<br>INSTRUMENT_HOST_CATALOG,DATA_SET_CATALOG,<br>VOL_DESC, DATA_SET_MAP_PROJECTION_CATALOG| F(Extraction)     
+  E(Extraction) --> |Files| H[Storage File System]     
+  F(Extraction) --> |Files| M[Storage File System]     
+  D(Extraction) --> |JSON PdsRegistryModel| I[HDF5]     
+  I[HDF5] --> |PdsRegistryModel| N[Transform]     
+  M[Storage File System] --> |PdsRecordsModel, DataSetMapProjectionModel,<br>MissionModel, ReferencesModel,<br>PersonnelsModel, VolumeModel,<br>InstrumentModel, InstrumentHostModel,<br>DataSetModel| L[Transform]     
+  H[Storage File System] --> |PdsRecordModel| N[Transform]     
+  I[HDF5] --> |PdsRegistryModel| L[Transform]     
+  N[Transform] --> |STAC Item, STAC Collection, STAC Catalog| O[STAC repository]     
+  L[Transform] --> |STAC Collection, STAC Catalog| O[STAC repository] 
+  ```
 
 ## Stable release
 
