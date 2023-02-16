@@ -16,5 +16,6 @@ pytest-html==3.1.1
 Sphinx==4.3.1
 sphinx-bootstrap-theme==0.8.0
 sphinx_rtd_theme
+sphinxcontrib-mermaid==0.8
 sphinxcontrib-plantuml
 tox==3.24.4
