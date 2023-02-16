@@ -1,0 +1,152 @@
+// Grammar for mission file
+
+start               : pds_version ( revision_note | record_type | mission | properties )+ "END"
+pds_version         : "PDS_VERSION_ID" "=" "PDS3"
+revision_note       : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type         : "RECORD_TYPE" "=" standard_value
+
+// MISSION
+// --------
+// The MISSION catalog object is used to submit information about a mission or observing
+// campaign to PDS. Sub-objects are included for identifying associated instrument hosts, targets,
+// and references.
+//
+// 1 Required Keywords
+//  1. MISSION_NAME
+//
+// 2 Optional Keywords
+//  None
+//
+// 3 Required Objects
+//  1. MISSION_HOST
+//  2. MISSION_INFORMATION
+//  3. MISSION_REFERENCE_INFORMATION
+//
+// 4 Optional Objects
+//  None
+//
+// 5 Usage Notes
+//  One MISSION_INFORMATION catalog object must be completed for each mission. A
+//  MISSION_HOST catalog object must be completed for each mission host associated with the
+//  mission, and one MISSION_REFERENCE_INFORMATION catalog object is required for each
+//  individual reference associated with the mission (e.g., articles, papers, memoranda, published
+//  data, etc.). All references should be included that are relevant to providing more detailed /
+//  specific mission information; such as, description of the mission, phases of the mission, mission
+//  objectives, mission documentation, review results, etc. These references may include published
+//  articles, books, papers, electronic publications, etc.
+
+mission             :  mission_start properties mission_information mission_host mission_reference_informations mission_stop
+mission_start.1     : "OBJECT" "=" "MISSION"
+mission_stop.1      : "END_OBJECT" "=" "MISSION"
+
+// MISSION_INFORMATION
+// -------------------
+// The MISSION_INFORMATION object, a sub-object of the MISSION catalog object, provides
+// start and stop times and text descriptions of a mission (or observing campaign) and its objectives.
+// Suggested content includes agency involvement, spacecraft/observatory utilized, mission
+// scenario including phases, technology and scientific objectives.
+//
+// 1 Required Keywords
+//  1. MISSION_ALIAS_NAME
+//  2. MISSION_DESC
+//  3. MISSION_OBJECTIVES_SUMMARY
+//  4. MISSION_START_DATE
+//  5. MISSION_STOP_DATE
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+//
+//  5 Usage notes
+//      The following paragraph headings and suggested contents for the MISSION_DESC and
+//      MISSION_OBJECTIVES_SUMMARY text are strongly recommended as the minimal set of
+//      information necessary to adequately describe a mission or observing campaign. Additional
+//      headings may be added as needed.
+
+mission_information         : mission_information_start properties mission_information_stop
+mission_information_start.1 : "OBJECT" "=" "MISSION_INFORMATION"
+mission_information_stop.1  : "END_OBJECT" "=" "MISSION_INFORMATION"
+
+// MISSION_HOST
+// ------------
+// The MISSION_HOST object, a sub-object of the MISSION catalog object, is completed for each
+// instrument host associated with a mission or observing campaign. If there is more than one
+// instrument host involved in the mission, this object is repeated.
+//
+// 1 Required Keywords
+//      1. INSTRUMENT_HOST_ID
+//
+// 2 Optional Keywords
+//      None
+//
+// 3 Required Objects
+//      1. MISSION_TARGET
+//
+// 4 Optional Objects
+//      None
+
+mission_host            : mission_host_start properties mission_targets mission_host_stop
+mission_host_start.1    : "OBJECT" "=" "MISSION_HOST"
+mission_host_stop.1     : "END_OBJECT" "=" "MISSION_HOST"
+
+// MISSION_TARGET
+// The MISSION_TARGET object, a sub-object of the MISSION_HOST catalog object, associates
+// a target with a mission host. One MISSION_TARGET catalog object is completed for each
+// target associated with a mission host.
+//
+// 1 Required Keywords
+//      1. TARGET_NAME
+//
+// 2 Optional Keywords
+//      None
+//
+// 3 Required Objects
+//      None
+//
+// 4 Optional Objects
+//      None
+
+mission_targets         : mission_target*
+mission_target          : mission_target_start properties mission_target_stop
+mission_target_start.1  : "OBJECT" "=" "MISSION_TARGET"
+mission_target_stop.1   : "END_OBJECT" "=" "MISSION_TARGET"
+
+// MISSION_REFERENCE_INFORMATION
+// -----------------------------
+// The MISSION_REFERENCE_INFORMATION object, a sub-object of the MISSION catalog
+// object, associates a reference with a mission. A separate object must be completed for each
+// reference cited within the MISSION catalog object.
+// A separate REFERENCE catalog object is completed to provide the associated citation for each
+// reference.
+//
+// 1 Required Keywords
+//      1. REFERENCE_KEY_ID
+//      Note: If there are no relevant references to cite, the REFERENCE_KEY_ID should have a value
+//      of "N/A".
+//
+// 2 Optional Keywords
+//      None
+//
+// 3 Required Objects
+//      None
+//
+// 4 Optional Objects
+//      None
+
+mission_reference_informations          : mission_reference_information*
+mission_reference_information           : mission_reference_information_start properties mission_reference_information_stop
+mission_reference_information_start.1   : "OBJECT" "=" "MISSION_REFERENCE_INFORMATION"
+mission_reference_information_stop.1    : "END_OBJECT" "=" "MISSION_REFERENCE_INFORMATION"
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

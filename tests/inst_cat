@@ -1,0 +1,193 @@
+PDS_VERSION_ID       = PDS3
+LABEL_REVISION_NOTE  = "S. SLAVNEY, 1998-09-10;
+                        G. NEUMANN, 2003-02-26"
+RECORD_TYPE          = STREAM
+
+OBJECT               = INSTRUMENT
+  INSTRUMENT_HOST_ID = MGS
+  INSTRUMENT_ID      = MOLA
+
+  OBJECT             = INSTRUMENT_INFORMATION
+    INSTRUMENT_NAME  = "MARS ORBITER LASER ALTIMETER"
+    INSTRUMENT_TYPE  = "LASER ALTIMETER"
+    INSTRUMENT_DESC  = "
+
+
+  Instrument Overview
+  ===================
+
+  The principal components of MOLA are a diode-pumped, Nd:YAG laser
+  transmitter that emits 1.064 micrometer wavelength laser pulses, a
+  0.5 m diameter telescope, a silicon avalanche photodiode detector,
+  and a time interval unit with 10 nsec resolution. Additional delay
+  fibers increase the effective resolution to 2.5 ns. When in the
+  Mapping Phase of the mission, MOLA provides measurements of the
+  topography of Mars within approximately 160 m footprints and a
+  center-to-center along-track footprint spacing of 300 m along the
+  MGS nadir ground-track.  Range measurements, with an effective
+  resolution of 37 cm, are converted to profiles of planetary radius
+  and topographic height after correction for orbit and pointing errors.
+  Radial accuracy of individual profiles is approximately 1 m RMS, as
+  determined by altimetric crossovers, and shot locations are determined
+  to within 100 m in the along-track and across-track directions.
+  MOLA profiles have been assembled into global grids referenced to Mars'
+  center-of-mass, with resolutions of up to 1/128 degree per pixel,
+  although at this density some interpolation is required across-track.
+  Other standard data products will include near-global grids of
+  footprint-scale roughness and 1.064 micrometer surface reflectivity.
+  The background solar illumination noise level provides seasonal maps
+  of narrow-band Lambert albedo.
+
+  All components of MOLA except for the laser and telescope have been
+  designed, built and tested at NASA's Goddard Space Flight Center,
+  Greenbelt, MD.
+
+
+  MOLA Science Objectives
+  =======================
+
+  The primary MOLA objective is to determine globally the topography
+  of Mars at a level suitable for addressing problems in geology and
+  geophysics [ZUBERETAL1992, SMITHETAL1998].  Secondary objectives
+  include characterizing the 1.064 micrometer wavelength surface
+  reflectivity of Mars to contribute to analyses of global surface
+  mineralogy and seasonal albedo changes.  Other objectives include
+  addressing problems in atmospheric circulation and providing
+  geodetic control and topographic context for the assessment of
+  possible future Mars landing sites.
+
+
+  Instrument Specifications
+  =========================
+
+  The following table summarizes MOLA characteristics.
+
+  Parameter                          Value            Unit
+  ----------------------------------------------------------------
+  Physical Characteristics
+  Volume                              0.15            m^3
+  Mass                               26.18            kg
+  Power (TOTAL)                      28.74            W
+  Heater Power                       10.00            W
+
+  Laser Transmitter
+  Laser type                 Q-switched, diode-pumped Nd:YAG*
+  Wavelength                         1.064            micrometer
+  Laser energy                       20-48            mJ pulse^-1
+  Laser power consumption            13.7             W
+  Pulse width                        ~8.5             ns (FWHM**)
+  Pulse repetition rate              10               sec^-1
+  Beam cross-section                 25x25            mm^2
+  Beam divergence                    0.25             mrad
+
+  Altimeter Receiver
+  Telescope type                     Cassegrain
+  Mirror composition                 Gold-coated beryllium
+  Telescope diameter                 0.5              m
+  Focal length                       0.74             m
+  Detector type          Silicon avalanche photodiode (Si APD)
+  Sensitivity                        1                nW
+  Optical filter                     2.             nm bandpass
+  Field of view                     ~0.85             mrad
+
+  Receiver Electronics
+  Receiver type            Match-filtered leading-edge trigger
+  Time resolution                    2.5              nsec
+  Range resolution                   0.4              m
+  Pulse energy resolution            5%
+
+  Measurements
+  Footprint size (@ 400 km)          120              m
+  Footprint spacing (@ velocity = 3 km/sec)
+ (center-to-center, along-track)   300              m
+
+  Computer
+  Type                               80C86
+  Data rate                          617           bits sec^-1
+
+  * Nd:YAG is neodymium-doped yttrium aluminum garnet.
+  ** FWHM is full width at half maximum.
+  ----------------------------------------------------------------
+
+
+  Operational Considerations
+  ==========================
+
+  The MOLA instrument measures the round-trip time of flight of
+  infrared laser pulses transmitted from the MGS spacecraft to the
+  martian surface.  The instrument normally operates in a single
+  autonomous mode, in which it will produce ranging measurements.
+  Surface topography estimates can be derived from these data, given
+  appropriate corrections for the position and attitude of the
+  spacecraft.
+
+  MOLA's transmitter is a Q-switched, Nd:YAG laser oscillator which is
+  pumped by a 44 bar laser array.  Each bar contains ~1000 AlGaAs
+  (Aluminum, Gallium Arsenide) laser diodes.  The Q-switch controls
+  the emission of the laser, and Nd:YAG refers to the composition of
+  the material that is optically excited to produce laser action:
+  Neodymium-doped Yttrium Aluminum Garnet. The laser emits 8.5-ns-wide
+  (full width at half the maximum pulse amplitude, FWHM) pulses at
+  1.064 micrometers. The pulse repetition rate is 10 Hz, and the
+  pulse energy was 48 mJ at the beginning of the Mapping Phase
+  and 20 mJ at the end of its operation. The laser consumed 13.7 W
+  when operating, and its on-orbit lifetime was 6.7x10^8 laser
+  pulses (~2 years) when the laser firing signal ceased. The failure
+  was traced to loss of gain in a transistor circuit driving the 100 MHz
+  ovenized crystal oscillator, probably a result of aging and radiation
+  damage.
+
+  The development of a space-qualified, long-lifetime laser represents
+  one of the primary engineering challenges associated with MOLA.  For
+  comparison, the ruby flashlamp laser altimeters flown on the Apollo
+  15, 16 and 17 missions [KAULAETAL1972, KAULAETAL1973, KAULAETAL1974]
+  each operated for less than 10^4 laser pulses.  High
+  pulse-repetition-rate lasers with lifetimes on the order of 10^9
+  shots have been made possible due to breakthroughs in solid-state
+  laser technology, resulting in improvements in the peak power,
+  brightness, and availability of semiconductor diodes and arrays
+  [CROSSETAL1987, BYERETAL1988].  The key technological advance has
+  been the replacement of the flashlamp, which is the device that has
+  traditionally been used to pump optical energy into the laser rod,
+  with a highly efficient array of laser diodes.  While flashlamp
+  lasers fail catastrophically, diode-pumped lasers such as MOLA's
+  instead undergo a gradual degradation in energy output as individual
+  pump diodes fail.  Laser diodes also produce the required pump
+  energy only in a narrow region near the laser rod's absorption band,
+  which dramatically improves the laser's electrical to optical
+  efficiency."
+
+
+  END_OBJECT         = INSTRUMENT_INFORMATION
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "BYERETAL1988"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "CROSSETAL1987"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "KAULAETAL1972"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "KAULAETAL1973"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "KAULAETAL1974"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "SMITHETAL1998"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+  OBJECT             = INSTRUMENT_REFERENCE_INFO
+    REFERENCE_KEY_ID = "ZUBERETAL1992"
+  END_OBJECT         = INSTRUMENT_REFERENCE_INFO
+
+END_OBJECT           = INSTRUMENT
+
+END

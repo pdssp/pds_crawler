@@ -1,0 +1,237 @@
+PDS_VERSION_ID                   = PDS3
+LABEL_REVISION_NOTE              = "S. SLAVNEY, 1999-02-24;
+                                    S. SLAVNEY, 1999-04-21"
+RECORD_TYPE                      = STREAM
+
+OBJECT                           = PERSONNEL
+  PDS_USER_ID                    = "JALEXOPOULOS"
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "JIM S. ALEXOPOULOS"
+  LAST_NAME                      = "ALEXOPOULOS"
+  TELEPHONE_NUMBER               = "314-935-8152"
+  ALTERNATE_TELEPHONE_NUMBER     = "314-935-5332"
+  FAX_NUMBER                     = "314-935-7361"
+  INSTITUTION_NAME               = "WASHINGTON UNIVERSITY"
+  NODE_ID                        = "GEOSCIENCE"
+  PDS_AFFILIATION                = "NODE"
+  REGISTRATION_DATE              = 1996-01-01
+  PDS_ADDRESS_BOOK_FLAG          = "Y"
+  ADDRESS_TEXT                   = "Washington University
+                                   Dept. of Earth & Planetary Sciences
+                                   Campus Box 1169
+                                   One Brookings Drive
+                                   St. Louis, MO  63130-4899"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "JIM@WUZZY.WUSTL.EDU"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = "RARVIDSON"
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "RAYMOND E. ARVIDSON"
+  LAST_NAME                      = "ARVIDSON"
+  TELEPHONE_NUMBER               = "314-935-5609"
+  ALTERNATE_TELEPHONE_NUMBER     = "314-935-5679"
+  FAX_NUMBER                     = "314-935-4998"
+  INSTITUTION_NAME               = "WASHINGTON UNIVERSITY"
+  NODE_ID                        = "GEOSCIENCE"
+  PDS_AFFILIATION                = "NODE"
+  REGISTRATION_DATE              = 1988-11-01
+  PDS_ADDRESS_BOOK_FLAG          = "Y"
+  ADDRESS_TEXT                   = "Washington University
+                                   Dept. of Earth & Planetary Sciences
+                                   Campus Box 1169
+                                   One Brookings Drive
+                                   St. Louis, MO  63130-4899"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "ARVIDSON@WUNDER.WUSTL.EDU"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = PJESTER
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "PEGGY L. JESTER"
+  LAST_NAME                      = JESTER
+  TELEPHONE_NUMBER               = "757-824-2093"
+  ALTERNATE_TELEPHONE_NUMBER     = UNK
+  FAX_NUMBER                     = "757-824-1036"
+  INSTITUTION_NAME               = "NASA/GODDARD SPACE FLIGHT CENTER"
+  NODE_ID                        = "N/A"
+  PDS_AFFILIATION                = "DATA PRODUCER"
+  REGISTRATION_DATE              = "N/A"
+  PDS_ADDRESS_BOOK_FLAG          = "N"
+  ADDRESS_TEXT                   = "NASA/Goddard Space Flight Center
+                                   Wallops Flight Facility
+                                   Wallops Island, VA  23337"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "JESTER@OSB1.WFF.NASA.GOV"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = GNEUMANN
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "GREGORY A. NEUMANN"
+  LAST_NAME                      = NEUMANN
+  TELEPHONE_NUMBER               = "301-614-6010"
+  ALTERNATE_TELEPHONE_NUMBER     = "301-614-6026"
+  FAX_NUMBER                     = UNK
+  INSTITUTION_NAME               = "NASA/GODDARD SPACE FLIGHT CENTER"
+  NODE_ID                        = "N/A"
+  PDS_AFFILIATION                = "DATA PRODUCER"
+  REGISTRATION_DATE              = "N/A"
+  PDS_ADDRESS_BOOK_FLAG          = "N"
+  ADDRESS_TEXT                   = "NASA/Goddard Space Flight Center
+                                   Code 926, Space Geodesy
+                                   Greenbelt, MD  20771"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "NEUMANN@THARSIS.GSFC.NASA.GOV"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = "RPHILLIPS"
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "ROGER PHILLIPS"
+  LAST_NAME                      = "PHILLIPS"
+  TELEPHONE_NUMBER               = "314-935-6356"
+  ALTERNATE_TELEPHONE_NUMBER     = "314-935-5332"
+  FAX_NUMBER                     = "314-935-7361"
+  INSTITUTION_NAME               = "WASHINGTON UNIVERSITY"
+  NODE_ID                        = "GEOSCIENCE"
+  PDS_AFFILIATION                = "SUBNODE"
+  REGISTRATION_DATE              = 1994-08-15
+  PDS_ADDRESS_BOOK_FLAG          = "Y"
+  ADDRESS_TEXT                   = "Washington University
+                                   Dept. of Earth & Planetary Sciences
+                                   Campus Box 1169
+                                   One Brookings Drive
+                                   St. Louis, MO  63130-4899"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "PHILLIPS@WUSTITE.WUSTL.EDU"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = "SSLAVNEY"
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "SUSAN H. SLAVNEY"
+  LAST_NAME                      = "SLAVNEY"
+  TELEPHONE_NUMBER               = "314-935-5493"
+  ALTERNATE_TELEPHONE_NUMBER     = "314-935-5679"
+  FAX_NUMBER                     = "314-935-4998"
+  INSTITUTION_NAME               = "WASHINGTON UNIVERSITY"
+  NODE_ID                        = "GEOSCIENCE"
+  PDS_AFFILIATION                = "NODE"
+  REGISTRATION_DATE              = 1988-11-01
+  PDS_ADDRESS_BOOK_FLAG          = "Y"
+  ADDRESS_TEXT                   = "Washington University
+                                   Dept. of Earth & Planetary Sciences
+                                   Campus Box 1169
+                                   One Brookings Drive
+                                   St. Louis, MO  63130-4899"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "SLAVNEY@WUNDER.WUSTL.EDU"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = DSMITH
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "DAVID E. SMITH"
+  LAST_NAME                      = SMITH
+  TELEPHONE_NUMBER               = "301-286-8671"
+  ALTERNATE_TELEPHONE_NUMBER     = UNK
+  FAX_NUMBER                     = UNK
+  INSTITUTION_NAME               = "NASA/GODDARD SPACE FLIGHT CENTER"
+  NODE_ID                        = "N/A"
+  PDS_AFFILIATION                = "DATA PRODUCER"
+  REGISTRATION_DATE              = "N/A"
+  PDS_ADDRESS_BOOK_FLAG          = "N"
+  ADDRESS_TEXT                   = "NASA/Goddard Space Flight Center
+                                   Code 920
+                                   Laboratory for Terrestrial Physics
+                                   Greenbelt, MD  20771"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "DSMITH@THARSIS.GSFC.NASA.GOV"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+
+
+OBJECT                           = PERSONNEL
+PDS_USER_ID                      = MZUBER
+
+  OBJECT                         = PERSONNEL_INFORMATION
+  FULL_NAME                      = "MARIA T. ZUBER"
+  LAST_NAME                      = ZUBER
+  TELEPHONE_NUMBER               = "301-286-2129"
+  ALTERNATE_TELEPHONE_NUMBER     = UNK
+  FAX_NUMBER                     = "301-286-1757"
+  INSTITUTION_NAME               = "NASA/GODDARD SPACE FLIGHT CENTER"
+  NODE_ID                        = "N/A"
+  PDS_AFFILIATION                = "DATA PRODUCER"
+  REGISTRATION_DATE              = "N/A"
+  PDS_ADDRESS_BOOK_FLAG          = "N"
+  ADDRESS_TEXT                   = "NASA/Goddard Space Flight Center
+                                   Mailstop 920.0
+                                   Greenbelt, MD  20771"
+  END_OBJECT                     = PERSONNEL_INFORMATION
+
+  OBJECT                         = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID             = "ZUBER@THARSIS.GSFC.NASA.GOV"
+  ELECTRONIC_MAIL_TYPE           = "INTERNET"
+  PREFERENCE_ID                  = 1
+  END_OBJECT                     = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                       = PERSONNEL
+END

@@ -1,0 +1,146 @@
+// Grammar for instrument file
+
+start           : pds_version ( revision_note | record_type | instrument | properties )+ "END"
+pds_version     : "PDS_VERSION_ID" "=" ("PDS3"|"3")
+revision_note   : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type     : "RECORD_TYPE" "=" standard_value
+
+// INSTRUMENT
+// ----------
+// The INSTRUMENT catalog object is used to submit information about an instrument to PDS.
+// Instruments are typically associated with a particular spacecraft or earth-based host, so the
+// INSTRUMENT_HOST_ID keyword may identify either a valid SPACECRAFT_ID or
+// EARTH_BASE_ID. (In those cases where a specific instrument was mounted on multiple earthbased hosts, the INSTRUMENT_HOST_ID may be multi-valued.) The catalog object includes a
+// text description of the instrument and a sub-object for identifying reference information.
+//
+//  1 Required Keywords
+//      1. INSTRUMENT_HOST_ID
+//      2. INSTRUMENT_ID
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      1. INSTRUMENT_INFORMATION
+//      2. INSTRUMENT_REFERENCE_INFO
+//
+//  4 Optional Objects
+//      None
+//
+//  5 Usage Notes
+// One INSTRUMENT_INFORMATION catalog object must be completed for each instrument.
+// An INSTRUMENT_REFERENCE_INFO catalog object is required for each individual
+// reference associated with the instrument. All references should be included that are relevant to
+// providing more detailed / specific instrument information; such as, description of the instrument,
+// instrument documentation, review results, etc. These references may include published articles,
+// books, papers, electronic publications, etc.
+
+instrument          :  instrument_start properties instrument_information instrument_reference_infos instrument_stop
+instrument_start.1  : "OBJECT" "=" "INSTRUMENT"
+instrument_stop.1   : "END_OBJECT" "=" "INSTRUMENT"
+
+// INSTRUMENT_INFORMATION
+// ----------------------
+// The INSTRUMENT_INFORMATION catalog object provides a description of the instrument.
+//
+//  1 Required Keywords
+//      1. INSTRUMENT_DESC
+//      2. INSTRUMENT_NAME
+//      3. INSTRUMENT_TYPE
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+//
+//  5 Usage Notes
+//      The following paragraph headings and suggested contents for the INSTRUMENT_DESC text
+//      are strongly recommended as the minimal set of information necessary to adequately describe an
+//      instrument. Additional headings may be appropriate for specific instruments and these also may
+//      be added here. Should any of the recommended headings not appear within the description, they
+//      will be considered not applicable to the data set.
+//
+//      Instrument Overview
+//          A high-level description of the characteristics and properties of an instrument
+//      Scientific Objectives
+//          The scientific objectives of data obtained from this instrument
+//      Calibration
+//          Methods/procedures/schedules of instrument calibration (calibration stability, parameters,
+//          etc.)
+//      Operational Considerations
+//          Special circumstances or events that affect the instrument’s ability to acquire high quality
+//          data , and which are reflected in the archive product. For example: spacecraft charging;
+//          thruster firings; contamination from other instruments; air quality; temperatures, etc.
+//      Detectors
+//          General description of the detector(s), including things like type of detector used,
+//          sensitivity and noise levels, detector fields of view, geometric factors, instrument/detector
+//          mounting descriptions (offset angles, pointing positions, etc.)
+//      Electronics
+//          Description of the instrument electronics and internal data processing (A-D converter)
+//      Filters
+//          Description of instrument filters and filter calibrations (filter type, center wavelength,
+//          min/max wavelength), as applicable
+//      Optics
+//          Description of instrument optics (focal lengths, transmittance, diameter, resolution,
+//          t_number, etc.), as applicable
+//      Location
+//          Latitude and longitude location, for earth-based instruments
+//      Operational Modes
+//          Description of instrument configurations for data acquisitions. Description of “modes”
+//          (scan, gain, etc.) of data acquisition and of measured parameter(s) and/or data sampling
+//          rates or schemes used in each mode
+//      Subsystems
+//          Logical subsystems of the instrument, including descriptions of each subsystem, how it’s
+//          used, which “modes” make use of which subsystem, etc.
+//      Measured Parameters
+//          Description of what the instrument measures directly (particle counts, magnetic field
+//          components, radiance, current/voltage ratios, etc.), plus descriptions and definitions of
+//          these measurements (min/max, noise levels, units, time interval between measurements,
+//          etc.)
+//      OTHER - Data Supplier provided: Any other important information in additional headings as
+//      desired (e.g., data reduction, data compression, time-tagging, diagnostics, etc.)
+
+instrument_information          : instrument_information_start properties instrument_information_stop
+instrument_information_start.1  : "OBJECT" "=" ( "INSTRUMENT_INFORMATION" | "INSTINFO" )
+instrument_information_stop.1   : "END_OBJECT" "=" ( "INSTRUMENT_INFORMATION" | "INSTINFO" )
+
+// INSTRUMENT_REFERENCE_INFO
+// -------------------------
+// The INSTRUMENT_REFERENCE_INFO catalog object associates a reference with an
+// instrument description. A separate object must be completed for each reference cited within the
+// INSTRUMENT catalog object. Include any important references such as instrument description
+// and calibration documents. These can be published articles, internal documents or informal
+// memoranda.
+// A separate REFERENCE catalog object is completed to provide the associated citation for each
+// reference.
+//
+//  1 Required Keywords
+//      1. REFERENCE_KEY_ID
+//      Note: If there are no relevant references to cite, the REFERENCE_KEY_ID should have a value
+//      of "N/A".
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+instrument_reference_infos          : instrument_reference_info*
+instrument_reference_info           : instrument_reference_info_start properties instrument_reference_info_stop
+instrument_reference_info_start.1   : "OBJECT" "=" ( "INSTRUMENT_REFERENCE_INFO" | "INSTREFINFO")
+instrument_reference_info_stop.1    : "END_OBJECT" "=" ( "INSTRUMENT_REFERENCE_INFO" | "INSTREFINFO" )
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

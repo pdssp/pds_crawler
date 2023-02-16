@@ -1,0 +1,175 @@
+// Grammar for ref_cat file
+// Note : According to the doc https://pds.nasa.gov/datastandards/pds3/standards/sr/StdRef_20090227_v3.8.pdf
+//        reference should provide the following keyword REFERENCE_KEY_ID and REFERENCE_DESC
+//        In our grammary, instead of parsing REFERENCE_KEY_ID and REFERENCE_DESC, we parse all (key,value)
+
+start           : pds_version ( revision_note | record_type | references | properties )+ "END"
+pds_version     : "PDS_VERSION_ID" "=" "PDS3"
+revision_note   : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type     : "RECORD_TYPE" "=" standard_value
+
+// REFERENCE
+// ---------
+// The REFERENCE catalog object provides a citation and a unique identifier for every journal
+// article, book, chapter, or other reference mentioned in a CATALOG object or one of its
+// components (MISSION, INSTRUMENT HOST, INSTRUMENT, DATA SET, etc.).
+// One REFERENCE catalog object should be completed for each reference associated with a
+// CATALOG (or component) object. Since the goal in generating REFERENCE catalog objects is
+// to provide additional external long-term documentation, care should be exercised in selecting
+// candidate references. Internal documents, informal memoranda, and other unpublished material
+// should be avoided. A REFERENCE should cite published data, such as other PDS archives.
+// Multiple REFERENCE catalog objects are often assembled into a single REF.CAT file to
+// accompany an archive.
+//
+// 1 Required Keywords
+//      1. REFERENCE_KEY_ID
+//      2. REFERENCE_DESC
+//
+// 2 Optional Keywords
+//      None
+//
+// 3 Required Objects
+//      None
+//
+// 4 Optional Objects
+//      None
+//
+// 5 Usage Notes
+// The following examples show how to cite various types of information in REFERENCE catalog
+// objects for PDS archive products. PDS has elected to use the American Geophysical Union
+// (AGU) reference citation formats. The information presented within this section was derived
+// from and complies with AGU’s formats for publication (see www.agu.org/pubs/references.html
+// for more information). For assistance in determining the proper format for a citation that does
+// not fit within one of the categories described here, contact a PDS Data Engineer.
+//
+//      5.1 Materials Appropriate for Inclusion in a REFERENCE Catalog Object
+//      Each article, book, report, electronic collection (CD-ROM or electronic publication), thesis, or
+//      similar publication used in documenting a PDS archival product should be defined by a
+//       REFERENCE catalog object.
+//
+//      5.2 Materials Inappropriate for Inclusion in a REFERENCE Catalog Object
+//      Unpublished materials such as personal communications, unpublished reports, papers presented
+//      at meetings, and manuscripts in preparation or submitted for publication but not yet formally
+//      accepted are not allowed in REFERENCE catalog objects; PDS does not consider them to be
+//      part of the literature. Likewise, internal memoranda and documents should be avoided unless
+//      they can be accessed by outside users. Papers accepted but without final publication data
+//      (volume, page numbers, dates, etc.) are discouraged since the information in the REFERENCE
+//      catalog object would be incomplete and need to be updated later.
+//      In cases where it would be desirable to credit another author or group for contributions or prior
+//      work, an in-line text acknowledgement or citation is acceptable, even when the material is not
+//      readily accessible. If such material is required for understanding the archive, the normal
+//      constraints apply, however.
+//
+//      5.3 Reference List Citations
+//      The most widely accessible source of a particular piece of material should be cited. For
+//      example, if an article exists as an internal publication and in a professional journal, the latter
+//      should be used in the REFERENCE catalog object.
+//
+//      5.4 Construction of REFERENCE_KEY_ID
+//          1. For a single author, the REFERENCE_KEY_ID comprises the author's surname followed
+//          by the year of the publication (e.g., "SMITH1990").
+//          2. For two authors, the REFERENCE_KEY_ID comprises the author's surname followed by
+//          "&" followed by the co-author's surname followed by the year of the publication (e.g.,
+//          "LAUREL&HARDY1990").
+//          3. For more than two authors, the REFERENCE_KEY_ID comprises the first author's
+//          surname followed by "ETAL" followed by the year of the publication (e.g.,
+//          "SMITHETAL1990").
+//          4. If the same author(s) published more than one paper in the same year, the following
+//          applies:
+//              a. The initial publication will have a REFERENCE_KEY_ID as formulated above (e.g.,
+//              "SMITH1990"). Note that the reference uses an implicit "A".
+//              b. Subsequent publications will use the next sequential letter to uniquely identify the
+//              reference:
+//                 - the 2nd publication will be "SMITH1990B",
+//                 - the 3rd publication will be "SMITH1990C".
+//          5. The REFERENCE_KEY_ID value should be enclosed within double quotes.
+//          6. For additional information on formulating a REFERENCE_KEY_ID, check the PDS
+//          Data Dictionary (http://pdsproto.jpl.nasa.gov/onlinecatalog/top.cfm).
+//
+//      5.5 Construction of REFERENCE_DESC
+//          The information included in a REFERENCE catalog object will vary somewhat depending on
+//          the source. The following subsections describe the most common types; contact a PDS Data
+//          Engineer for assistance when encountering a type not described here. Details on constructing the
+//          components of a REFERENCE_DESC value are described in the next section.
+//
+//          5.5.1 Papers in Professional Journals and Other Articles
+//          Citations of articles should include the following information in the order listed:
+//               1. Name(s) of author or authors
+//              2. Title of article
+//              3. Name of periodical
+//              4. Volume and/or issue number
+//              5. First and last pages occupied by article
+//              6. Year of publication
+//
+//          5.5.2 Books and Reports
+//          Citations of books and reports should include the following information, in the order listed:
+//              1. Name(s) of author or authors
+//              2. Title of article or chapter (if only part of book or report is being cited)
+//              3. Title of book or report
+//              4. Volume number (if part of a multivolume series)
+//              5. Edition (if not original)
+//              6. Editor(s) (if any)
+//              7. Report number(s)
+//              8. Page numbers (if only part of book or report is being cited)
+//              9. Publisher's name
+//              10. City of publication
+//              11. Year of publication
+//
+//          5.5.3 Electronic Publications
+//          Certain types of electronic publications may be given as REFERENCE catalog objects. These
+//          include publications on electronic media such as CD-ROM and regularly issued, dated electronic
+//          journals. Data deposited at PDS and National Data Centers (e.g., NSSDC) may also be included.
+//          Because of the ephemeral nature of some electronic media, authors should consult a Data
+//          Engineer if the specific reference (e.g., a website) does not seem to have a traditional hardcopy
+//          analog.
+//
+//              5.5.3.1 Data Sets
+//              REFERENCE catalog objects for data sets that are on deposit at PDS or National Data Centers
+//              (e.g., NSSDC) should include the following information, in the order listed:
+//                  1. Name of author or authors (e.g., Principal Investigator and/or Data Producer)
+//                  2. Name of the data set (e.g., DATA_SET_NAME)
+//                  3. Unique identifier of the data set (e.g., DATA_SET_ID)
+//                  4. Volume and/or issue number (e.g., VOLUME_SET_ID or VOLUME_ID) (optional)
+//                  5. Name of publisher or producer (e.g., NASA Planetary Data System)
+//                  6. Year of publication
+//
+//              5.5.3.2 Physical Media (CD-ROM / DVD-R)
+//              REFERENCE catalog objects for physical media (e.g., CDs or DVDs) should include the
+//              following information, in the order listed:
+//                  1. Name of author or authors (e.g., Principal Investigator and/or Data Producer)
+//                  2. Name of the volume or volume set (e.g., VOLUME_NAME or VOLUME_SET_NAME)
+//                  3. Unique identifier of the volume or volume set (e.g., VOLUME_ID or
+//                  VOLUME_SET_ID)
+//                  4. Name of publisher or producer (e.g., NASA Planetary Data System)
+//                  5. Year of publication
+//
+//              5.5.3.3 Electronic Journal Articles
+//              Material published in regularly issued, dated electronic journals should be referenced similarly to
+//              printed papers (see Papers in Professional Journals and Other Articles, above). Because this
+//              aspect of the Internet is evolving rapidly, PDS does not offer specific recommendations; authors
+//              should contact a Data Engineer for current guidelines. Because the Internet is a dynamic
+//              environment and sites may change or move, PDS cautions that such electronic sources should
+//              have established a record of stability before being considered acceptable for use in REFERENCE
+//              catalog objects.
+//
+//      5.6 REFERENCE_DESC Components
+//          5.6.1 Author Names
+//          For the first author only, the surname is given first, followed by initials. Names of any co-authors
+//          appear in regular order: initials precede the co-author's surname. The word “and” precedes the
+//          last author’s name. Do not include white space between authors' initials (e.g., Kurth, W.S.)
+//          When the number of authors exceeds five, the author list may consist of the first five authors’
+//          names and initials as usual, followed by “and N others”, where “N”, an arabic numeral, is the
+//          number of remaining authors.
+
+references          : reference*
+reference           : reference_start properties reference_stop
+reference_start.1   : "OBJECT" "=" "REFERENCE"
+reference_stop.1    : "END_OBJECT" "=" "REFERENCE"
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

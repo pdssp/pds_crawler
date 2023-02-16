@@ -1,0 +1,103 @@
+// Grammar for instrument host
+
+start           : pds_version (revision_note | record_type | instrument_host | properties)+ "END"
+pds_version     : "PDS_VERSION_ID" "=" "PDS3"
+revision_note   : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type     : "RECORD_TYPE" "=" standard_value
+
+// INSTRUMENT_HOST
+// ---------------
+// The INSTRUMENT_HOST catalog object is used to describe a variety of instrument hosts, such
+// as a spacecraft or an earth-based observatory.
+//
+//  1 Required Keywords
+//      1. INSTRUMENT_HOST_ID
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      1. INSTRUMENT_HOST_INFORMATION
+//      2. INSTRUMENT_HOST_REFERENCE_INFO
+//
+//  4 Optional Objects
+//      None
+//
+//  5 Usage Notes
+//      One INSTRUMENT_HOST_INFORMATION catalog object must be completed for each
+//      instrument host. An INSTRUMENT_HOST_REFERENCE_INFO catalog object is required for
+//      each individual reference associated with the instrument host. All references should be included
+//      that are relevant to providing more detailed / specific instrument host information; such as,
+//      description of the instrument host, instrument host documentation, review results, etc. These
+//      references may include published articles, books, papers, electronic publications, etc
+
+instrument_host         :  instrument_host_start properties instrument_host_information instrument_host_reference_infos instrument_host_stop
+instrument_host_start.1 : "OBJECT" "=" "INSTRUMENT_HOST"
+instrument_host_stop.1  : "END_OBJECT" "=" "INSTRUMENT_HOST"
+
+// INSTRUMENT_HOST_INFORMATION
+// ---------------------------
+// The INSTRUMENT_HOST_INFORMATION object, a sub-object of the
+// INSTRUMENT_HOST catalog object, provides a description of an instrument host. For
+// spacecraft, this typically includes paragraphs on the various subsystems. Earth-based instrument
+// host descriptions generally focus on geographic and facility elements.
+//
+//  1 Required Keywords
+//      1. INSTRUMENT_HOST_DESC
+//      2. INSTRUMENT_HOST_NAME
+//      3. INSTRUMENT_HOST_TYPE
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+//
+//  5 Usage Notes
+//      The INSTRUMENT_HOST_DESC keyword contains a text description of the spacecraft or
+//      ground observatory. It should contain at least one heading, “Instrument Host Overview”. This
+//      section should provide a high-level description of the characteristics and properties of the host.
+//      Other headings and sub-headings may be added as needed.
+
+instrument_host_information         : instrument_host_information_start properties instrument_host_information_stop
+instrument_host_information_start.1 : "OBJECT" "=" "INSTRUMENT_HOST_INFORMATION"
+instrument_host_information_stop.1  : "END_OBJECT" "=" "INSTRUMENT_HOST_INFORMATION"
+
+// INSTRUMENT_HOST_REFERENCE_INFO
+// ------------------------------
+// The INSTRUMENT_HOST_REFERENCE_INFO object, a sub-object of the
+// INSTRUMENT_HOST catalog object, associates a reference with an instrument host. A
+// separate object must be completed for each reference cited within the INSTRUMENT_HOST
+// catalog object.
+// A separate REFERENCE catalog object is completed to provide the associated citation for each
+// reference.
+//
+//  1 Required Keywords
+//      1. REFERENCE_KEY_ID
+//      Note: If there are no relevant references to cite, the REFERENCE_KEY_ID should have a value
+//      of "N/A".
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+instrument_host_reference_infos         : instrument_host_reference_info*
+instrument_host_reference_info          : instrument_host_reference_info_start properties instrument_host_reference_info_stop
+instrument_host_reference_info_start.1  : "OBJECT" "=" "INSTRUMENT_HOST_REFERENCE_INFO"
+instrument_host_reference_info_stop.1   : "END_OBJECT" "=" "INSTRUMENT_HOST_REFERENCE_INFO"
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

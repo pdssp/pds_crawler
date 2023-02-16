@@ -1,0 +1,61 @@
+PDS_VERSION_ID                = PDS3
+RECORD_TYPE                   = STREAM
+
+OBJECT                        = VOLUME
+  VOLUME_SERIES_NAME          = "MESSENGER"
+  VOLUME_SET_NAME             = "MESSENGER MDIS CALIBRATED DATA"
+  VOLUME_SET_ID               = "USA_NASA_PDS_MSGRMDIS_2001"
+  VOLUMES                     = NULL
+  VOLUME_NAME                 = "MESSENGER MDIS CALIBRATED DATA
+                                 ARCHIVE"
+  VOLUME_ID                   = MSGRMDS_2001
+  VOLUME_VERSION_ID           = "VERSION 1"
+  VOLUME_FORMAT               = "NONE"
+  MEDIUM_TYPE                 = "ELECTRONIC"
+  PUBLICATION_DATE            = 2016-05-06
+  DESCRIPTION                 = "
+    MESSENGER MDIS calibrated data. This volume contains MDIS images
+    taken at Earth, Venus and Mercury over the interval 2004-232 (19-Aug)
+    to 2015-120 (30-Apr)."
+
+  MISSION_NAME                = "MESSENGER"
+  SPACECRAFT_NAME             = "MESSENGER"
+  DATA_SET_ID                 = "MESS-E/V/H-MDIS-4-CDR-CALDATA-V1.0"
+
+  OBJECT                      = DATA_PRODUCER
+    INSTITUTION_NAME          = "JOHNS HOPKINS UNIVERSITY APPLIED
+                                 PHYSICS LABORATORY"
+    FACILITY_NAME             = "N/A"
+    FULL_NAME                 = "LOUISE PROCKTER"
+    ADDRESS_TEXT              = "JHU Applied Physics Laboratory
+                                 11100 Johns Hopkins Rd.
+                                 Laurel, MD  20723"
+    TELEPHONE_NUMBER          = "443-778-6769"
+    ELECTRONIC_MAIL_ID        = "Louise.Prockter@jhuapl.edu"
+    ELECTRONIC_MAIL_TYPE      = INTERNET
+  END_OBJECT                  = DATA_PRODUCER
+
+  OBJECT                      = DATA_SUPPLIER
+    INSTITUTION_NAME          = "APPLIED COHERENT TECHNOLOGY"
+    FACILITY_NAME             = "N/A"
+    FULL_NAME                 = "CHRISTOPHER HASH"
+    ADDRESS_TEXT              = "Applied Coherent Technology
+                                 112 Elden Street, Suite K
+                                 Herndon, VA  22070
+                                 USA"
+    TELEPHONE_NUMBER          = "703-742-0294"
+    ELECTRONIC_MAIL_ID        = "chash@actgate.com"
+    ELECTRONIC_MAIL_TYPE      = INTERNET
+  END_OBJECT                  = DATA_SUPPLIER
+
+  OBJECT                      = CATALOG
+    ^MISSION_CATALOG          = "MISSION.CAT"
+    ^INSTRUMENT_HOST_CATALOG  = "INSTHOST.CAT"
+    ^INSTRUMENT_CATALOG       = {"MDIS_WAC_INST.CAT","MDIS_NAC_INST.CAT"}
+    ^DATA_SET_CATALOG         = "MDIS_EDR_DS.CAT"
+    ^REFERENCE_CATALOG        = "REF.CAT"
+    ^PERSONNEL_CATALOG        = "PERSON.CAT"
+  END_OBJECT                  = CATALOG
+
+END_OBJECT                    = VOLUME
+END

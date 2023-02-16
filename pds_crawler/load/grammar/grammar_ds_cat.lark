@@ -1,0 +1,253 @@
+// Grammar for dataset file
+
+start                                   : pds_version ( revision_note | record_type | data_set | properties )+ "END"
+pds_version                             : "PDS_VERSION_ID" "=" "PDS3"
+revision_note                           : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type                             : "RECORD_TYPE" "=" standard_value
+
+// DATA_SET
+// --------------------
+// The DATA_SET catalog object is used to submit information about a data set to the PDS. The
+// DATA_SET object includes a free-form text description of the data set as well as sub-objects for
+// identifying associated targets, hosts, and references.
+//
+//  1 Required Keywords
+//      1. DATA_SET_ID
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      1. DATA_SET_HOST
+//      2. DATA_SET_INFORMATION
+//      3. DATA_SET_REFERENCE_INFORMATION
+//      4. DATA_SET_TARGET
+//      5. DATA_SET_MISSION
+//
+//  4 Optional Objects
+//      None
+//
+//  5 Usage Notes
+//      One DATA_SET_INFORMATION catalog object must be completed for each data set. One
+//      DATA_SET_TARGET catalog object must be completed for each target associated with the data
+//      set. That is, if there is more than one target, this object is repeated. Similarly, one
+//      DATA_SET_HOST catalog object must be completed for each host/instrument pair associated
+//      with the data set, and one DATA_SET_REFERENCE_INFORMATION catalog object is
+//      required for each individual reference associated with the data set. All references should be
+//      included that are relevant to providing more detailed / specific data set information; such as,
+//      description of the data set, calibration procedures, processing software, data set documentation,
+//      review results, etc. These references may include published articles, books, papers, electronic
+//      publications, etc.
+//      Note that the DATA_SET_TARGET, DATA_SET_HOST and DATA_SET_REFERENCE
+//      objects associate a particular target, host or reference ID with the data set, but do not themselves
+//      define the attributes of the corresponding target, host or reference. For each new ID referenced in
+//      one of these fields, a high-level description must be provided in the corresponding catalog object.
+//      For example, if the REFERENCE_KEY_ID listed in a DATA_SET_REFERENCE object does
+//      not already exist, a new REFERENCE object, defining that REFERENCE_KEY_ID, must also
+//      be submitted with the delivery. The Central Node data engineers can assist in locating existing
+//      catalog objects that may be referenced in any of the above fields.
+data_set                                :  data_set_start data_set_content+ data_set_stop
+data_set_content                        : ( dataset_information | data_set_targets | data_set_host | data_set_mission | data_set_reference_informations | properties )
+data_set_start.1                        : "OBJECT" "=" "DATA_SET"
+data_set_stop.1                         : "END_OBJECT" "=" "DATA_SET"
+
+// DATA_SET_INFORMATION
+// --------------------
+// The DATA_SET_INFORMATION catalog object, a sub-object of the DATA_SET catalog
+// object, provides a high-level description of a single PDS data set.
+//
+//1 Required Keywords
+//  1. ABSTRACT_DESC
+//  2. CITATION_DESC
+//  3. CONFIDENCE_LEVEL_NOTE
+//  4. DATA_OBJECT_TYPE
+//  5. DATA_SET_COLLECTION_MEMBER_FLG
+//  6. DATA_SET_DESC
+//  7. DATA_SET_NAME
+//  8. DATA_SET_RELEASE_DATE
+//  9. DATA_SET_TERSE_DESC
+//  10. DETAILED_CATALOG_FLAG
+//  11. PRODUCER_FULL_NAME
+//  12. START_TIME
+//  13. STOP_TIME
+//
+//2 Optional keywords
+//  None
+//
+//3 Required Objects
+//  None
+//
+//4 Optional Objects
+//  None
+//
+//5 Usage Notes
+//The DATA_SET_INFORMATION catalog object includes two free-form text description fields:
+//DATA_SET_DESC and CONFIDENCE_LEVEL_NOTE. Following are recommended
+//headings and subheadings for use in these fields, with brief descriptions of suggested contents.
+//Note: These headings and subheadings are recommended as the minimum set of headings
+//needed to describe a data set adequately. Additional headings and sub-headings may be added as
+//desired. Should any of the more common headings not appear within the description, they will be
+//assumed to be not applicable to the data set.
+//
+//  5.1 DATA_SET_DESC Headings
+//  Data Set Overview
+//      A high level description of the characteristics and properties of a data set
+//      Parameters
+//      The primary parameters (measured or derived quantities) included in the data set, with
+//      units and sampling intervals
+//  Processing
+//      The overall processing used to produce the data set, including a description of the input
+//      data (and source), processing methods or software, and primary parameters or
+//      assumptions used to produce the data set
+//  Data
+//      Detailed description of each data type identified in the “Data Set Overview”, (e.g., image
+//      data, table data, etc.)
+//  Ancillary Data
+//      Description of the ancillary information needed to interpret the data set. The ancillary
+//      information may or may not be provided along with the data set. If not, this description
+//      should include sources or references for locating the ancillary data.
+//  Coordinate System
+//      Description of the coordinate system(s) or frame(s) of reference to be used for proper
+//      interpretation of the data set
+//  Software
+//      Description of software relevant to the data, including software supplied with the data set
+//      as well as external software or systems that may be accessed independently to assist in
+//      visualization or analysis of the data
+//  Media/Format
+//      Description of the media on which the data set is delivered to PDS for distribution,
+//      including format information that may limit use of the data set on specific hardware
+//      platforms (e.g., binary/ASCII, IBM EBCDIC format)
+//
+//  5.2 CONFIDENCE_LEVEL_NOTE Headings
+//  Confidence Level Overview
+//      A high level description of the level of confidence (e.g., reliability, accuracy, or certainty)
+//      in the data
+//  Review
+//      Brief description of the review process that took place prior to release of the data set to
+//      insure the accuracy and completeness of the data and associated documentation
+//  Data Coverage and Quality
+//      Description of overall data coverage and quality. This section should include information
+//      about gaps in the data (both for times or regions) and details regarding how missing or
+//      poor data are flagged or filled, if applicable.
+//  Limitations
+//      Description of any limitations on the use of the data set. For example, discuss other data
+//      required to interpret the data properly, or any assumptions regarding special processing
+//      systems used to further reduce or analyze the data. If the data have been calibrated or
+//      otherwise corrected or derived, describe any known anomalies or uncertainties in the
+//      results.
+//
+//  5.3 CITATION_DESC Formation Rule
+//      The CITATION_DESC keyword is subject to a formation rule described in detail in the
+//      CITATION_DESC element definition in the PDS Data Dictionary. A brief description is:
+//      { <author_name>, <author_name>, ... }, <data_set_name>, DATA_SET_ID,
+//      NASA Planetary Data System, <year_of_peer_review>.
+//      If a citation description is not defined, nor is applicable to the data set, the value "N/A" should be
+//      used.
+//
+//  5.4 OTHER - Data Supplier provided
+//      Any other important information in addition to the headings above, as desired (e.g., data
+//      compression, time-tagging, etc.)
+
+dataset_information                     : dataset_information_start properties dataset_information_stop
+dataset_information_start.1             : "OBJECT" "=" "DATA_SET_INFORMATION"
+dataset_information_stop.1              : "END_OBJECT" "=" "DATA_SET_INFORMATION"
+
+// DATA_SET_TARGET
+// ---------------
+// The DATA_SET_TARGET object, a sub-object of DATA_SET catalog object, identifies an
+// observed target.
+//
+//  1 Required Keywords
+//      2. TARGET_NAME
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+data_set_targets                        : data_set_target*
+data_set_target                         : data_set_target_start properties data_set_target_stop
+data_set_target_start.1                 : "OBJECT" "=" "DATA_SET_TARGET"
+data_set_target_stop.1                  : "END_OBJECT" "=" "DATA_SET_TARGET"
+
+// DATA_SET_HOST
+// -------------
+// The DATA_SET_HOST catalog object, a sub-object of the DATA_SET catalog object,
+// identifies one host/instrument pair associated with a data set.
+//
+//  1 Required Keywords
+//      1. INSTRUMENT_HOST_ID
+//      2. INSTRUMENT_ID
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+data_set_host                           : data_set_host_start properties data_set_host_stop
+data_set_host_start.1                   : "OBJECT" "=" "DATA_SET_HOST"
+data_set_host_stop.1                    : "END_OBJECT" "=" "DATA_SET_HOST"
+
+// DATA_SET_MISSION
+// ----------------
+// The DATA_SET_MISSION object, a sub-object of DATA_SET catalog object, identifies an
+// associated mission.
+//
+//  1 Required Keywords
+//      1. MISSION_NAME
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+data_set_mission                        : data_set_mission_start properties data_set_mission_stop
+data_set_mission_start.1                : "OBJECT" "=" "DATA_SET_MISSION"
+data_set_mission_stop.1                 : "END_OBJECT" "=" "DATA_SET_MISSION"
+
+// DATA_SET_REFERENCE_INFORMATION
+// ------------------------------
+// The DATA_SET_REFERENCE_INFORMATION object, a sub-object of DATA_SET catalog
+// object, is used to identify references relevant to a particular data set. . A separate object must be
+// completed for each reference cited within the DATA_SET catalog object.
+// A separate REFERENCE catalog object is completed to provide the associated citation for each
+//reference.
+//
+//  1 Required Keywords
+//      1. REFERENCE_KEY_ID
+//      Note: If there are no relevant references to cite, the REFERENCE_KEY_ID should have a value
+//      of "N/A".
+//
+//  2 Optional Keywords
+//      None
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+data_set_reference_informations         : data_set_reference_information*
+data_set_reference_information          : data_set_reference_information_start properties data_set_reference_information_stop
+data_set_reference_information_start.1  : "OBJECT" "=" "DATA_SET_REFERENCE_INFORMATION"
+data_set_reference_information_stop.1   : "END_OBJECT" "=" "DATA_SET_REFERENCE_INFORMATION"
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

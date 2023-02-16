@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools", "wheel", "setuptools_scm"]
+build-backend = 'setuptools.build_meta'
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.flit.metadata]
+module = "pds_crawler"
+author = "Jean-Christophe Malapert"
+author-email = "jean-christophe.malapert@cnes.fr"
+home-page = "https://github.com/pdssp/pds_crawler"
+classifiers = [ "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",]
+description-file = "README.rst"

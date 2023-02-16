@@ -1,0 +1,87 @@
+// Grammar for map projection
+
+start                                   : pds_version ( revision_note | record_type | data_set_map_projection | properties )+ "END"
+pds_version                             : "PDS_VERSION_ID" "=" "PDS3"
+revision_note                           : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type                             : "RECORD_TYPE" "=" standard_value
+
+// The DATA_SET_MAP_PROJECTION catalog object is one of two distinct objects that together
+// define the map projection used in creating the digital images in a PDS data set. The associated
+// object that completes the definition is the IMAGE_MAP_PROJECTION, which is fully
+// described in Appendix B.13 of this document.
+// The map projection information resides in these two objects essentially to reduce data
+// redundancy and at the same time allow the inclusion of elements needed to process the data at
+// the image level. Static information that is applicable to the complete data set resides in the
+// DATA_SET_MAP_PROJECTION object while dynamic information that is applicable to the
+// individual images resides in the IMAGE_MAP_PROJECTION object.
+// 1 Required Keywords
+//      1. DATA_SET_ID
+// 2 Optional Keywords
+//      None
+// 3 Required Objects
+//      1. DATA_SET_MAP_PROJECTION_INFO
+// 4 Optional Objects
+//      None
+data_set_map_projection                 :  data_set_map_projection_start properties data_set_map_projection_info data_set_map_projection_stop
+data_set_map_projection_start.1         : "OBJECT" "=" "DATA_SET_MAP_PROJECTION"
+data_set_map_projection_stop.1          : "END_OBJECT" "=" "DATA_SET_MAP_PROJECTION"
+
+
+// The DATA_SET_MAP_PROJECTION catalog object, a sub-object of
+// DATA_SET_MAP_PROJECTION, defines the specific map projection of an image data set.
+// 1 Required Keywords
+//      1. MAP_PROJECTION_DESC
+//      2. MAP_PROJECTION_TYPE
+//      3. ROTATIONAL_ELEMENT_DESC
+// 2 Optional Keywords
+//      None
+// 3 Required Objects
+//      1. DS_MAP_PROJECTION_REF_INFO
+// 4 Optional Objects
+//      None
+// 5 Usage notes
+//      The MAP_PROJECTION_DESC text should contain at least one heading, “Map Projection
+//      Overview”. This section should provide a description of the map projection of the data set,
+//      indicating mathematical expressions used for latitude/longitude or line/sample transformations,
+//      line and sample projection offsets, center longitudes, etc., as well as any assumptions made in
+//      processing. Subheadings may be used for each of these descriptions, if desired.
+//      The ROTATIONAL_ELEMENT_DESC text should contain at least one heading, “Rotational
+//      Element Overview”. This section should provide a description of the standard used for the
+//      definition of a planet’s pole orientation and prime meridian, right ascension and declination, spin
+//      angle, etc. (Please see the Planetary Science Data Dictionary for complete description.) The
+//      value in this field may also be a bibliographic citation of a published work containing the
+//      rotation element description. In this case the “Rotational Element Overview” heading may be
+//      omitted.
+data_set_map_projection_info            : data_set_map_projection_info_start properties data_set_map_projection_refs_info data_set_map_projection_info_stop
+data_set_map_projection_info_start.1    : "OBJECT" "=" "DATA_SET_MAP_PROJECTION_INFO"
+data_set_map_projection_info_stop.1     : "END_OBJECT" "=" "DATA_SET_MAP_PROJECTION_INFO"
+
+// The DS_MAP_PROJECTION_REF_INFO object, a sub-object of
+// DATA_SET_MAP_PROJECTION_INFO catalog object, is used to identify references relevant
+// to a map projection. A separate object must be completed for each reference cited within the
+// DATA_SET_MAP_PROJECTION_INFO catalog object.
+// A separate REFERENCE catalog object is completed to provide the associated citation for each
+// reference.
+// 1 Required Keywords
+//      1. REFERENCE_KEY_ID
+//      Note: If there are no relevant references to cite, the REFERENCE_KEY_ID should have a value
+//      of "N/A".
+// 2 Optional Keywords
+//      None
+// 3 Required Objects
+//      None
+// 4 Optional Objects
+//      None
+data_set_map_projection_refs_info           : data_set_map_projection_ref_info*
+
+data_set_map_projection_ref_info            : data_set_map_projection_ref_info_start properties data_set_map_projection_ref_info_stop
+data_set_map_projection_ref_info_start.1    : "OBJECT" "=" "DS_MAP_PROJECTION_REF_INFO"
+data_set_map_projection_ref_info_stop.1     : "END_OBJECT" "=" "DS_MAP_PROJECTION_REF_INFO"
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

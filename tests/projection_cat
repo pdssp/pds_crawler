@@ -1,0 +1,87 @@
+PDS_VERSION_ID                    = PDS3
+LABEL_REVISION_NOTE               = "Scott Murchie, 2005-09-25;
+                                     Scott Murchie, 2007-01-12;
+                                     J. Ward, 2007-01-12;
+                                     Scott Murchie, 2010-11-29;
+                                     Scott Murchie, 2022-04-22"
+RECORD_TYPE                       = "STREAM"
+INSTRUMENT_HOST_NAME              = "MARS RECONNAISSANCE ORBITER"
+SPACECRAFT_ID                     = MRO
+INSTRUMENT_NAME                   = "COMPACT RECONNAISSANCE IMAGING
+                                     SPECTROMETER FOR MARS"
+INSTRUMENT_ID                     = CRISM
+TARGET_NAME                       = MARS
+OBJECT                            = DATA_SET_MAP_PROJECTION
+DATA_SET_ID                       = "MRO-M-CRISM-5-RDR-MULTISPECTRAL-V1.0"
+  OBJECT                          = DATA_SET_MAP_PROJECTION_INFO
+    MAP_PROJECTION_TYPE           = "EQUIRECTANGULAR"
+    MAP_PROJECTION_DESC           = "CRISM multispectral imaging of Mars
+      is mosaicked into 1964 non-overlapping tiles each containing multiple
+      strips of mapping data. Their longitude width increases poleward to
+      keep tiles approximately the same in area. The adopted projection
+      convention is planetocentric, positive east, using the 2000 IAU prime
+      meridian and pole of rotation. The projection varies in 5 degree
+      using EQUIRECTANGULAR equatorward of 87.5 degrees latitude, and POLAR
+      latitude bands, STEREOGRAPHIC poleward of 87.5 degrees latitude. From
+      the equator toward the north pole, for example, the bins are -2.5
+      to 2.5, 2.5 to 7.5, 7.5 to 12.5, etc. Versions 1 and 3 were 256
+      pixels per degree. Version 4 is 327 pixels per degree.
+
+      For the latitude band projected equirectangularly, the
+      CENTER_LATITUDE of projection is the central latitude of
+      each band to minimize 'distortion.' For the three latitude bands
+      given above, the central latitudes are 0.0, 5.0, and 10.0.
+
+      The transformation from latitude and longitude to line and
+      sample is given by the following equations:
+
+      LINE = int(LINE_PROJECTION_OFFSET - lat*MAP_RESOLUTION)
+
+      SAMPLE = int(SAMPLE_PROJECTION_OFFSET - lon*MAP_RESOLUTION)
+
+      where lat = latitude and lon = longitude.
+      Note that integral values of line and sample correspond to the
+      center of a pixel. Lat and lon are the latitude and longitude of a
+      given location on the surface, east positive.
+
+      MAP_RESOLUTION= the map resolution in pixels per degree,
+      256 pixels/degree for version 1 and 3, and 327 pixels/degree for
+      version 4.
+
+      LINE_PROJECTION_OFFSET is the line number minus the line on which
+      the map projection origin occurs. For an EQUIRECTANGULAR map
+      projection, origin is the equatorward edge of the map tile.
+      The value of LINE_PROJECTION_OFFSET is positive for
+      images starting north of the equator and is negative for images
+      starting south of the equator.
+
+      SAMPLE_PROJECTION_OFFSET is the nearest sample number to the left of
+      the projection longitude. For an EQUIRECTANGULAR map
+      projection, the value of SAMPLE_PROJECTION_OFFSET is
+      positive for images starting to the west of the projection longitude
+      and is negative for images starting to the east of the projection
+      longitude.
+
+      MAP_RESOLUTION is measured in pixels/degree.
+
+      MAP_SCALE is measured in km/pixel and is an average.
+
+      There are four PDS parameters that specify the latitude and
+      longitude boundaries of an image.  MAXIMUM_LATITUDE and
+      MINIMUM_LATITUDE specify the latitude boundaries of the image, and
+      EASTERNMOST_LONGITUDE and WESTERNMOST_LONGITUDE specify the
+      longitudinal boundaries of the map.
+
+      Definitions of other mapping parameters can be found in the PDS Data
+      dictionary."
+
+    ROTATIONAL_ELEMENT_DESC       = "UNK"
+
+    OBJECT                        = DS_MAP_PROJECTION_REF_INFO
+      REFERENCE_KEY_ID            = "UNK"
+    END_OBJECT                    = DS_MAP_PROJECTION_REF_INFO
+
+  END_OBJECT                      = DATA_SET_MAP_PROJECTION_INFO
+END_OBJECT                        = DATA_SET_MAP_PROJECTION
+
+END

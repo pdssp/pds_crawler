@@ -1,0 +1,89 @@
+PDS_VERSION_ID                    = PDS3
+LABEL_REVISION_NOTE               = "2004-10-42: First Version (TR)"
+RECORD_TYPE                       = FIXED_LENGTH
+RECORD_BYTES                      = 80
+RELEASE_ID                        = 0001
+REVISION_ID                       = 0000
+
+
+OBJECT                            = PERSONNEL
+ PDS_USER_ID                      = "N/A"
+
+ OBJECT                           = PERSONNEL_INFORMATION
+  FULL_NAME                       = Gerhard Neukum
+  LAST_NAME                       = Neukum
+  TELEPHONE_NUMBER                = 49-30-83870579
+  ALTERNATE_TELEPHONE_NUMBER      = "N/A"
+  FAX_NUMBER                      = 49-30-83870188
+  INSTITUTION_NAME                = "Freie Universitaet, Berlin, Germany"
+  NODE_ID                         = "N/A"
+  PDS_AFFILIATION                 = "N/A"
+  PDS_ADDRESS_BOOK_FLAG           = "N/A"
+  REGISTRATION_DATE               = "N/A"
+  ADDRESS_TEXT                    =  "Malteser Strasse 74-100,
+  12249 Berlin, Germnay"
+ END_OBJECT                       = PERSONNEL_INFORMATION
+
+ OBJECT                           = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID              = "gneukum@zedat.fu-berlin.de"
+  ELECTRONIC_MAIL_TYPE            = "INTERNET"
+  PREFERENCE_ID                   = 1
+ END_OBJECT                       = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                        = PERSONNEL
+
+OBJECT                            = PERSONNEL
+ PDS_USER_ID                      = "N/A"
+
+ OBJECT                           = PERSONNEL_INFORMATION
+  FULL_NAME                       = Ralf Jaumann
+  LAST_NAME                       = Jaumann
+  TELEPHONE_NUMBER                = 49-30-6700400
+  ALTERNATE_TELEPHONE_NUMBER      = "N/A"
+  FAX_NUMBER                      = 49-30-67055402
+  INSTITUTION_NAME                = "Institut fuer Planetenforschung, DLR,
+  Berlin, Germany"
+  NODE_ID                         = "N/A"
+  PDS_AFFILIATION                 = "N/A"
+  PDS_ADDRESS_BOOK_FLAG           = "N/A"
+  REGISTRATION_DATE               = "N/A"
+  ADDRESS_TEXT                    =  "Rutherfordstrasse 2,
+  12489 Berlin, Germnay"
+ END_OBJECT                       = PERSONNEL_INFORMATION
+
+ OBJECT                           = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID              = "ralf.jaumann@dlr.de"
+  ELECTRONIC_MAIL_TYPE            = "INTERNET"
+  PREFERENCE_ID                   = 1
+ END_OBJECT                       = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                        = PERSONNEL
+
+OBJECT                            = PERSONNEL
+ PDS_USER_ID                      = "N/A"
+
+ OBJECT                           = PERSONNEL_INFORMATION
+  FULL_NAME                       = Thomas Roatsch
+  LAST_NAME                       = Roatsch
+  TELEPHONE_NUMBER                = 49-30-6700339
+  ALTERNATE_TELEPHONE_NUMBER      = "N/A"
+  FAX_NUMBER                      = 49-30-67055402
+  INSTITUTION_NAME                = "Institut fuer Planetenforschung, DLR,
+  Berlin, Germany"
+  NODE_ID                         = "N/A"
+  PDS_AFFILIATION                 = "N/A"
+  PDS_ADDRESS_BOOK_FLAG           = "N/A"
+  REGISTRATION_DATE               = "N/A"
+  ADDRESS_TEXT                    =  "Rutherfordstrasse 2,
+  12489 Berlin, Germnay"
+ END_OBJECT                       = PERSONNEL_INFORMATION
+
+ OBJECT                           = PERSONNEL_ELECTRONIC_MAIL
+  ELECTRONIC_MAIL_ID              = "thomas.roatsch@dlr.de"
+  ELECTRONIC_MAIL_TYPE            = "INTERNET"
+  PREFERENCE_ID                   = 1
+ END_OBJECT                       = PERSONNEL_ELECTRONIC_MAIL
+
+END_OBJECT                        = PERSONNEL
+
+END

@@ -1,0 +1,497 @@
+PDS_VERSION_ID                    = PDS3
+LABEL_REVISION_NOTE               = "R. SIMPSON, 1997-09-12;
+                                     S. SLAVNEY, 1998-10-07;
+                                     S. SLAVNEY, 1999-02-11;
+                                     S. SLAVNEY, 1999-03-10;
+                                     M. CAPLINGER, 2000-04-04;
+                                     R. SIMPSON, 2000-11-03;
+                                     S. SLAVNEY, 2001-01-25;
+                                     S. SLAVNEY, 2001-01-30;
+                                     S. SLAVNEY, 2001-04-06"
+
+RECORD_TYPE                       = STREAM
+
+OBJECT                            = MISSION
+ MISSION_NAME                     = "MARS GLOBAL SURVEYOR"
+
+ OBJECT                           = MISSION_INFORMATION
+  MISSION_START_DATE              = 1994-10-12
+  MISSION_STOP_DATE               = UNK
+  MISSION_ALIAS_NAME              = "N/A"
+  MISSION_DESC                    = "
+
+    Mission Overview
+    ================
+
+      The Mars Global Surveyor (MGS) spacecraft was launched from
+      the Cape Canaveral Air Station in Florida on 7 November 1996
+      aboard a Delta-2/7925 rocket.  The 1062-kilogram spacecraft,
+      built by Lockheed Martin Astronautics, traveled nearly 750
+      million kilometers over the course of a 300-day cruise to
+      reach Mars on 12 September 1997 [JPLD-12088].
+
+      Upon reaching Mars, MGS fired its main rocket engine for a
+      25-minute Mars orbit insertion (MOI) burn.  This maneuver
+      slowed the spacecraft and allowed the planet's gravity to
+      capture it into orbit.  Initially, MGS whirled around the
+      red planet in a highly elliptical orbit that took 45 hours
+      to complete.
+
+      After orbit insertion, MGS performed a series of orbit changes
+      to drop the low point of its orbit into the upper fringes of
+      the Martian atmosphere at an altitude of about 110 kilometers.
+      During every atmospheric pass, the spacecraft slowed by a small
+      amount because of air resistance.  This slowing caused the
+      spacecraft to lose altitude on its next pass through the
+      orbit's high point.  MGS was to use this aerobraking technique
+      over a period of four months to lower the high point of its
+      orbit from 56,000 km to near 400 km in altitude, resulting in
+      a nearly circular orbit for mapping.
+
+      At the low point of orbit 15, on October 8, 1997, the spacecraft
+      experienced difficulties later diagnosed as due to excess
+      vibrations of one of the solar panels. The problem was
+      associated with a fracture of a panel damper arm
+      [ALBEEETAL1998]. While an evaluation of the solar array problem
+      was underway, periapsis was raised to about 172 km on October
+      13, 1997 and remained near that altitude until November 7, 1997
+      (orbits 19 through 36). During this 26-day period the spacecraft
+      instrument panel was pointed towards Mars during close
+      approaches (i.e., near periapsis) and the first extensive set
+      of science observations from MGS was collected. Orbits 19
+      through 36 are known as the Assessment Orbits or the
+      Aerobraking Hiatus. The science observations were acquired
+      during the descending leg of each orbit; that is, as the
+      spacecraft moved from north to south.
+
+      Aerobraking was restarted on November 8, 1997 (orbit 37), but
+      with a periapsis approximately 10 km higher than that previously
+      used.  Aerobraking was then conducted at about 1/3 the rate
+      originally planned, placing the spacecraft in a 2 AM
+      Sun-synchronous mapping orbit by March 1999 rather than the
+      planned 2 PM mapping orbit in March 1998. (The 2 PM orbit meant
+      that the spacecraft would have crossed the equator in the
+      descending leg of the orbit -- north to south -- at 2 PM, a
+      desirable time for data collection for some instruments. This
+      orbit could not be achieved given the new orbital
+      characteristics. However, a 2 AM orbit was satisfactory because
+      if the descending leg of the orbit crossed the equator at 2 AM,
+      it meant that the ascending leg, south to north, crossed the
+      equator at the desired time of 2 PM.)
+
+      Aerobraking was halted again on March 27, 1998, and resumed on
+      September 24, 1998. The period from March 27 through April 28 is
+      known as Science Phasing Orbit 1 (SPO-1, orbits 202 through
+      268). Solar conjunction occurred between April 29 and May 27,
+      followed by Science Phasing Orbit 2 (SPO-2, orbits 329-573)
+      from May 28 through September 23. This second aerobraking hiatus
+      was necessary to ensure that the final two-hour circular orbit
+      would have an equatorial crossing time of 2 AM. A final period
+      of aerobraking began September 24, 1998, and ended February 4,
+      1999. The spacecraft then began mapping on March 9, 1999.
+      During mapping operations, the spacecraft orbited Mars with
+      a period of about 118 minutes, at an average altitude of 400 km.
+      The mapping phase of the mission lasted for approximately
+      one Mars year, ending January 31, 2001. This date marks the end
+      of the MGS primary mission.
+
+      An extended mission will run from February 1, 2001, through
+      April 22, 2002. Mapping operations will continue during the
+      extended mission in much the same way as they were conducted
+      during the primary mission, with ongoing data acquisition from
+      all science instruments and the radio science experiment.
+
+      The spacecraft is three-axis stabilized and powered by solar
+      cells.  It is built of lightweight composite materials
+      and divided into four sub-assemblies: the equipment module,
+      the propulsion module, the solar array support structure, and
+      the high-gain antenna support structure.  Most science
+      instruments were bolted to a nadir equipment deck.
+
+      Mars Global Surveyor carries four on-board science instruments.
+      The Mars Orbiter Camera (MOC) has both a wide-angle mode for
+      global coverage and a narrow-angle mode with resolution of 1.4
+      meters [MALINETAL1992].  The Thermal Emission Spectrometer
+      (TES) measures infrared radiation.  TES is used to determine
+      the general mineral composition of patches of ground as small
+      as 9.0 square kilometers; in addition, TES also scans the
+      Martian atmosphere to provide data for the study of the clouds
+      and weather [CHRISTENSENETAL1992].  The Magnetometer and
+      Electron Reflectometer (MAG/ER) are used to measure the global
+      magnetic properties of Mars, which provided insight on internal
+      structure [ACUNAETAL1992].  The Mars Orbiting Laser Altimeter
+      (MOLA) gathers data that allow calculation of surface
+      feature heights to accuracies of 30 meters [ZUBERETAL1992].
+
+      An ultra-stable oscillator (USO) in conjunction with
+      the on-board telecommunications equipment and ground equipment
+      at stations of the NASA Deep Space Network (DSN) make up the
+      Radio Science Subsystem (RSS).  RSS measurements include radio
+      tracking of the spacecraft to improve the gravity field model
+      of Mars and radio occultation observations to study the
+      structure of the atmosphere [TYLERETAL1992].
+
+      A sixth 'instrument' is the Mars Relay, a cylindrically
+      shaped antenna that will be used to collect data transmitted
+      to Surveyor from landers on the Martian surface. These landers
+      will be carried to Mars by later spacecraft and operated after
+      completion of the MGS primary mission (late January 2001).
+
+      A seventh instrument is the Accelerometer which measures the
+      deceleration of the spacecraft as it passes through the
+      atmosphere. These quantities can then be reduced to atmospheric
+      density. Knowing the density and the altitude, pressures and
+      temperatures can be derived for the Martian atmosphere.
+
+
+    Mission Phases
+    ==============
+      Six mission phases were originally defined for significant
+      spacecraft activity periods. These were the Pre-Launch, Launch,
+      Cruise, Orbit Insertion, Mapping, and Relay Phases.  The Cruise
+      Phase included both Inner and Outer Cruise components.  Once
+      every seven Martian days during the Mapping Phase, the
+      spacecraft approximately retraced its ground track; these
+      88-orbit intervals are known as 'repeat cycles.'
+
+      The final mission phase, Relay, was intended to support the 1998
+      Mars Polar Lander and possibly the Mars 2001 Lander. It was
+      planned to run from February 1, 2001, through January 1, 2003.
+      Since the Mars Polar Lander was lost and the 2001 mission was
+      reconfigured without a lander, MGS is no longer needed for
+      relay.  Instead, the Extended Mission replaces Relay as the
+      sixth mission phase.
+
+      PRELAUNCH
+      ---------
+        The Prelaunch Phase extended from beginning of the MGS
+        mission until the start of the launch countdown at the
+        Kennedy Space Center.
+
+        Mission Phase Start Time       : 1994-10-12
+        Mission Phase Stop Time        : 1996-11-06
+
+
+      LAUNCH
+      ------
+        The Launch Phase extended from the start of launch countdown
+        until completion of the injection into the Earth-Mars
+        trajectory.
+
+        Mission Phase Start Time       : 1996-11-06
+        Mission Phase Stop Time        : 1996-11-07
+
+
+      CRUISE
+      ------
+        The Cruise Phase extended from injection into the Earth-Mars
+        trajectory until Mars orbit insertion.  During the Inner
+        Cruise sub-phase, MGS aimed its solar panels toward the Sun
+        and communicated through its low-gain antenna; during
+        the Outer Cruise sub-phase, the high-gain antenna could be
+        used while the solar panels generated acceptable levels of
+        power.  The transition occurred on 1997-01-09.
+
+        Mission Phase Start Time       : 1996-11-07
+        Mission Phase Stop Time        : 1997-09-12
+
+
+      ORBIT INSERTION
+      ---------------
+        The Mars Orbit Insertion Phase began on 1997-09-12.
+        It was during this phase that the problem with the solar
+        panel was discovered, as described above, and aerobraking
+        was halted while the problem was assessed. The original
+        schedule for aerobraking was then revised to proceed more
+        slowly than planned, in order to put less stress on the
+        solar panel arm. Aerobraking ended in early February 1999
+        and was followed by a Gravity Calibration Orbit, various
+        other calibration activities, and trajectory adjustments
+        to put the spacecraft into the mapping orbit.
+
+        Mission Phase Start Time       : 1997-09-12
+        Mission Phase Stop Time        : 1999-03-09
+
+        Subphases                 Dates                     Orbits
+        ---------                 -----                     ------
+        Aerobraking Phase 1A      1997-09-12 to 1997-10-12    1-18
+        Aerobraking Hiatus        1997-10-13 to 1997-11-07   19-36
+        Aerobraking Phase 1B      1997-11-08 to 1998-03-27   37-201
+        Science Phasing Orbit 1   1998-03-27 to 1998-04-28  202-268
+           (SPO-1)
+        Solar conjunction         1998-04-29 to 1998-05-27  269-328
+        Science Phasing Orbit 2   1998-05-28 to 1998-09-23  329-573
+           (SPO-2)
+        Aerobraking Phase 2       1998-09-24 to 1999-02-04  574-1284
+        Transition to Mapping     1999-02-04 to 1999-03-09  1285-1683
+
+
+      MAPPING
+      -------
+        The Mapping Phase is the period of concentrated science data
+        acquisition.  At the beginning of this phase, orbit numbering
+        was restarted at 1. The Mapping Phase is planned to
+        last for 695 days, a little more than one Martian year.
+
+        As a risk reduction measure against possible problems with the
+        deployment of the High-Gain Antenna, the first 20 days of the
+        Mapping Phase were operated in so-called 'Fixed High-Gain
+        Antenna' or FHGA mode.  In this mode, the undeployed HGA was
+        pointed at Earth for four to five orbits out of every twelve
+        to transmit data.  During data transmission, the science
+        instruments were not pointed at Mars.  The HGA was deployed on
+        1999-03-29, and the first day of full mapping was 1999-04-03.
+
+        Soon after the antenna was deployed (1999-04-16) its
+        azimuth gimbal jammed, causing an entry into contingency mode
+        and interruption in the acquisition of science data.  This
+        interruption lasted until 1999-04-29, and then data were
+        acquired in a modified FHGA mode (HGA deployed, but boresight
+        fixed in the spacecraft +x direction) until 1999-05-06, when
+        normal mapping resumed.  It was determined that the restricted
+        range of travel on the azimuth gimbal would allow normal
+        mapping operations until early 2000.
+
+        So-called 'beta supplement mode' operations, in which the
+        antenna was reoriented to allow Earth tracking during data
+        acquisition, were begun on 2000-02-07. But beta supplement
+        mode required that the antenna be 'rewound' while the
+        spacecraft was being tracked and precluded collection of
+        egress (exit) radio occultations.
+
+        Approximately three days of FHGA operation were inserted into
+        the schedule (2000-03-05 to 2000-03-07) to mitigate impact on
+        radio science. Unexpected heating of MOLA resulted, and
+        further FHGA operation was suspended pending resolution of the
+        thermal problems.
+
+        Mission Phase Start Time       : 1999-03-09
+        Mission Phase Stop Time        : 2001-01-31
+
+
+      EXTENDED MISSION
+      ----------------
+        The Extended Mission Phase will begin at the end of the
+        Mapping Phase, 1 February 2001, and continue through 22 April
+        2002.  Mapping operations will continue in much the same way
+        as operations during the Mapping Phase, with data acquisition
+        expected to continue as before for all science experiments.
+        A new type of spacecraft maneuver has been designed for
+        targeted science observations during the extended mission: the
+        Roll Only Targeted Observation (ROTO). The maneuver is
+        constrained to occur primarily in the roll axis and cannot
+        exceed +/- 25 degrees off nadir. The spacecraft will be
+        rolled during selected orbits to acquire off-nadir contiguous
+        MOC, MOLA, and TES data, which will be used primarily to
+        support landing site certification for future missions.
+
+        Mission Phase Start Time       : 2001-02-01
+        Mission Phase Stop Time        : 2002-04-22"
+
+
+  MISSION_OBJECTIVES_SUMMARY      = "
+
+    One of the most intriguing, unanswered scientific questions is
+    why do Earth and Mars appear different today?  At the time of
+    their formation several billion years ago, Mars and Earth shared
+    similar conditions.  Both planets harbored vast quantities of
+    surface water, thick atmospheres, and climates warmer than at
+    present.  Today, Earth is a lush world filled with a countless
+    number of animal and plant species.  In contrast, data gathered
+    from Mars prior to MGS showed that the planet was trapped in
+    conditions reminiscent of a global ice age.  The dry and
+    seemingly lifeless Martian surface makes the Sahara look like
+    an ocean in comparison, and average daily temperatures make
+    Antarctica seen balmy.  Comparing the history and evolution of
+    the two planets yields clues into Earth's past and possibly
+    its future.
+
+    Science objectives for the failed Mars Observer Mission
+    [ALBEEETAL1992] were essentially identical to those for Mars
+    Global Surveyor.
+
+
+    Basic Measurements and Data Collection
+    ======================================
+      Although several spacecraft preceded MGS to Mars, fundamental
+      measurements remain to be made.  No topographic model of
+      the planet exists at the 100 meter level (and many areas were
+      uncertain by kilometers); MOLA will provide one with typical
+      accuracies of 30 m.  Preliminary measurements on the magnetic
+      field have been carried out by early spacecraft; but MGS MAG/ER
+      is the first instrument to carry out a systematic mapping
+      effort.  Gravity models have been compiled from Mariner 9 and
+      Viking data, but MGS RSS provides an order of magnitude
+      improvement in these -- leading to improved understanding of
+      the planet's interior.
+
+
+    Atmospheric Processes
+    =====================
+      Despite its forbidding climate, surface temperatures on Mars
+      resemble the Earth's more than any other planet.  These
+      similarities in temperature result in part from the fact that
+      Mars orbits the Sun only slightly farther out than the Earth as
+      compared to other planets.  For example, the ground at some
+      locations near Mars' equator may warm up to as high as 25C
+      at noontime.  However, daytime temperatures still average well
+      below freezing, and night temperatures dip much lower.
+
+      Martian temperatures may seem almost inviting to the seasoned
+      outdoors explorer, but the composition of the atmosphere leaves
+      much to be desired from a human perspective.  Most of the
+      martian air consists of carbon dioxide (CO2), similar to
+      conditions on Venus.  If breathing carbon dioxide seems
+      uninviting, the density of the air will appear worse.  Average
+      barometric pressures on Mars are lower than that found at
+      Earth's sea level by a factor of more than 125.  In other
+      words, the air at the surface of Mars is thinner than that
+      found on Earth at an altitude 19 times higher than Denver,
+      Colorado.
+
+      The extremely thin Martian air directly impacts the mystery of
+      potential life on Mars, either in the past or present.  The
+      reason is that almost all of the water lies trapped in the
+      Martian polar ice caps or frozen beneath the surface.  Liquid
+      water cannot exist on the surface because the thin atmosphere
+      will cause melting ice to evaporate directly into water vapor.
+
+      Despite the hostile composition, density, and temperature by
+      today's standards on Earth, the atmosphere of Mars is both
+      interesting and dynamic.  MGS objectives in this area include
+      recording global daily images of the planet so that cloud
+      patterns can be followed and the growth of dust storms can
+      be monitored over a full martian year.  TES and RSS are both
+      able to measure vertical structure within the atmosphere,
+      another key to understanding transport of material within the
+      atmosphere -- including precipitation of CO2 itself on the
+      winter polar cap.
+
+
+    Surface Processes
+    =================
+      Geologically, Mars is one of the most interesting planets in
+      the Solar System.  Although only half the diameter of Earth,
+      Mars maintains large water and CO2 ice caps at the poles, a
+      canyon much deeper than the Grand Canyon and longer than the
+      contiguous 48 United States are wide, crater valleys as
+      large as the western United States, and a handful of monstrous
+      volcanoes that make Mount Everest appear tiny in comparison.
+
+      A study of Martian geology is crucial toward revealing clues
+      into the history of the Earth.  Mars is the only planet in the
+      solar system that both has an atmosphere, and contains surface
+      features that cover almost the entire range of history.  On
+      Earth, pristine rocks and other surface features from
+      the first billion years of our planet's existence do not exist
+      because geological events, weather, and life have caused
+      drastic alterations.  Because Earth and Mars shared similar
+      conditions near the time of their formation, the MGS
+      exploration of Mars allows us to take a peek into Earth's
+      past in a way not possible by studying the Earth by itself.
+
+      Although liquid water on Mars will quickly evaporate,
+      photographs transmitted back to Earth by NASA missions prior
+      to MGS revealed giant flood channels, dry river beds, and
+      flood plains on the surface.  This evidence of past water on
+      Mars led some scientists to consider Mars as the prime
+      location in the Solar System to search for extraterrestrial
+      life.  The speculation was that because Mars once possessed
+      a thicker atmosphere and vast quantities of surface water
+      billions of years ago, then the planet may have harbored
+      conditions favorable to the formation of life despite its
+      present forbidding climate.
+
+      Viking and Mars Pathfinder returned information on elemental
+      composition of some Mars surface materials at specific
+      landing sites.  But regional and global information is needed
+      to understand both the current state and history of rocky
+      surfaces.  MOC will provide high-resolution image data; TES
+      will acquire spectral signatures of rock units so that thermal
+      inertia, surface rock distributions, and composition could
+      be inferred.
+
+
+    Search for Life
+    ===============
+      Sensors aboard various NASA spacecraft launched to Mars over
+      the 30 years prior to MGS showed that advanced life forms
+      almost certainly do not exist on the planet today.  However,
+      many felt that the planet might hide bacterial forms of life
+      or their fossil remains.  Although Mars Global Surveyor will
+      not conduct a search for life on Mars, it will gather detailed
+      data that will help in understanding the mystery of the
+      missing water.  This type of study will provide important
+      background data to help scientists in their search for
+      Martian life on future missions.
+
+
+    Other Studies
+    =============
+      In addition to studying Mars, the spacecraft could also be
+      used for experiments of opportunity, such as searching for
+      gravitational waves during cruise [ESTABROOKETAL1995] and
+      probing the Sun's corona during solar conjunction [WOO1993]."
+
+
+ END_OBJECT                       = MISSION_INFORMATION
+
+ OBJECT                           = MISSION_HOST
+  INSTRUMENT_HOST_ID              = "MGS"
+
+  OBJECT                          = MISSION_TARGET
+  TARGET_NAME                     = "MARS"
+  END_OBJECT                      = MISSION_TARGET
+
+  OBJECT                          = MISSION_TARGET
+  TARGET_NAME                     = "PHOBOS"
+  END_OBJECT                      = MISSION_TARGET
+
+  OBJECT                          = MISSION_TARGET
+  TARGET_NAME                     = "SUN"
+  END_OBJECT                      = MISSION_TARGET
+ END_OBJECT                       = MISSION_HOST
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "ACUNAETAL1992"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "ALBEEETAL1992"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "ALBEEETAL1998"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "CHRISTENSENETAL1992"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "ESTABROOKETAL1995"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "JPLD-12088"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "MALINETAL1992"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "TYLERETAL1992"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "WOO1993"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+ OBJECT                           = MISSION_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID                = "ZUBERETAL1992"
+ END_OBJECT                       = MISSION_REFERENCE_INFORMATION
+
+END_OBJECT                        = MISSION
+
+END

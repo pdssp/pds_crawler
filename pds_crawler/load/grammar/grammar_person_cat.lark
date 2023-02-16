@@ -1,0 +1,106 @@
+// Grammar for person_cat file
+
+start           : pds_version ( revision_note | record_type | personnels | properties )+ "END"
+pds_version     : "PDS_VERSION_ID" "=" "PDS3"
+revision_note   : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type     : "RECORD_TYPE" "=" standard_value
+
+// PERSONNEL
+// ---------
+// The PERSONNEL catalog object is used to provide new or updated information for personnel
+// associated with PDS in some capacity. Associated personnel include data suppliers and
+// producers for data sets or volumes archived with PDS, as well as PDS node personnel and
+// contacts within other agencies and institutions.
+//
+// 1 Required Keywords
+//      1. PDS_USER_ID
+//      Note: With respect to new submissions, contact a PDS Data Engineer to obtain a valid and
+//      unique PDS_USER_ID. The value is constructed using the initial of the first name and the last
+//      name (e.g., John Smith would become PDS_USER_ID = “JSMITH”). The Data Engineer will
+//      ensure that the newly constructed value does not conflict with a previous entry in the catalog.
+//
+// 2 Optional Keywords
+//  None
+//
+// 3 Required Objects
+//      1. PERSONNEL_ELECTRONIC_MAIL
+//      2. PERSONNEL_INFORMATION
+//
+// 4 Optional Objects
+//      None
+//
+// 5 Usage Notes
+//      One PERSONNEL_INFORMATION catalog object must be completed for each person. One
+//      PERSONNEL_ELECTRONIC_MAIL catalog object must be completed for each email address
+//      associated with the person. That is, if there is more than one email address, this object is
+//      repeated.
+
+personnels          : personnel*
+personnel           : personnel_start pds_user_id personnel_information personnel_electronic_mail personnel_stop
+personnel_start.1   : "OBJECT" "=" "PERSONNEL"
+personnel_stop.1    : "END_OBJECT" "=" "PERSONNEL"
+
+pds_user_id         : "PDS_USER_ID" "=" pds_user_value
+pds_user_value      : value_property
+
+// PERSONNEL_INFORMATION
+// ---------------------
+// The PERSONNEL_INFORMATION object, a sub-object of the PERSONNEL catalog object,
+// provides name, address, telephone, and related information for an individual.
+//
+// 1 Required Keywords
+//      1. ADDRESS_TEXT
+//      2. ALTERNATE_TELEPHONE_NUMBER
+//      3. FAX_NUMBER
+//      4. FULL_NAME
+//      5. INSTITUTION_NAME
+//      6. LAST_NAME
+//      7. NODE_ID
+//      8. PDS_AFFILIATION
+//      9. REGISTRATION_DATE
+//      10. TELEPHONE_NUMBER
+//
+// 2 Optional Keywords
+//      1. PDS_ADDRESS_BOOK_FLAG
+//
+// 3 Required Objects
+//      None
+//
+// 4 Optional Objects
+//      None
+
+personnel_information           :  personnel_information_start properties personnel_information_stop
+personnel_information_start.1   : "OBJECT" "=" "PERSONNEL_INFORMATION"
+personnel_information_stop.1    : "END_OBJECT" "=" "PERSONNEL_INFORMATION"
+
+// PERSONNEL_ELECTRONIC_MAIL
+// -------------------------
+// The PERSONNEL_ELECTRONIC_MAIL object, a sub-object of the PERSONNEL catalog
+// object, provides electronic mail information for an individual. This object may be repeated if
+// more than one electronic mail address is applicable.
+//
+// 1 Required Keywords
+//      1. ELECTRONIC_MAIL_ID
+//      2. ELECTRONIC_MAIL_TYPE
+//      3. PREFERENCE_ID
+//
+// 2 Optional Keywords
+//      None
+//
+// 3 Required Objects
+//      None
+//
+// 4 Optional Objects
+//      None
+
+personnel_electronic_mail           :  personnel_electronic_mail_start properties personnel_electronic_mail_stop
+personnel_electronic_mail_start.1   : "OBJECT" "=" "PERSONNEL_ELECTRONIC_MAIL"
+personnel_electronic_mail_stop.1    : "END_OBJECT" "=" "PERSONNEL_ELECTRONIC_MAIL"
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

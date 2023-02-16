@@ -1,0 +1,327 @@
+PDS_VERSION_ID                    = PDS3
+RECORD_TYPE                       = STREAM
+LABEL_REVISION_NOTE               ="
+2008-03-17, LOLA:neumann V01 Creation;
+2008-03-25, GEO: ward reformatted and updated;
+2010-03-09, LOLA: kj updated;
+2011-05-18, LOLA: kj updated."
+
+/* Core Team */
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = DSMITH
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "DAVID E. SMITH"
+    LAST_NAME                     = "SMITH"
+    TELEPHONE_NUMBER              = "3016146013"
+    ALTERNATE_TELEPHONE_NUMBER    = "3016146010"
+    FAX_NUMBER                    = "3016146015"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = {"MASSACHUSETTS INSTITUTE OF TECHNOLOGY",
+                                     "NASA/GODDARD SPACE FLIGHT CENTER"}
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "MASSACHUSETTS INSTITUTE OF TECHNOLOGY
+                                    EAPS, 77 MASS AVE BLDG 54
+                                    CAMBRIDGE, MA 02139
+                                    NASA/GODDARD SPACE FLIGHT CENTER
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "DAVID.E.SMITH@NASA.GOV"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT                            = PERSONNEL
+  PDS_USER_ID                     = SSTOCKMAN
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "STEPHANIE A. STOCKMAN"
+    LAST_NAME                     = "STOCKMAN"
+    TELEPHONE_NUMBER              = "NULL"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = {"NASA/GODDARD SPACE FLIGHT CENTER",
+                                     "SCIENCE SYSTEMS AND APPLICATIONS, INC."}
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "NASA/GODDARD SPACE FLIGHT CENTER
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "STEPHANIE.A.STOCKMAN.1@GSFC.NASA.GOV"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+/* Science Team */
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = OAHARONSON
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "ODED AHARONSON"
+    LAST_NAME                     = "AHARONSON"
+    TELEPHONE_NUMBER              = "6263955704"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "CALIFORNIA INSTITUTE OF TECHNOLOGY"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "CALIFORNIA INSTITUTE OF TECHNOLOGY
+                                    MC 150-21
+                                    PASADENA, CA 91125-2500"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "OA@CALTECH.EDU"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = JHEAD
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "JAMES W. HEAD III"
+    LAST_NAME                     = "HEAD III"
+    TELEPHONE_NUMBER              = "4018632526"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "BROWN UNIVERSITY"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "BROWN UNIVERSITY
+                                    BOX 1846, PROVIDENCE, RI 02912"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "JAMES_HEAD@BROWN.EDU"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT                            = PERSONNEL
+  PDS_USER_ID                     = FLEMOINE
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "FRANK G. LEMOINE"
+    LAST_NAME                     = LEMOINE
+    TELEPHONE_NUMBER              = "3012862460"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "3012861760"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "NASA/GODDARD SPACE FLIGHT CENTER"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = 1996-01-01
+    ADDRESS_TEXT                  = "NASA GODDARD SPACE FLIGHT CENTER
+                                    CODE 926, SPACE GEODESY BRANCH
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "FRANK.G.LEMOINE.1@GSFC.NASA.GOV"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = GNEUMANN
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "GREGORY A. NEUMANN"
+    LAST_NAME                     = "NEUMANN"
+    TELEPHONE_NUMBER              = "3016146026"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "NASA/GODDARD SPACE FLIGHT CENTER"
+    PDS_AFFILIATION               = "DATA PROVIDER"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "NASA/GODDARD SPACE FLIGHT CENTER
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "GREGORY.A.NEUMANN@NASA.GOV"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = MROBINSON
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "MARK S. ROBINSON"
+    LAST_NAME                     = "ROBINSON"
+    TELEPHONE_NUMBER              = "4807279691"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "ARIZONA STATE UNIVERSITY"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "ARIZONA STATE UNIVERSITY
+                                    SCHOOL OF EARTH AND SPACE EXPLORATION
+                                    BOX 871404
+                                    TEMPE, AZ 85287-1404"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "MARK.S.ROBINSON@ASU.EDU"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = MZUBER
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "MARIA T. ZUBER"
+    LAST_NAME                     = "ZUBER"
+    TELEPHONE_NUMBER              = "6172536397"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "MASSACHUSETTS INSTITUTE OF TECHNOLOGY"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "MASSACHUSETTS INSTITUTE OF TECHNOLOGY
+                                    EAPS, 77 MASS AVE BLDG 54
+                                    CAMBRIDGE, MA 02139"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "ZUBER@MIT.EDU"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+ PDS_USER_ID                     = EMAZARICO
+ OBJECT                          = PERSONNEL_INFORMATION
+   FULL_NAME                     = "ERWAN MAZARICO"
+   LAST_NAME                     = "MAZARICO"
+   TELEPHONE_NUMBER              = "3016146504"
+   ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+   FAX_NUMBER                    = "N/A"
+   PDS_ADDRESS_BOOK_FLAG         = "N"
+   INSTITUTION_NAME              = {"MASSACHUSETTS INSTITUTE OF TECHNOLOGY",
+                                    "NASA/GODDARD SPACE FLIGHT CENTER"}
+   PDS_AFFILIATION               = "N/A"
+   NODE_ID                       = "N/A"
+   REGISTRATION_DATE             = "N/A"
+   ADDRESS_TEXT                  = "MASSACHUSETTS INSTITUTE OF TECHNOLOGY
+                                   EAPS, 77 MASS AVE BLDG 54
+                                   CAMBRIDGE, MA 02139
+                                   NASA/GODDARD SPACE FLIGHT CENTER
+                                   GREENBELT, MD 20771"
+ END_OBJECT                      = PERSONNEL_INFORMATION
+ OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+   ELECTRONIC_MAIL_ID            = "ERWAN.M.MAZARICO@NASA.GOV"
+   ELECTRONIC_MAIL_TYPE          = "INTERNET"
+   PREFERENCE_ID                 = 1
+ END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = KJHA
+
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "KOPAL JHA"
+    LAST_NAME                     = "JHA"
+    TELEPHONE_NUMBER              = "3016145881"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = {"SIGMA SPACE CORPORATION",
+                                     "NASA/GODDARD SPACE FLIGHT CENTER"}
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "NASA/GODDARD SPACE FLIGHT CENTER
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "KOPAL.JHA@SIGMASPACE.COM"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+END
+
+OBJECT = PERSONNEL
+ PDS_USER_ID                     = MAROSENBURG
+ OBJECT                          = PERSONNEL_INFORMATION
+   FULL_NAME                     = "MARGARET A ROSENBURG"
+   LAST_NAME                     = "ROSENBURG"
+   TELEPHONE_NUMBER              = "6263955823"
+   ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+   FAX_NUMBER                    = "N/A"
+   PDS_ADDRESS_BOOK_FLAG         = "N"
+   INSTITUTION_NAME              = "CALIFORNIA INSTITUTE OF TECHNOLOGY"
+   PDS_AFFILIATION               = "N/A"
+   NODE_ID                       = "N/A"
+   REGISTRATION_DATE             = "N/A"
+   ADDRESS_TEXT                  = "CALIFORNIA INSTITUTE OF TECHNOLOGY
+                                   MC 150-21
+                                   PASADENA, CA 91125-2500"
+ END_OBJECT                      = PERSONNEL_INFORMATION
+ OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+   ELECTRONIC_MAIL_ID            = "MEGR@GPS.CALTECH.EDU"
+
+/* Instrument Teams - LOLA */
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = JCAVANAUGH
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "JOHN CAVANAUGH"
+    LAST_NAME                     = "CAVANAUGH"
+    TELEPHONE_NUMBER              = "3016146022"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "N/A"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "NASA/GODDARD SPACE FLIGHT CENTER"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "NASA/GODDARD SPACE FLIGHT CENTER
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "JOHN.F.CAVANAUGH@NASA.GOV"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL
+
+OBJECT = PERSONNEL
+  PDS_USER_ID                     = HRIRIS
+
+  OBJECT                          = PERSONNEL_INFORMATION
+    FULL_NAME                     = "HARIS RIRIS"
+    LAST_NAME                     = "RIRIS"
+    TELEPHONE_NUMBER              = "3016146736"
+    ALTERNATE_TELEPHONE_NUMBER    = "N/A"
+    FAX_NUMBER                    = "3016146744"
+    PDS_ADDRESS_BOOK_FLAG         = "N"
+    INSTITUTION_NAME              = "NASA/GODDARD SPACE FLIGHT CENTER"
+    PDS_AFFILIATION               = "N/A"
+    NODE_ID                       = "N/A"
+    REGISTRATION_DATE             = "N/A"
+    ADDRESS_TEXT                  = "NASA/GODDARD SPACE FLIGHT CENTER
+                                    GREENBELT, MD 20771"
+  END_OBJECT                      = PERSONNEL_INFORMATION
+  OBJECT                          = PERSONNEL_ELECTRONIC_MAIL
+    ELECTRONIC_MAIL_ID            = "HARIS.RIRIS-1@NASA.GOV"
+    ELECTRONIC_MAIL_TYPE          = "INTERNET"
+    PREFERENCE_ID                 = 1
+  END_OBJECT                      = PERSONNEL_ELECTRONIC_MAIL
+END_OBJECT                        = PERSONNEL

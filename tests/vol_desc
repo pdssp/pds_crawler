@@ -1,0 +1,42 @@
+PDS_VERSION_ID          = PDS3
+RECORD_TYPE             = STREAM
+
+OBJECT                  = VOLUME
+  VOLUME_SERIES_NAME    = "MISSION TO MARS"
+  VOLUME_SET_NAME       = "MGS MARS ORBITER LASER ALTIMETER PEDR
+                          AND EGDR ARCHIVES"
+  VOLUME_SET_ID         = USA_NASA_JPL_MGSL_XXXX
+  VOLUME_NAME           = "MGS MOLA PEDR ARCHIVE"
+  VOLUME_ID             = MGSL_21XX
+  VOLUMES               = 1
+  MEDIUM_TYPE           = "ONLINE"
+  VOLUME_FORMAT         = "N/A"
+  VOLUME_VERSION_ID     = "VERSION 1"
+  PUBLICATION_DATE      = 2003-02-27
+  DESCRIPTION           = "This volume contains the complete set of
+      MOLA PEDR products acquired during the Mars Global Surveyor
+      mission. These PEDR products have been regenerated using the
+      final version of the processing software. "
+  DATA_SET_ID           = "MGS-M-MOLA-3-PEDR-L1A-V1.0"
+
+  OBJECT                = DATA_PRODUCER
+    INSTITUTION_NAME    = "NASA/GODDARD SPACE FLIGHT CENTER"
+    FACILITY_NAME       = "LABORATORY FOR TERRESTRIAL PHYSICS"
+    FULL_NAME           = "DAVID E. SMITH"
+    ADDRESS_TEXT        = "CODE 920, NASA-GSFC, GREENBELT, MD 20771"
+    ELECTRONIC_MAIL_ID  = "DAVID.E.SMITH@GSFC.NASA.GOV"
+    TELEPHONE_NUMBER    = "301-286-8671"
+  END_OBJECT            = DATA_PRODUCER
+
+  OBJECT                     = CATALOG
+    ^MISSION_CATALOG         = "MISSION.CAT"
+    ^DATA_SET_CATALOG        = "PEDRDS.CAT"
+    ^INSTRUMENT_CATALOG      = "INST.CAT"
+    ^INSTRUMENT_HOST_CATALOG = "INSTHOST.CAT"
+    ^PERSONNEL_CATALOG       = "PERSON.CAT"
+    ^REFERENCE_CATALOG       = "REF.CAT"
+  END_OBJECT                 = CATALOG
+
+END_OBJECT              = VOLUME
+
+END

@@ -1,0 +1,726 @@
+PDS_VERSION_ID                   = PDS3
+LABEL_REVISION_NOTE              = "S. SLAVNEY, 1998-09-10;
+                                    S. SLAVNEY, 1999-02-24;
+                                    G. NEUMANN, 2003-02-26;
+                                    A. WHITE,   2020-09-25"
+RECORD_TYPE                      = STREAM
+
+OBJECT                           = DATA_SET
+ DATA_SET_ID                     = "MGS-M-MOLA-3-PEDR-L1A-V1.0"
+
+ OBJECT                          = DATA_SET_INFORMATION
+  DATA_SET_NAME                  = "MOLA PRECISION EXPERIMENT DATA
+                                   RECORD"
+  DATA_SET_TERSE_DESC            = "The Precision Experiment Data Record
+    (PEDR) archive contains Mars Global Surveyor (MGS) Mars Orbiter Laser
+    Altimeter (MOLA) science mode telemetry data that has been converted
+    to engineering and physical units."
+  DATA_SET_COLLECTION_MEMBER_FLG = "N"
+  START_TIME                     = 1997-212T19:10:00.000
+  STOP_TIME                      = 2001-181T11:10:40.000
+  DATA_OBJECT_TYPE               = FILE
+  DATA_SET_RELEASE_DATE          = 2003-02-27
+  PRODUCER_FULL_NAME             = {"DAVID E. SMITH", "MARIA T. ZUBER",
+                                    "GREGORY A. NEUMANN", "PEGGY JESTER"}
+  DETAILED_CATALOG_FLAG          = "N"
+  ABSTRACT_DESC                  = "The Precision Experiment Data Record
+    (PEDR) archive contains Mars Global Surveyor (MGS) Mars Orbiter Laser
+    Altimeter (MOLA) science mode telemetry data that has been converted
+    to engineering and physical units."
+  CITATION_DESC                  = "Smith, D., M. T. Zuber, G. A. Neumann,
+    and P. Jester, Mars Global Surveyor Laser Altimeter Precision
+    Experiment Data Record, NASA Planetary Data System,
+    MGS-M-MOLA-3-PEDR-L1A-V1.0, 2003."
+  DATA_SET_DESC                  = "
+
+  Data Set Overview
+  =================
+  The Mars Global Surveyor (MGS) spacecraft included a laser altimeter
+  instrument. The primary objective of the Mars Orbiter Laser
+  Altimeter (MOLA) is to determine globally the topography of Mars at
+  a level suitable for addressing problems in geology and geophysics.
+
+  A Precision Experiment Data Record (PEDR) contains MOLA science mode
+  telemetry data that has been converted to engineering and physical
+  units. The Aggregated Experiment Data Record (AEDR) is the source for
+  the science data, while ancillary information is provided by the Radio
+  Science investigation. Precision orbit, geometric, and calibration data
+  have been incorporated, as well as an equipotential datum (areoid), so
+  that topographic profiles may be obtained directly from the PEDR.
+
+  Each PEDR contains a 2 second span of data, called a frame, that is
+  retrieved from the 14 second MOLA science mode telemetry
+  packets. Therefore, seven PEDRs are generated from each MOLA AEDR
+  record. In addition to the frame data, the packet's engineering and
+  housekeeping data are retained and subcommutated among the seven
+  PEDRs that comprise a packet. Some of the engineering data, namely
+  the background noise counters, have recently been used as a
+  narrow-band radiometric data type and will be archived separately.
+  Additional packet information, e.g., packet header, are stored in
+  the PEDR as well as data correction values which were used to
+  process the telemetry data into the PEDR data.
+
+  A complete listing of all parameters contained in a PEDR can be
+  found in Table 1 of the PEDR Software Interface Specification (SIS)
+  document [MOLAPEDRSIS2003]. A description of the parameters
+  contained in a PEDR is found in Table 2. The
+  engineering/housekeeping data are listed in Table 3; this table also
+  describes the location of the engineering/housekeeping data among
+  the seven PEDRs that constitute a MOLA telemetry
+  packet. Additionally, the PEDR format and contents are described in
+  the PEDR Data Dictionary in Appendix B of the SIS.
+
+  Contained in a PEDR are the range value computed at the frame mid-
+  point, the planetary radius at the frame mid-point, and the
+  planetary radius for each shot. Range counts are converted to units
+  of length following [ABSHIREETAL2000]. There are 20 possible shots
+  in a 2 second frame, numbered from 1-20. Additionally, ground and
+  spacecraft location, i.e., latitude, longitude, and radial distance,
+  obtained from the precision orbit data for the frame mid-point, are
+  stored in the PEDR.  The change in latitude and longitude per frame
+  is also stored, so that the location of individual shots may be
+  obtained by interpolation via the generic formula: shot_location =
+  mid_pt_location + (shot_no - 10.5)/20 * delta_location. In view of
+  the parallax introduced by offnadir observations, there is an added
+  first-order correction for deviations in radius from the frame mid-
+  point radius to the location of each individual shot in a frame.
+
+  The range and precision orbit data are given with respect to the
+  Mars Global Surveyor center of mass. The planetary radius values are
+  computed with respect to the center of mass of Mars. The locations
+  of the MOLA shots are in areocentric coordinates, with the longitude
+  positive Eastward. Each footprint represents the centroid of a pulse
+  returned within a spot approximately 168 m in diameter, although the
+  majority of the energy detected from an individual shot may come
+  from a smaller area 75 m in diameter [NEUMANNETAL2003]. The
+  cartographic reference frame and rotational model describing ground
+  locations used in this release is the IAU2000 model
+  [SEIDELMANNETAL2002] based on Viking, Pathfinder, and MGS data. This
+  frame differs from the IAU1991 coordinate system used in earlier
+  MOLA releases [DAVIESETAL1992B].  The most significant change is the
+  longitude of the prime meridian in the J2000 epoch and reference
+  frame, which has decreased by 0.238 degrees from IAU1991. The effect
+  of this change is to place the center of a landmark, the crater
+  Airy-0, as close as possible to 0 longitude, and reduce the
+  discrepancy between Viking-era maps and the MOLA locations
+  introduced by a mistaken location for the Viking-1 Lander
+  [ZEITLER&OBERST1999].
+
+  On Earth, it is customary to define topography in terms of a height
+  above or below 'sea level', given that the ocean is very nearly an
+  equipotential.  surface. Beneath continents, an ellipsoidal datum is
+  used that closely matches the mean static oceanic surface, or geoid.
+  In contrast to terrestrial practice, the topography of Mars is
+  referenced to an equipotential surface, or areoid, described below.
+  The areoid departs by nearly 2 km from an ellipsoid of revolution
+  and cannot be described as a simple function of latitude. An earlier
+  such datum [WU1991] was defined by a spherical harmonic
+  expansion to degree and order four, thought to represent the height
+  at which the mean atmospheric pressure would equal 6.1 mbar (the
+  triple point of water). The martian atmosphere exchanges nearly 30%
+  of its mass with the poles annually, so that pressure is highly
+  variable with season. MOLA uses an areoid defined by a gravitational
+  potential model derived from satellite tracking, and an equatorial
+  mean planetary radius.  MOLA topography is the difference between
+  planetary radius and areoid at a given longitude and latitude. The
+  average 6.1 mbar pressure surface lies about 1.6 km below the MOLA
+  areoid [SMITH&ZUBER1998], but is expected to vary by 1.5 - 2.5 km
+  with season.
+
+  The areoid is defined as a surface of constant gravitational plus
+  rotational potential. The inertial rotation rate of Mars is assumed
+  to be 0.70882187E-4 rad/s. This potential is the mean value at the
+  equator at a radius of 3396.000 km, namely 12652804.7 m^2/s^2,
+  calculated from Goddard Mars Gravity Model mgm1025
+  [LEMOINEETAL2001] evaluated to degree and order 50.  Coefficients
+  of mgm1025 are archived by the Radio Science investigation.  At a
+  given longitude and latitude, zero elevation has a potential equal
+  to the mean equatorial potential at a radius of 3396 km. The choice
+  of 3396 km is convenient but somewhat arbitrary, as the radius of
+  Mars at the equator varies from 3390.219 to 3411.522 km, with mean
+  3396.195 km, median 3396.068, and mode 3394.324 km. In practice the
+  radius of the areoid is calculated iteratively using spherical
+  harmonics so that the potential due to gravity and rotation at that
+  radius is equal to the equatorial value.  Earlier releases used the
+  Goddard Mars potential model mgm0964c20 areoid, based on preliminary
+  MGS tracking and the IAU1991 coordinate system. The mgm1025 areoid
+  differs by 3 m root-mean-square (RMS) from previous releases, with
+  changes as large as 27 m over the Tharsis volcanoes and elsewhere.
+
+  Users of MOLA data must be aware of two important differences
+  between the planetocentric coordinate system and Viking-era
+  coordinates.  These differences are significant when comparing MOLA
+  groundtracks to MDIMs, USGS DTMs, or maps. MOLA uses the areocentric
+  coordinate system in IAU2000. MOLA areocentric coordinates may be
+  converted to areographic coordinates by means of relations given
+  below that depend on the flattening of the ellipsoid assumed.  The
+  IAU2000 recommended values for mean equatorial and polar radius are
+  3396.2 and 3376.2 km. Earlier IAU models gave values of 3397 and
+  3375 km.  (Note that Viking data assumed equatorial radius = 3393.40
+  km, and polar radius = 3375.73 km). Owing to the 3-km offset between
+  the Mars center of figure and its center of mass, the polar radii
+  differ from north to south by 6 km. These considerations cause
+  headaches when areographic latitudes, sometimes poorly specified,
+  are compared with planetocentric latitudes.
+
+  MOLA longitudes are areocentric, with positive degrees East.
+  Areographic longitudes are given as positive degrees West.  However,
+  the Viking-era longitudes were less precise than MOLA's and there
+  are additional offsets relative to the present IAU2000 frame.  The
+  magnitude of offset varies. More than one factor may contribute to
+  this discrepancy; a primary reason is a change in the IAU coordinate
+  system. Other possible effects are a drift of the prime meridian due
+  to uncertainties in the martian rotation period or errors in the
+  Viking spacecraft orbital position that propagated through the image
+  processing [SMITHETAL1998].
+
+
+  Data
+  ====
+  The primary standard products are the Precision Experiment Data
+  Record (PEDR) files.  The files are in binary format with an
+  attached PDS label. The SIS document describing this standard
+  product is included on this volume.
+
+  The PEDRs contain instrument science data, spacecraft and
+  sub-spacecraft location, estimates of the planetary radii, and radii
+  of an areoid equipotential surface. The MOLA topography is the shot
+  planetary radius minus the areoid radius at a given location.
+
+
+  Parameters
+  ==========
+  The MOLA instrument measures the round-trip time of flight of
+  infrared laser pulses transmitted from the MGS spacecraft to the
+  Martian surface.  The instrument normally operated in a single
+  autonomous mode, in which it produced ranging measurements.  Surface
+  topography estimates can be derived from these data, given
+  appropriate corrections for the position and attitude of the
+  spacecraft.
+
+
+  Processing
+  ==========
+  The PEDRs incorporate the best multi-arc orbital solutions derived
+  from Goddard Mars potential models and the available tracking,
+  supplemented by limited altimetric crossovers. Spacecraft clock
+  conversions are applied to obtain obtain Ephemeris Time in seconds
+  from the J2000 epoch, whence MGS state vectors are found for each
+  shot and the corresponding pointing matrices from project-supplied
+  C-kernels. Instrument timing biases and boresight offsets are given
+  by the MOLA instrument kernel version 2.6. MOLA ranges account for
+  instrument delays and the leading edge timing biases, estimated by
+  the receiver model of [ABSHIREETAL2000]. This model uses the
+  detector threshold settings and the pulse width and energy
+  measurements between the threshold crossings to infer the true pulse
+  centroid, width, and amplitude. During the aerobraking mission
+  phases, the highly eccentric orbit brought MOLA much closer to the
+  surface of Mars than the design called for. Due to the
+  inverse-square-law energy return in the link equation
+  [ZUBERETAL1992], the instrument detector was saturated during the
+  periapsis approach.  Received pulse energy and pulse width are
+  resolved during the portion of these passes when the detector is not
+  saturated.  The absolute accuracy of these quantities is about 5%,
+  and caution must be exercised when interpreting these measurements.
+  [NEUMANNETAL2003] give a more recent analysis and calibration of the
+  pulse width and energy measurements.
+
+  Laser energies are calculated according to the transmitter model of
+  [AFZALETAL1997]. During operation the laser energy declined
+  gradually to about half its preflight output, as discussed in
+  [SMITHETAL2001A].  Even so, returning pulses over bright terrain
+  remained saturated.  A bistatic measurement of albedo is possible
+  from the link equation during portions of the observations that are
+  not saturated, but is affected by the two-way atmospheric
+  transmittance. Further details are given in [IVANOV&MUHLEMAN1998].
+
+  The MOLA range data are clocked by the 99.996 MHz frequency F of the
+  MOLA timing oscillator, stable to 1 part in 10**8 per day, which in
+  turn is calibrated with respect to the spacecraft clock and thereby
+  to ground station standards. A post-launch calibration of the MOLA
+  oscillator resulted in an estimated frequency F=99,996,232 +/- 5 Hz.
+  This frequency changed due to clock drift and was updated daily in
+  the PEDR to maintain longterm absolute calibration. The firing
+  interval Delta_T was controlled by this clock so that Delta_T =
+  10,000,000 / F. Eventually the oscillator circuit gain degraded from
+  aging and radiation so much that F began to decrease rapidly, and
+  firing ceased. Despite these changes, range accuracy was limited
+  only by the 37 cm precision of the timing measurement and by the
+  estimate of the pulse centroid location with respect to the
+  leading-edge time (range walk). Range walk is terrain- and
+  link-dependent. A pulse width measurement is incorporated into the
+  calibration of [ABSHIREETAL2000], but where the energy and pulse
+  width measurements are saturated, a threshold-dependent leading-edge
+  timing bias derived from system characteristics is used instead of
+  pulse width.  The leading-edge timing correction may underestimate
+  centroid range over very bright or rough terrain by a few tenths of
+  a meter.
+
+  Time tags are given in ET seconds of MOLA fire time.  Timing of the
+  shots is interpolated to ~100 microseconds. Precision was essential
+  in the highly elliptical orbit insertion geometry because the
+  spacecraft radial distance changed by as much as 1600 meters per
+  second. Further timing corrections are discussed in the MOLA
+  instrument kernel version 2.6, but no adjustment to time tags has
+  been applied in the PEDR. In other words, the time of MOLA
+  observations used in a dynamical sense is 117 ms later than the
+  stated laser fire time.
+
+  The ground location and planetary radius is calculated in inertial
+  (J2000) coordinates as the difference between the spacecraft
+  position vector and the MOLA one-way range vector. The direction of
+  the MOLA vector is obtained from project-supplied spacecraft
+  attitude kernels and the boresight calibration of the instrument
+  with respect to the spacecraft. The one-way range of the laser shot
+  to the planet is obtained from the two-way range by correcting for
+  the change in spacecraft position during laser shot
+  time-of-flight. The ground point position vector is transformed into
+  planetary body-fixed coordinates at a time midway between the MOLA
+  laser fire time and the shot receive time, using the IAU2000
+  planetary model.
+
+  There is a table entry for each non-zero shot range detection for
+  all in-range packets in the data stream.  Occasional corrupted range
+  values occur due to transmission errors, and some packets are lost
+  entirely. A packet sequence number and checksum is generated by
+  MOLA.  The sequence number was initialized to 0 just before the
+  planet came within range during the SPO-1 and 2 data passes via a
+  restart command, while during the Hiatus subphase the restart
+  occurred earlier. During mapping the sequence number increments
+  continuously to its maximum of 16,383, followed by packets numbered
+  0, 0, 1, 2....  Where possible, packets with invalid checksums are
+  allowed, since usually only the latter frames of 7 in the packet are
+  affected.
+
+  Some MOLA ranges are either clouds or false detections due to the
+  intrinsic noise characteristics of the receiver. The MOLA ranges
+  that are true ground hits are flagged with a
+  shot_classification_code of 1 in the PEDR. A statistical and visual
+  analysis of cloud features and morphology can be performed,
+  revealing polar CO2 ice, water ice, and dust clouds at altitudes up
+  to 20 km above the surface.
+
+    Revision Notes
+    --------------
+
+    The final release of the PEDRs incorporates several minor changes
+    in the data format. One purpose of these changes is to expand the
+    information provided by crossover analysis, so that some estimate
+    of orbit and attitude quality can be made. The intent was also to
+    minimize any backward incompatibility with existing software,
+    keeping the record length and label structure the same. Existing
+    fields with marginally useful information were modified. These
+    changes apply to PRODUCT_VERSION_TYPE = 'R010-CALIBRATED REL.',
+    with the PRODUCT_ID and FILENAME version letter 'L'.
+
+    The following two bytes were previously bit fields in the
+    'SHOT_QUALITY_DESCRIPTOR_FLAG' reserved for the 'transmit power
+    test'. Since the MOLA laser never failed this test, these were
+    identically 0. Iterating the crossover adjustments did not always
+    converge, so that the final adjustment values were larger than
+    expected at some times. These values may be used to edit records
+    when significantly greater than 0. All values are scaled to
+    integers.
+
+     Bytes  Type      Range  Usage
+     34     unsigned  0-255  radial crossover adjustment magnitude, m
+     35     unsigned  0-255  in-plane crossover adjustment, unit = 30 m
+
+    The range window test, range comparison test, and return energy
+    test were not implemented. These and spare bits have been used for
+    the crossover adjustment delta-latitude and delta-longitude. These
+    values may be used to recover the original frame-midpoint location
+    in body-fixed (areocentric) coordinates, by subtracting them from
+    the frame-midpoint values in bytes 337-340 and 341-344.
+
+        Bytes
+        41-44   signed  *       crossover delta-latitude, degrees * 10^6
+        45-48   signed  *       crossover delta-latitude, degrees * 10^6
+
+    The atmospheric opacity field in bytes 549-552 was never
+    implemented. These bytes were replaced with the total along-track
+    and across-track crossover adjustments, in units of 3 cm. Where
+    these exceed approximately one shot spacing along-track (10000
+    units, 300 m) or one half shot spacing across-track, records may
+    be edited. Values of 32767 or -32768 denote invalid
+    adjustments. No attempt was made to adjust tracks where attitude
+    knowledge was missing, or where the laser beam incidence/emission
+    angle exceeded 0.025 radians or 1.4 degrees, as measured from a
+    planetary radial vector at the ground point. These values were
+    described in the PEDRSIS-2.8 revision.
+
+        549-550 signed *        crossover along-track delta
+        551-552 signed *        crossover across-track delta
+
+    The received optical pulse width, corrected, scaled
+    received_pulse_energy, and surface reflectivity-transmission
+    product have been recalculated following methods described in
+    Neumann et al., 2003, Mars Orbiter Laser Altimeter pulse width
+    measurements and footprint-scale roughness, Geophysical Research
+    Letters, in press. The measured pulse width at channel threshold
+    setting has been recalibrated based on inflight data as described
+    therein. In particular, the inversion for received optical pulse
+    width has been improved, to correspond more closely to pulse
+    spreading due to surface slope, non-nadir incidence, and
+    footprint-scale roughness. The bytes assigned are unchanged, but
+    values will differ. Each field consists of 20 16-bit values.
+
+      145-184 unsigned 0-65535 Received energy, attojoules
+      185-224 unsigned 0-65535 Reflectivity-transmission fraction * 10^5
+      245-284 unsigned 0-65535 Pulse width at trigger threshold, ns * 10
+      285-324 unsigned 0-65535 Sigma-optical, one S.D., ns * 10.
+
+
+  Ancillary Data
+  ==============
+  N/A
+
+
+  Coordinate System
+  =================
+  The diverse processing and display requirements for various
+  observational quantities necessitates flexibility in the choice of
+  coordinate system.  Two systems are used to describe data products
+  on this volume:
+
+     1.  The areocentric coordinate system [DAVIESETAL1996], more
+  generally described as planetocentric, is body-centered, using the
+  center-of-mass as the origin.  Areocentric latitude is defined by
+  the angle between the equatorial plane and a vector extending from
+  the origin of the coordinate system to the relevant point on the
+  surface.  Latitude is measured from -90 degrees at the south pole to
+  +90 degrees at the north pole.  Longitude extends from 0 to 360
+  degrees, with values increasing eastward (i.e., it is a right-handed
+  coordinate system) from the prime meridian. This coordinate system
+  is preferred for use in navigation and geophysical studies in which,
+  for example, estimates of elevation or gravitational potential are
+  generated mathematically.
+
+     2.  The areographic system (more generally, the planetographic
+  system) uses the same center-of-mass origin and coordinate axes as
+  the areocentric coordinate system.  Areographic latitudes are
+  defined by a vector normal to a reference ellipsoid surface.
+  Longitudes are measured from the prime meridian and increase toward
+  the west since Mars is a prograde rotator [DAVIESETAL1996].  This
+  system was standard for cartography of Mars and most pre-MGS maps
+  portray locations of surface features in areographic coordinates.
+  For MGS, the following data have been adopted as standard for
+  defining the reference spheroid for computing the areographic
+  latitudes [SEIDELMANNETAL2002]:
+
+          Equatorial radius  = 3396.2 km
+          Polar radius       = 3376.2 km
+          Flattening         = 0.0058889
+          Inverse flattening = 169.81
+
+  Note that the flattening is computed as one minus the ratio of the
+  polar radius to the equatorial radius. The gravitational flattening
+  of the planet is somewhat less, roughly 1/191. The relationship
+  between areographic and areocentric latitudes is approximated as:
+
+          tan(lc) = (1-f) * (1-f) * tan(lg)
+
+  where:  f = flattening
+       lg = areographic latitude
+       lc = areocentric latitude
+
+  Areocentric longitudes may be converted to areographic longitudes by
+  the relation
+
+     long_areographic = 360 - long_areocentric.
+
+
+  Software
+  =======
+  Software for accessing the PEDR data products is provided on the
+  archive volumes and on the PDS Geosciences Node web site at
+  http://wwwpds.wustl.edu and the MOLA Science Team web site at
+  http://ltpwww.gsfc.nasa.gov/tharsis/mola.html.
+
+
+  Media/Format
+  ============
+  The MGS MOLA PEDR dataset will be available electronically via the
+  PDS Geosciences Node web site at http://wwwpds.wustl.edu and the
+  MOLA Science Team web site at
+  http://ltpwww.gsfc.nasa.gov/tharsis/mola.html.  Formats will be
+  based on standards established by the Planetary Data System (PDS). "
+
+
+  CONFIDENCE_LEVEL_NOTE           = "
+
+  Overview
+  ========
+  The resolution of the data is about 40 cm vertically, and about 300
+  m along-track, limited by the 10 Hz firing rate of the laser.  Small
+  errors in the MGS ephemeris and pointing knowledge have been
+  corrected by means of crossover analysis [NEUMANNETAL2001]. The
+  absolute, long-wavelength radial orbit error is estimated to be 1 m
+  after adjustment. The uncertainty in absolute ground spot location
+  is limited by the attitude knowledge of the spacecraft, and is
+  estimated to be about 100 m at a nominal range of 400 km.
+
+
+  Review
+  ======
+  The volume containing the MOLA PEDR topography dataset was reviewed
+  by MGS mission scientists and by PDS.
+
+
+  Data Coverage/Quality
+  =====================
+  On September 15, 1997, on the 3rd orbit after insertion, MOLA ranged
+  to the surface of Mars with greater than 99% success for 21 minutes.
+  A further 17 passes were collected between October 14 and November
+  6, 1997 during a hiatus in the aerobraking phase necessitated by a
+  study of the integrity of a solar panel that was slightly damaged
+  after launch.
+
+  MOLA collected 61 topographic profiles of Mars' northern hemisphere
+  during the first phase of the MGS Science Phasing Orbit (SPO-1) that
+  spanned the period from March 26, 1998 until April 28, 1998. All of
+  the MOLA data collected during SPO-1 were presented in thirteen
+  talks and posters during the week of May 26, 1998 at the Spring
+  Meeting of the American Geophysical Union in Boston.
+
+  MOLA's SPO-1 observations were collected during orbital passes in
+  which targeted imaging of surface features was not being attempted.
+  Collection of images of target sites (Viking 1 & 2 and Pathfinder
+  landing sites and Cydonia) resulted in a loss of about 25% of the
+  data that MOLA could have collected during that period.  SPO-1 ended
+  in mid-May, just before solar conjunction. During conjunction the
+  sun is in the line of sight of the spacecraft, which interferes with
+  communication, so commanding of the spacecraft is minimized.
+
+  On May 26, 1998, the Mars Global Surveyor (MGS) spacecraft entered
+  into Phase 2 of the Science Phasing Orbit (SPO-2). SPO is a
+  near-polar (92.869 degrees) inclination orbit with a period of 11.6
+  hours and a periapsis altitude of about 170 km. During SPO-2 MOLA
+  collected observations of Mars' northern hemisphere, with detailed
+  mapping of the north polar ice cap. Late June and early July 1998
+  was expected to be the period of maximum ice loading for the
+  northern cap for the current Martian year and thus represented an
+  especially exciting and crucial time for MOLA observations. The
+  observations collected during this period contributed significantly
+  towards understanding the present-day Martian volatile budget. For
+  two weeks, the MGS spacecraft was tilted on alternating orbits so
+  that MOLA could fill in the coverage gap at the north pole that
+  occurred because the spacecraft orbital inclination is not exactly
+  90 degrees.
+
+  The Science Phasing Orbits represented a hiatus from aerobraking
+  that was needed so that the spacecraft could achieve the desired
+  local time for the mapping orbit that was entered in February,
+  1999. The geometry of these orbits was not optimal for MOLA science,
+  and in order to limit thermal stress on the laser and risks from
+  repeated power cycling, MOLA ceased ranging in SPO after 1998 JUL
+  30. An opportunity to range to the moon Phobos was provided on 1998
+  SEP 12, at which time MOLA collected ranges for 63 seconds before
+  swinging off the satellite limb.  Aerobraking resumed a few days
+  later.
+
+  During aerobraking passes, the MOLA instrument did not collect data
+  because the instrument was not pointed at the surface during the
+  period of time when the spacecraft is within ranging distance.
+  During the aerobraking exit phase, MOLA was again oriented toward
+  Mars and commenced mapping operations on 1999 FEB 28. The first
+  ground observations were obtained on orbit 1583. Mapping officially
+  began a week later, at which point the MGS project reset their orbit
+  numbering to 1. To avoid conflict and maintain increasing orbits,
+  MOLA added 10000 to the mapping orbit numbers, starting with orbit
+  12. Issues with the high-gain antenna gymbal resulted in less than
+  100% mapping coverage for several weeks, following which MOLA
+  operated continuously until 2000 JUN 01, at solar
+  conjunction. Mapping resumed on 2000 AUG 01 and continued through
+  the end of the Primary Mission and for 5 months of the Extended
+  Mission. On 2001 JUN 30 at 11:10:46 UTC, MOLA's oscillator ceased
+  operation, effectively ending the possibility of further laser
+  ranging. MOLA had by that time fired over 670 million times, and
+  generated nearly 9500 orbital profiles, as well as more than 500,000
+  ranges to clouds.
+
+
+  Limitations
+  ===========
+  MOLA met or exceeded all of its design expectations. It has
+  demonstrated a measurement precision of 40 centimeters over flat
+  terrain, and measured the seasonal variations of snow depth on both
+  poles. While designed for nadir-looking operation in a circular,
+  365- to 445-km- high orbit, MOLA has ranged successfully to Mars at
+  distances from 170 to 786 km, and to surface slopes up to 60
+  degrees. MOLA has ranged to the surfaces of clouds lying at
+  elevations of a few hundred meters above the surface, to nearly 20
+  km high, and returned measurements of atmospheric opacity greater
+  than 2 during dust storms. MOLA returned 628 ranges to the moon
+  Phobos in an orbital fast-flyby. The planetary range detection rate
+  in clear atmosphere has exceeded 99% over smooth and rough terrain.
+
+  The MOLA ranges and precision orbit data have been revised as our
+  knowledge of instrument, the spacecraft and the Martian gravity
+  field improved. Important details of the instrument design and the
+  progress of the mission are found in the files INST.CAT and
+  MISSION.CAT. The orbital, atmospheric and thermal environment of the
+  Orbit Insertion phase introduced uncertainties in the data
+  quality. Eccentric orbits and frequent off-nadir pointing during
+  ranging cause a greater sensitivity to errors in spacecraft timing
+  and attitude knowledge than in mapping orbit. Thus the topography of
+  Mars is mainly derived from mapping observations.
+
+  Orbital processing of radio observations depends on conservative and
+  non-conservative force modeling. The most important consideration is
+  the gravitational attraction of Mars. The gravity model used to
+  calculate MOLA orbits through January 2000 was the mgm0989a model,
+  while the mgm1004d solution was used thereafter. These interim
+  models were based on MGS and historical tracking data
+  [SMITHETAL1999, LEMOINEETAL2001].  In cases where tracking data were
+  absent or suspect, altimetric crossovers were used to constrain the
+  orbits and incorporated into the gravity solution.  The latest
+  potential model, mgm1025, is based on tracking throughout the
+  primary MGS Primary Mission and some of the Extended Mission. The
+  formal error in the areoid to degree and order 60 is about 1.8 m
+  RMS.
+
+  Altimetric crossovers are used to assess accuracy and correct the
+  data. Using more than 75 million crossovers, one may estimate
+  empirical parameters to correct the radial, along-track, and
+  across-track position of each profile [NEUMANNETAL2001]. This
+  procedure is nonlinear and has been iterated four times, with the
+  final correction entailing adjustment of 64 parameters per
+  revolution. Adjustments are concentrated at the poles, where many
+  passes converge. The wavelength of corrections may be as short as 36
+  km, or as long as 3000 km near the equator. The effect of these
+  adjustments is to improve the registration of ground tracks, while
+  temporal variations in topography and orbital accuracy are averaged
+  out, so that the effective radial knowledge depends mainly on the
+  uncertainty in the planetary mass constant GM, equivalent to
+  decimeter errors in range.  Changes in range due to consumption of
+  fuel displacing the spacecraft center-of-mass are probably greater,
+  although they are not considered.
+
+  Range measurements are affected by the counting frequency standard,
+  electronic delays, and spreading of the returned pulse due to ground
+  slope and detector characteristics. The MOLA timing interval unit
+  has an accuracy of ~2.5 nanoseconds, its precision being extended
+  from the 10 ns clock rate by two interpolator bits.  However, range
+  walk due to variable threshold settings, pulse amplitude and shape,
+  can be many times greater than measurement precision, especially
+  over rough terrain. The MOLA instrument records the pulse width and
+  amplitude during the time that the signal exceeds a
+  software-controlled threshold. Shot ranges are corrected in
+  processing via a mathematical receiver model [ABSHIREETAL2000],
+  assuming linear instrument behavior. Flat and highly reflective
+  terrain, short ranges, and abnormal atmospheric conditions can drive
+  the electronics into saturation, increasing detected pulse width and
+  invalidating the instrument model. The range corrections for
+  saturated returns are limited to their equivalents for terrain with
+  a slope of one in sixteen. Meter-level changes in topography must be
+  interpreted in the context of the range correction values in the
+  PEDR files.
+
+  The returned-optical-pulse-width and energy measurements must also
+  be interpreted with caution, in view of the above-mentioned effects.
+  Moreover, the sensors were not calibrated over the entire range of
+  temperatures experienced during Orbit Insertion. Energy values
+  initially appeared slightly higher than measured by test equipment
+  under optimal conditions. The unsaturated return energy and
+  reflectivity measurements were only designed for 5% accuracy in any
+  case.
+
+  Lastly, the presence of highly reflective clouds, and a level of
+  noise returns consistent with instrument tradeoffs, has necessitated
+  an empirical classification of shots as to their origin. The first
+  shot of every 140 is likely to be triggered by an internal test
+  source, but may be a valid ground return, while ~1% of the shots
+  result from detector noise exceeding the triggering threshold. The
+  probable ground returns have been flagged based on a combination of
+  measurements and a stochastic model of topographic variability. An
+  unambiguous classification is often impossible, given clouds that
+  often follow the surface, and the dramatic variability of Martian
+  terrain. The classification should be used only as a guide."
+
+ END_OBJECT                      = DATA_SET_INFORMATION
+
+ OBJECT                          = DATA_SET_TARGET
+  TARGET_NAME                    = MARS
+ END_OBJECT                      = DATA_SET_TARGET
+
+ OBJECT                          = DATA_SET_HOST
+  INSTRUMENT_HOST_ID             = MGS
+  INSTRUMENT_ID                  = MOLA
+ END_OBJECT                      = DATA_SET_HOST
+
+ OBJECT                          = DATA_SET_MISSION
+  MISSION_NAME                   = "MARS GLOBAL SURVEYOR"
+ END_OBJECT                      = DATA_SET_MISSION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "ABSHIREETAL2000"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "AFZALETAL1997"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "DAVIESETAL1996"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "IVANOV&MUHLEMAN1998"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "LEMOINEETAL2001"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "MOLAPEDRSIS2003"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "NEUMANNETAL2001"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "NEUMANNETAL2003"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "SEIDELMANNETAL2002"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "SMITH&ZUBER1998"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "SMITHETAL1998"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "SMITHETAL1999"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "SMITHETAL2001A"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "SMITHETAL2001B"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "WU1991"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "ZEITLER&OBERST1999"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+ OBJECT                          = DATA_SET_REFERENCE_INFORMATION
+  REFERENCE_KEY_ID               = "ZUBERETAL1992"
+ END_OBJECT                      = DATA_SET_REFERENCE_INFORMATION
+
+END_OBJECT                       = DATA_SET
+
+END

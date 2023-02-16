@@ -1,0 +1,43 @@
+PDS_VERSION_ID                = PDS3
+RECORD_TYPE                   = STREAM
+RELEASE_ID                    = 0001
+REVISION_ID                   = 0000
+
+OBJECT                        = VOLUME
+  VOLUME_SERIES_NAME          = "MISSION TO MARS"
+  VOLUME_SET_NAME             = "MEX OMEGA EDR ARCHIVES"
+  VOLUME_SET_ID               = OMEGA-FR-CNES-CNRS-MEXOMG-0001
+  VOLUME_NAME                 = "MEX OMEGA EDR ARCHIVES"
+  VOLUME_ID                   = MEXOMG-0001
+  VOLUMES                     = UNK
+  MEDIUM_TYPE                 = "ELECTRONIC"
+  VOLUME_FORMAT               = "N/A"
+  VOLUME_VERSION_ID           = "VERSION 1"
+  PUBLICATION_DATE            = 2004-11-15
+  DESCRIPTION                 = "This volume contains the OMEGA level-1B data
+                                and the observation geometry data"
+  DATA_SET_ID                 = MEX-M-OMEGA-2-EDR-FLIGHT-V1.0
+
+  OBJECT                      = DATA_PRODUCER
+    INSTITUTION_NAME          = "INSTITUT D'ASTROPHYSIQUE SPATIAL"
+    FACILITY_NAME             = "LABORATORY FOR TERRESTRIAL PHYSICS"
+    FULL_NAME                 = "JEAN-PIERRE BIBRING"
+    ADDRESS_TEXT              = "UNIVERSITE PARIS-SUD, BATIMENT 121
+                                F-91405 ORSAY, FRANCE"
+    ELECTRONIC_MAIL_ID        = "JEAN-PIERRE-BIBRING@IAS.U-PSUD.FR"
+    TELEPHONE_NUMBER          = "0033-(0)-169-858-675"
+  END_OBJECT                  = DATA_PRODUCER
+
+  OBJECT                      = CATALOG
+    ^MISSION_CATALOG          = "MISSION.CAT"
+    ^INSTRUMENT_HOST_CATALOG  = "INSTHOST.CAT"
+    ^INSTRUMENT_CATALOG       = "INSTRUMENT.CAT"
+    ^DATA_SET_CATALOG         = "DATASET.CAT"
+    ^REFERENCE_CATALOG        = "REFERENCES.CAT"
+    ^SOFTWARE_CATALOG         = "SOFTWARE.CAT"
+    ^DATA_SET_RELEASE_CATALOG = "RELEASE.CAT"
+  END_OBJECT                  = CATALOG
+
+END_OBJECT                    = VOLUME
+
+END

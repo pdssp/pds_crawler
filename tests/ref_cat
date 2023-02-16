@@ -1,0 +1,17 @@
+PDS_VERSION_ID                     = PDS3
+LABEL_REVISION_NOTE                = "J. Ward, 2006-06-01, edited
+                                      S. Murchie, 2006-09-18, edited
+                                      J. Ward, 2006-10-31, edited;
+                                      S. Murchie, 2022-04-24, edited"
+RECORD_TYPE                        = STREAM
+
+OBJECT                             = REFERENCE
+  REFERENCE_KEY_ID                 = "BUGBYETAL2005"
+  REFERENCE_DESC                   = "Bugby, D., J. Garzon, M. Beres,
+    C. Stouffer, D. Mehoke, and M. Wirzburger, Cryogenic diode heat pipe
+    system for cryocooler redundancy, in Proc. SPIE, edited by J.B. Heaney
+    and L.G. Burriesci, Vol. 5904, pp. 321-329, 2005."
+END_OBJECT                         = REFERENCE
+
+
+END

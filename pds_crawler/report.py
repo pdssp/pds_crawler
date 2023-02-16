@@ -1,0 +1,88 @@
+# -*- coding: utf-8 -*-
+# pds-crawler - ETL to index PDS data to pdssp
+# Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
+# This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
+# SPDX-License-Identifier: LGPL-3.0-or-later
+import logging
+import os
+from dataclasses import asdict
+from dataclasses import dataclass
+from json import dumps
+
+from .load import Database
+from .utils import Observer
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class MessageModel:
+    resource: str
+    explanation: Exception
+
+    @classmethod
+    def from_dict(cls, env):
+        return cls(**{k: v for k, v in env.items()})
+
+    @property
+    def __dict__(self):
+        return asdict(self)
+
+    @property
+    def json(self):
+        return dumps(self.__dict__, indent=None)
+
+    def __repr__(self) -> str:
+        return f"MessageModel({self.ressource}, {self.explanation})"
+
+
+class CrawlerReport(Observer):
+    def __init__(self, db: Database):
+        self.__db = db
+        self.__name: str = "default_report"
+        self.__file = None
+
+    @property
+    def output(self):
+        return self.__output
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value: str):
+        self.__name = value
+
+    def start_report(self, mode: str = "w"):
+        self.__file = open(
+            os.path.join(self.__db.base_directory, self.name), mode=mode
+        )
+        self._write_header()
+
+    def _write_header(self):
+        header = """
+        Resource        |       Explanation
+        ----------------|-------------------
+        """
+        if self.__file is None:
+            logger.error(header)
+        else:
+            self.__file.write(header)
+
+    def close_report(self):
+        self.__file.flush()
+        self.__file.close()
+        self.__file = None
+
+    def notify(self, observable, *args, **kwargs):
+        """Receives the notification.
+
+        Args:
+            observable ([type]): Observable
+        """
+        message: MessageModel = args[0]
+        if self.__file is None:
+            logger.error(f"{message.resource}  | {message.explanation}")
+        else:
+            self.__file.write(f"{message.resource}  | {message.explanation}\n")

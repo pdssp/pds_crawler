@@ -1,0 +1,217 @@
+// Grammar for VOLDESC.CAT
+// This file contains the VOLUME object, which gives a high-level description of the contents of the
+//volume.
+
+start           : pds_version ( volume | properties )+ "END"
+pds_version     : "PDS_VERSION_ID" "=" "PDS3"
+revision_note   : "LABEL_REVISION_NOTE" "=" multi_lines_string
+record_type     : "RECORD_TYPE" "=" standard_value
+// VOLUME
+// ------
+// The VOLUME object describes a physical or logical unit used to store or distribute data products
+// (e.g., a magnetic tape, CD-ROM disk, or floppy disk) that contain directories and files. The
+// directories and files may include documentation, software, calibration and geometry information
+// as well as the actual science data.
+//
+//  1 Required Keywords
+//      1. DATA_SET_ID
+//      2. DESCRIPTION
+//      3. MEDIUM_TYPE
+//      4. PUBLICATION_DATE
+//      5. VOLUME_FORMAT
+//      6. VOLUME_ID
+//      7. VOLUME_NAME
+//      8. VOLUME_SERIES_NAME
+//      9. VOLUME_SET_NAME
+//      10. VOLUME_SET_ID
+//      11. VOLUME_VERSION_ID
+//      12. VOLUMES
+//
+//  2 Optional Keywords
+//      1. BLOCK_BYTES
+//      2. DATA_SET_COLLECTION_ID
+//      3. FILES
+//      4. HARDWARE_MODEL_ID
+//      5. LOGICAL_VOLUMES
+//      6. LOGICAL_VOLUME_PATH_NAME
+//      7. MEDIUM_FORMAT
+//      8. NOTE
+//      9. OPERATING_SYSTEM_ID
+//      10. PRODUCT_TYPE
+//      11. TRANSFER_COMMAND_TEXT
+//      12. VOLUME_INSERT_TEXT
+//
+//  3 Required Objects
+//      1. CATALOG
+//      2. DATA_PRODUCER
+//
+//  4 Optional Objects
+//      1. DIRECTORY
+//      2. FILE
+//      3. DATA_SUPPLIER
+
+volume          :  volume_start (properties | data_producer | catalog | data_supplier | files | directories)+ volume_stop
+volume_start.1  : "OBJECT" "=" "VOLUME"
+volume_stop.1   : "END_OBJECT" "=" "VOLUME"
+
+// DATA_PRODUCER
+// -------------
+// The DATA_PRODUCER object is a required sub-object of the VOLUME object. The
+// DATA_PRODUCER, as opposed to the DATA_SUPPLIER, is an individual or organization
+// responsible for collecting, assembling, and/or engineering the raw data into one or more data
+// sets.
+//
+//  1 Required Keywords
+//      1. INSTITUTION_NAME
+//      2. FACILITY_NAME
+//      3. FULL_NAME
+//      4. ADDRESS_TEXT
+//
+//  2 Optional Keywords
+//      1. DISCIPLINE_NAME
+//      2. NODE_NAME
+//      3. TELEPHONE_NUMBER
+//      4. ELECTRONIC_MAIL_TYPE
+//      5. ELECTRONIC_MAIL_ID
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+data_producer           : data_producer_start properties data_producer_stop
+data_producer_start.1   : "OBJECT" "=" "DATA_PRODUCER"
+data_producer_stop.1    : "END_OBJECT" "=" "DATA_PRODUCER"
+
+// CATALOG
+// -------
+// The CATALOG object is used within a VOLUME object to reference the completed PDS highlevel catalog object set. The catalog object set provides additional information related to the data
+// sets on a volume. Please refer to the File Specification and Naming chapter in this document for
+// more information.
+//
+//  1 Required Keywords
+//      None
+//
+//  2 Optional Keywords
+//      1. DATA_SET_ID
+//      2. LOGICAL_VOLUME_PATHNAME
+//      3. LOGICAL_VOLUMES
+//
+//  3 Required Objects
+//      1. DATA_SET
+//      2. INSTRUMENT
+//      3. INSTRUMENT_HOST
+//      4. MISSION
+//
+//  4 Optional Objects
+//      1. DATA_SET_COLLECTION
+//      2. PERSONNEL
+//      3. REFERENCE
+//      4. TARGET
+// TODO: DATA_SET, INSTRUMENT, INSTRUMENT_HOST, MISSION, DATA_SET_COLLECTION, PERSONNEL, REFERENCE, TARGET
+
+catalog         : catalog_start properties catalog_stop
+catalog_start.1 : "OBJECT" "=" "CATALOG"
+catalog_stop.1  : "END_OBJECT" "=" "CATALOG"
+
+// DATA_SUPPLIER
+// -------------
+// The DATA_SUPPLIER object is an optional sub-object of the VOLUME object. The
+// DATA_SUPPLIER, as opposed to the DATA_PRODUCER, is an individual or organization
+// responsible for distributing the data sets and associated data to the science community.
+//
+//  1 Required Keywords
+//      1. INSTITUTION_NAME
+//      2. FACILITY_NAME
+//      3. FULL_NAME
+//      4. ADDRESS_TEXT
+//      5. TELEPHONE_NUMBER
+//      6. ELECTRONIC_MAIL_TYPE
+//      7. ELECTRONIC_MAIL_ID
+//
+//  2 Optional Keywords
+//      1. DISCIPLINE_NAME
+//      2. NODE_NAME
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+data_supplier           : data_supplier_start properties data_supplier_stop
+data_supplier_start.1   : "OBJECT" "=" "DATA_SUPPLIER"
+data_supplier_stop.1    : "END_OBJECT" "=" "DATA_SUPPLIER"
+
+// FILE
+// ----
+// The FILE object is used in attached or detached labels to define the attributes or characteristics
+// of a data file. In attached labels, the file object is also used to indicate boundaries between label
+// records and data records in data files which have attached labels.
+//
+//  1 Required Keywords
+//      1. RECORD_TYPE
+//
+//  2 Optional Keywords
+//      1. DESCRIPTION
+//      2. ENCODING_TYPE
+//      3. FILE_NAME (required only in minimal detached labels and tape archives)
+//      4. FILE_RECORDS (required only in minimal detached labels and tape archives)
+//      5. INTERCHANGE_FORMAT
+//      6. LABEL_RECORDS
+//      7. RECORD_BYTES
+//      8. REQUIRED_STORAGE_BYTES
+//      9. SEQUENCE_NUMBER
+//      10. UNCOMPRESSED_FILE_NAME
+//
+//  3 Required Objects
+//      None
+//
+//  4 Optional Objects
+//      None
+
+files       : file*
+file        : file_start properties file_stop
+file_start  : "OBJECT" "=" "FILE"
+file_stop   : "END_OBJECT" "=" "FILE"
+
+// DIRECTORY
+// ---------
+// The DIRECTORY object is used to define a hierarchical file organization on a linear (i.e.,
+// sequential) medium such as tape. The DIRECTORY object identifies all directories and
+// subdirectories below the root level. It is a required sub-object of the VOLUME object for
+// volumes delivered on sequential media.
+// Note: The root directory on a volume does not need to be explicitly defined with the
+// DIRECTORY object.
+// Subdirectories are identified by defining DIRECTORY objects as sub-objects of the root
+// DIRECTORY. Files within the directories and subdirectories are sequentially identified by using
+// FILE objects with a SEQUENCE_NUMBER value corresponding to their position on the
+// medium. The SEQUENCE_NUMBER value must be unique for each file on the medium.
+//  1 Required Keywords
+//      1. NAME
+//
+//  2 Optional Keywords
+//      1. RECORD_TYPE
+//      2. SEQUENCE_NUMBER
+//
+//  3 Required Objects
+//      1. FILE
+//
+//  4 Optional Objects
+//      1. DIRECTORY
+// TODO: DIRECTORY for optional Objects
+
+directories     : directory*
+directory       : directory_start properties files directory_stop
+directory_start : "OBJECT" "=" "DIRECTORY"
+directory_stop  : "END_OBJECT" "=" "DIRECTORY"
+
+
+%import .grammar_common (multi_lines_string, standard_value, properties, property, keyword_property, value_property, date_str, string, simple_value, multi_values, simple_value_comma, open_bracket, close_bracket, open_list, close_list, open_parenthesis, close_parenthesis, tiret, point, CNAME)
+
+%import common.WS
+%ignore WS
+
+C_COMMENT: /\/\*.*/
+%ignore C_COMMENT

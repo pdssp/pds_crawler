@@ -1,0 +1,100 @@
+PDS_VERSION_ID = PDS3
+LABEL_REVISION_NOTE ="1998-07-01, S. Joy (PPI);"
+RECORD_TYPE = STREAM
+
+OBJECT = VOLUME
+    VOLUME_SERIES_NAME = "VOYAGERS TO THE OUTER PLANETS"
+    VOLUME_SET_NAME = "VOYAGER NEPTUNE PLANETARY PLASMA
+                        INTERACTIONS DATA"
+    VOLUME_SET_ID = USA_NASA_PDS_VG_1001
+    VOLUMES = 1
+    VOLUME_NAME = "VOYAGER NEPTUNE PLANETARY PLASMA
+                    INTERACTIONS DATA"
+    VOLUME_ID = VG_1001
+    VOLUME_VERSION_ID = "VERSION 1"
+    VOLUME_FORMAT = "ISO-9660"
+    MEDIUM_TYPE = "CD-ROM"
+    PUBLICATION_DATE = 1992-11-13
+    DESCRIPTION = "This volume contains a collection of
+    non-imaging Planetary Plasma datasets
+    from the Voyager 2 spacecraft encounter
+    with Neptune. Included are datasets
+    from the Cosmic Ray System (CRS),
+    Plasma System (PLS), Plasma Wave System
+    (PWS), Planetary Radio Astronomy (PRA),
+    Magnetometer (MAG), and Low Energy
+    Charged Particle (LECP) instruments, as
+    well as spacecraft position vectors
+    (POS) in several coordinate systems.
+    The volume also contains documentation
+    and index files to support access and
+    use of the data."
+    DATA_SET_ID = {"VG2-N-CRS-3-RDR-D1-6SEC-V1.0",
+    "VG2-N-CRS-4-SUMM-D1-96SEC-V1.0",
+    "VG2-N-CRS-4-SUMM-D2-96SEC-V1.0",
+    "VG2-N-LECP-4-SUMM-SCAN-24SEC-V1.0",
+    "VG2-N-LECP-4-RDR-STEP-12.8MIN-V1.0",
+    "VG2-N-MAG-4-RDR-HG-COORDS-1.92SEC-V1.0",
+    "VG2-N-MAG-4-SUMM-HG-COORDS-48SEC-V1.0",
+    "VG2-N-MAG-4-RDR-HG-COORDS-9.6SEC-V1.0",
+    "VG2-N-MAG-4-SUMM-NLSCOORDS-12SEC-V1.0",
+    "VG2-N-PLS-5-RDR-2PROMAGSPH-48SEC-V1.0",
+    "VG2-N-PLS-5-RDR-ELEMAGSPHERE-96SEC-V1.0",
+    "VG2-N-PLS-5-RDR-IONMAGSPHERE-48SEC-V1.0",
+    "VG2-N-PLS-5-RDR-IONLMODE-48SEC-V1.0",
+    "VG2-N-PLS-5-RDR-IONMMODE-12MIN-V1.0",
+    "VG2-N-PLS-5-RDR-ION-INBNDWIND-48SEC-V1.0",
+    "VG2-N-POS-5-RDR-HGHGCOORDS-48SEC-V1.0",
+    "VG2-N-POS-5-SUMM-NLSCOORDS-12-48SEC-V1.0",
+    "VG2-N-PRA-4-SUMM-BROWSE-SEC-V1.0",
+    "VG2-N-PRA-2-RDR-HIGHRATE-60MS-V1.0",
+    "VG2-N-PWS-2-RDR-SA-4SEC-V1.0",
+    "VG2-N-PWS-4-SUMM-SA-48SEC-V1.0",
+    "VG2-N-PWS-1-EDR-WFRM-60MS-V1.0"}
+
+    OBJECT = DATA_PRODUCER
+        INSTITUTION_NAME = "UNIVERSITY OF CALIFORNIA, LOS ANGELES"
+        FACILITY_NAME = "PDS PLANETARY PLASMA INTERACTIONS
+        NODE"
+        FULL_NAME = "DR. RAYMOND WALKER"
+        DISCIPLINE_NAME = "PLASMA INTERACTIONS"
+        ADDRESS_TEXT = "UCLA
+        IGPP
+        LOS ANGELES, CA 90024 USA"
+    END_OBJECT = DATA_PRODUCER
+
+    OBJECT = DATA_SUPPLIER
+        INSTITUTION_NAME = "NATIONAL SPACE SCIENCE DATA CENTER"
+        FACILITY_NAME = "NATIONAL SPACE SCIENCE DATA CENTER"
+        FULL_NAME = "NATIONAL SPACE SCIENCE DATA CENTER"
+        DISCIPLINE_NAME = "NATIONAL SPACE SCIENCE DATA CENTER"
+        ADDRESS_TEXT = "Code 633 \n
+        Goddard Space Flight Center \n
+        Greenbelt, Maryland, 20771, USA"
+        TELEPHONE_NUMBER = "3012866695"
+        ELECTRONIC_MAIL_TYPE = "NSI/DECNET"
+        ELECTRONIC_MAIL_ID = "NSSDCA::REQUEST"
+    END_OBJECT = DATA_SUPPLIER
+
+    OBJECT = CATALOG
+        ^MISSION_CATALOG = "MISSION.CAT"
+        ^INSTRUMENT_HOST_CATALOG = "INSTHOST.CAT"
+        ^INSTRUMENT_CATALOG = {"CRS_INST.CAT",
+        "LECPINST.CAT",
+        "MAG_INST.CAT",
+        "PLS_INST.CAT",
+        "PRA_INST.CAT",
+        "PWS_INST.CAT"}
+        ^DATA_SET_CATALOG = {"CRS_DS.CAT",
+        "LECP_DS.CAT",
+        "MAG_DS.CAT",
+        "PLS_DS.CAT",
+        "POS_DS.CAT",
+        "PRA_DS.CAT",
+        "PWS_DS.CAT"}
+        ^TARGET_CATALOG = TARGET.CAT
+        ^PERSONNEL_CATALOG = PERSON.CAT
+        ^REFERENCE_CATALOG = REF.CAT
+    END_OBJECT = CATALOG
+END_OBJECT = VOLUME
+END
