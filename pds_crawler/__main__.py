@@ -6,6 +6,7 @@
 """Main program."""
 import argparse
 import logging
+import os
 import signal
 import sys
 
@@ -90,6 +91,13 @@ def parse_cli() -> argparse.Namespace:
         help="set Level log (default: %(default)s)",
     )
 
+    parser.add_argument(
+        "-d",
+        "--database",
+        help="Name and path of the database (default: %(default)s)",
+        default=os.path.join("work", "database", "pds.h5"),
+    )
+
     subparser = parser.add_subparsers()
     extraction = subparser.add_parser(
         name="extract", description="Data extraction from PDS"
@@ -122,7 +130,6 @@ def run():
 
     try:
         options_cli = parse_cli()
-
         pds_crawler = Crawler(options_cli=options_cli)
         pds_crawler.run()
         sys.exit(0)

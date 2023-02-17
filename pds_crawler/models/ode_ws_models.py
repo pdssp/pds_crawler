@@ -3,6 +3,7 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
+"""ODE services models"""
 import inspect
 import logging
 import os

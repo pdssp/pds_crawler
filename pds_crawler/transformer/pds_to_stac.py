@@ -3,6 +3,25 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
+"""
+Module Name:
+    pds_to_stac
+
+Description:
+    the pds_to_stac module convert the PDS3 objects and records from ODE web service to a unique
+    STAC PDS catalog.
+
+Classes:
+    StacTransformer:
+        Abstract class.
+    StacRecordsTransformer :
+        Converts records from ODE webservice to PDS STAC catalog.
+    StacCatalogTransformer :
+        Converts PDS3 object from ODE archive to PDS STAC catalog (without items)
+
+Author:
+    Jean-Christophe Malapert
+"""
 import logging
 import os
 from abc import ABC
@@ -40,6 +59,8 @@ logger = logging.getLogger(__name__)
 
 
 class StacTransformer(ABC, Observable):
+    """Abstract class for STAC transformation"""
+
     def __init__(self, database: Database):
         super().__init__()
         if not isinstance(database, Database):
@@ -54,6 +75,8 @@ class StacTransformer(ABC, Observable):
 
 
 class StacRecordsTransformer(StacTransformer):
+    """Convert the records to STAC."""
+
     def __init__(
         self,
         database: Database,
@@ -73,7 +96,8 @@ class StacRecordsTransformer(StacTransformer):
     def catalog(self) -> pystac.Catalog:
         return self.__catalog
 
-    def read_root_catalog(self):
+    def load_root_catalog(self):
+        """Loads the root catalog"""
         self.__catalog = pystac.Catalog.from_file(
             os.path.join(self.database.stac_directory, "catalog.json")
         )
@@ -81,6 +105,18 @@ class StacRecordsTransformer(StacTransformer):
     def _create_items_stac(
         self, pds_records: PdsRecords, pds_collection: PdsRegistryModel
     ) -> pystac.ItemCollection:
+        """Creates a collection of STAC items of records from a PDS collection.
+
+        The records are loaded from the local storage, handled by `PdsRecord`
+
+        Args:
+            pds_records (PdsRecords): Object that handle Records
+            pds_collection (PdsRegistryModel): PDS collection data
+
+        Returns:
+            pystac.ItemCollection: Collection of items
+        """
+
         def create_items(
             pages: Iterator[PdsRecordsModel], pds_collection: PdsRegistryModel
         ) -> Iterable[pystac.Item]:
@@ -119,6 +155,14 @@ class StacRecordsTransformer(StacTransformer):
     def _is_exist(
         self, catlog_or_collection: Union[pystac.Catalog, pystac.Collection]
     ) -> bool:
+        """Check if catlog_or_collection exists.
+
+        Args:
+            catlog_or_collection (Union[pystac.Catalog, pystac.Collection]): STAC catalog or collection
+
+        Returns:
+            bool: True when the catalog or the collection exists otherwise False
+        """
         return catlog_or_collection is not None
 
     def to_stac(
@@ -126,6 +170,12 @@ class StacRecordsTransformer(StacTransformer):
         pds_records: PdsRecords,
         pds_collections: List[PdsRegistryModel],
     ):
+        """Create a STAC catalogs with its children.
+
+        Args:
+            pds_records (PdsRecords): Objcet that handle the PDS records
+            pds_collections (List[PdsRegistryModel]): All PDS collections data
+        """
         for pds_collection in tqdm(
             pds_collections,
             desc="Processing collection",
@@ -211,19 +261,20 @@ class StacRecordsTransformer(StacTransformer):
                 parent.save_object(include_self_link=False)
 
     def describe(self):
+        """Describes the STAC catalog and its children as a tree"""
         self.catalog.describe()
 
-    def describe_changes(self):
-        self.catalog.get_child(
-            self.__new_catalog_id, recursive=True
-        ).describe()
-
     def save(self):
+        """Nothing happens.
+        Averything is saved in to_stac method"""
         pass
 
 
 class StacCatalogTransformer(StacTransformer):
+    """Converts the catalogs to STAC."""
+
     def __init__(self, database: Database, *args, **kwargs):
+        """Initialises the object with database to get access to the data."""
         super().__init__(database)
         if kwargs.get("report"):
             self.__report = kwargs.get("report")
@@ -231,6 +282,7 @@ class StacCatalogTransformer(StacTransformer):
         self.init()
 
     def init(self):
+        """Initialise the catalog"""
         self.__catalog = pystac.Catalog(
             id="urn:pdssp:pds",
             title="Planetary Data System",
@@ -247,24 +299,69 @@ class StacCatalogTransformer(StacTransformer):
 
     @property
     def catalog(self) -> pystac.Catalog:
+        """Returns the root catalog
+
+        Returns:
+            pystac.Catalog: the root catalog
+        """
         return self.__catalog
 
     def _has_mission(self, catalog: Any) -> bool:
+        """Checks if the catalog contains the PDS3 object of the mission
+
+        Args:
+            catalog (Any): list of PDS3 objets
+
+        Returns:
+            bool: True when the catalog contains the PDS3 object of the mission otherwise False
+        """
         return PdsParserFactory.FileGrammary.MISSION_CATALOG.name in catalog
 
     def _has_plateform(self, catalog: Any) -> bool:
+        """Checks if the catalog contains the PDS3 object of the plateform
+
+        Args:
+            catalog (Any): list of PDS3 objets
+
+        Returns:
+            bool: True when the catalog contains the PDS3 object of the plateform otherwise False
+        """
         return (
             PdsParserFactory.FileGrammary.INSTRUMENT_HOST_CATALOG.name
             in catalog
         )
 
     def _has_instrument(self, catalog: Any) -> bool:
+        """Checks if the catalog contains the PDS3 object of the instrument
+
+        Args:
+            catalog (Any): list of PDS3 objets
+
+        Returns:
+            bool: True when the catalog contains the PDS3 object of the instrument otherwise False
+        """
         return PdsParserFactory.FileGrammary.INSTRUMENT_CATALOG.name in catalog
 
     def _has_collection(self, catalog: Any) -> bool:
+        """Checks if the catalog contains the PDS3 object of the dataset
+
+        Args:
+            catalog (Any): list of PDS3 objets
+
+        Returns:
+            bool: True when the catalog contains the PDS3 object of the dataset otherwise False
+        """
         return PdsParserFactory.FileGrammary.DATA_SET_CATALOG.name in catalog
 
     def _is_already_exists(self, id: str) -> bool:
+        """Checks if the catalog or collection ID is in the STAC catalog
+
+        Args:
+            id (str): catalog or collection ID
+
+        Returns:
+            bool: True when the catalog or collection ID is in the STAC catalog
+        """
         return self.catalog.get_child(id, recursive=True) is not None
 
     def _add_plateforms_to_mission(
@@ -273,6 +370,16 @@ class StacCatalogTransformer(StacTransformer):
         mission_id: str,
         references: Optional[ReferencesModel] = None,
     ):
+        """Creates a Plateform STAC catalogs and add them to the mission STAC catalog if
+        one of the plateform does not exist
+
+        References are used to add citations in the plateform STAC catalog.
+
+        Args:
+            plateforms (List[InstrumentHostModel]): plateforms
+            mission_id (str): mission ID
+            references (Optional[ReferencesModel], optional): _description_. Defaults to None.
+        """
         for plateform in plateforms:
             self._add_plateform_to_mission(plateform, mission_id, references)
 
@@ -282,6 +389,16 @@ class StacCatalogTransformer(StacTransformer):
         mission_id: str,
         references: Optional[ReferencesModel] = None,
     ):
+        """Creates a Plateform STAC catalog and add it to the mission STAC catalog if
+        the plateform does not exist
+
+        References are used to add citations in the plateform STAC catalog.
+
+        Args:
+            plateform (InstrumentHostModel): plateform
+            mission_id (str): mission ID
+            references (Optional[ReferencesModel], optional): citations. Defaults to None.
+        """
         pystac_plateform_cat: pystac.Catalog = plateform.create_stac_catalog(
             references
         )
@@ -295,6 +412,15 @@ class StacCatalogTransformer(StacTransformer):
         instruments: List[InstrumentModel],
         references: Optional[ReferencesModel] = None,
     ):
+        """Creates an Instrument STAC catalogs and add them to the plateform STAC catalog if
+        one of the instrument does not exist
+
+        References are used to add citations in the plateform STAC catalog.
+
+        Args:
+            instruments (List[InstrumentHostModel]): instrument
+            references (Optional[ReferencesModel], optional): _description_. Defaults to None.
+        """
         for instru in instruments:
             self._add_instrument_to_plateform(instru, references)
 
@@ -303,6 +429,15 @@ class StacCatalogTransformer(StacTransformer):
         instrument: InstrumentModel,
         references: Optional[ReferencesModel] = None,
     ):
+        """Creates a Instrument STAC catalog and add it to the plateform STAC catalog if
+        the instrument does not exist
+
+        References are used to add citations in the plateform STAC catalog.
+
+        Args:
+            instrument (InstrumentHostModel): instrument
+            references (Optional[ReferencesModel], optional): citations. Defaults to None.
+        """
         pystac_instru_cat: pystac.Catalog = instrument.create_stac_catalog(
             references
         )
@@ -318,6 +453,17 @@ class StacCatalogTransformer(StacTransformer):
         data_supplier: Optional[DataSupplierModel] = None,
         data_producer: Optional[DataProducerModel] = None,
     ):
+        """Creates Datasets STAC collections and add them to the instrument STAC catalog if
+        the dataset does not exist.
+
+        References are used to add citations in the collection STAC catalog.
+
+        Args:
+            collections (List[DataSetModel]): datasets
+            references (Optional[ReferencesModel], optional): citations. Defaults to None.
+            data_supplier (Optional[DataSupplierModel], optional): data supplier. Defaults to None,
+            data_producer: (Optional[DataProducerModel], optional): data producer. Defaults to None
+        """
         for collection in collections:
             self._add_collection_to_instrument(
                 collection, references, data_supplier, data_producer
@@ -330,6 +476,17 @@ class StacCatalogTransformer(StacTransformer):
         data_supplier: Optional[DataSupplierModel] = None,
         data_producer: Optional[DataProducerModel] = None,
     ):
+        """Creates a Dataset STAC collections and add it to the instrument STAC catalog if
+        the dataset does not exist.
+
+        References are used to add citations in the collection STAC catalog.
+
+        Args:
+            collections (DataSetModel): dataset
+            references (Optional[ReferencesModel], optional): citations. Defaults to None.
+            data_supplier (Optional[DataSupplierModel], optional): data supplier. Defaults to None,
+            data_producer: (Optional[DataProducerModel], optional): data producer. Defaults to None
+        """
         collection_id: str = collection.DATA_SET_ID
         if not self._is_already_exists(collection_id):
             instrument_id: str = collection.DATA_SET_HOST.get_instrument_id()
@@ -345,6 +502,11 @@ class StacCatalogTransformer(StacTransformer):
     def _build_stac_catalogs_and_collections(
         self, catalogs: Iterator[Dict[str, Any]]
     ):
+        """Builds STAC catalogs and collections
+
+        Args:
+            catalogs (Iterator[Dict[str, Any]]): Catalogs to convert to STAC
+        """
         for catalog in catalogs:
             stac_mission: pystac.Catalog
             references_ode: ReferencesModel = catalog.get(
@@ -462,15 +624,23 @@ class StacCatalogTransformer(StacTransformer):
         pds_ode_catalogs: PDSCatalogsDescription,
         pds_collections: List[PdsRegistryModel],
     ):
+        """Creates the STAC catalog and its children.
+
+        Args:
+            pds_ode_catalogs (PDSCatalogsDescription): PDS3 objects
+            pds_collections (List[PdsRegistryModel]): PDS Collection data
+        """
         catalogs: Iterator[Dict[str, Any]] = pds_ode_catalogs.get_ode_catalogs(
             pds_collections
         )
         self._build_stac_catalogs_and_collections(catalogs)
 
     def describe(self):
+        """Describe the catalog"""
         self.catalog.describe()
 
     def save(self):
+        """Save on disk the catalog"""
         self.catalog.normalize_and_save(
             self.database.stac_directory,
             catalog_type=pystac.CatalogType.SELF_CONTAINED,

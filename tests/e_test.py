@@ -6,7 +6,7 @@
 # db = Database("/home/malapert/Work/tmp/data/database/pds.h5")
 # pds_registry = PdsRegistry(db)
 # catalogs = PDSCatalogsDescription(db)
-# collections = pds_registry.load_pds_collection_from_cache()
+# collections = pds_registry.load_pds_collections_from_cache()
 # iter = catalogs.get_ode_catalogs(collections)
 # while True:
 #     print(next(iter))

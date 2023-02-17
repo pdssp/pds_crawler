@@ -25,7 +25,7 @@ To use this package, you can import and use the exported components as follows:
     pds_registry = PdsRegistry(database)
 
     # Retrieve all the georeferenced collections list
-    results: Tuple[Dict[str,str], List[PdsRegistryModel]] = pds_registry.get_collections_pds()
+    results: Tuple[Dict[str,str], List[PdsRegistryModel]] = pds_registry.get_pds_collections()
 
 
 Knowing the collection and one record, it is possible to retrieve extra metadata describing general information.
@@ -36,19 +36,19 @@ Knowing the collection and one record, it is possible to retrieve extra metadata
     from pds_crawler.models import PdsRegistryModel, PdsRecordModel, VolumeModel
     from typing import List
 
-    pds_catalogs = PDSCatalogDescription(database)
+    pds_objects_cat = PDSCatalogDescription(database)
 
-    # Retrieve the URLs of all description catalogs (PDS objects)
-    pds_catalogs.retrieve_catalogs(pds_collection)
+    # Retrieve the URLs of all PDS3 description catalogs (PDS objects)
+    pds_objects_cat.load_catalogs_urls(pds_collection)
 
     # Get the differents URLs of the catalogs
-    catalogs_urls: List[str] = pds_catalogs.catalogs_urls
+    catalogs_urls: List[str] = pds_objects_cat.catalogs_urls
 
     # Get the URL of the root directory of the collection
-    url: str = pds_catalogs.url
+    url: str = pds_objects_cat.url
 
     # Get volume description catalog
-    vol_catalog: VolumeModel = pds_catalogs.volume_desc_url
+    vol_catalog: VolumeModel = pds_objects_cat.volume_desc_url
 """
 from .pds_ode_website import PDSCatalogDescription
 from .pds_ode_website import PDSCatalogsDescription

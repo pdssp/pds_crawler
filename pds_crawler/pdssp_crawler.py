@@ -27,7 +27,8 @@ class Crawler:
         return self.__options_cli
 
     def run(self):
-        database_name = "/home/malapert/Work/tmp/data/database/pds.h5"
+        database_name = self.options_cli.database
+        logger.info(f"Using {database_name} as database")
         etl = StacETL(database_name)
 
         if hasattr(self.options_cli, "type_stac"):

@@ -7,6 +7,9 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+work/
+third_party.txt
+docs/source/_static/report.html
 .pds_crawler
 .vscode/
 .Python

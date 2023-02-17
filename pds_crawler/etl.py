@@ -116,18 +116,22 @@ class StacETL(ETL):
                 (
                     stats,
                     collections_pds,
-                ) = self.pds_registry.get_collections_pds()
-                self.pds_registry.cache_collections_pds(collections_pds)
+                ) = self.pds_registry.get_pds_collections()
+                self.pds_registry.cache_pds_collections(collections_pds)
             case PdsSourceEnum.PDS_RECORDS:
                 pds_collections: List[
                     PdsRegistryModel
-                ] = self.pds_registry.load_pds_collection_from_cache()
-                self.pds_records.generate_urls_collections(pds_collections)
-                self.pds_records.download_pds_collections(pds_collections)
+                ] = self.pds_registry.load_pds_collections_from_cache()
+                self.pds_records.generate_urls_for_all_collections(
+                    pds_collections
+                )
+                self.pds_records.download_pds_records_for_all_collections(
+                    pds_collections
+                )
             case PdsSourceEnum.PDS_CATALOGS:
                 pds_collections: List[
                     PdsRegistryModel
-                ] = self.pds_registry.load_pds_collection_from_cache()
+                ] = self.pds_registry.load_pds_collections_from_cache()
                 self.pds_ode_catalogs.download(pds_collections)
             case _:
                 raise NotImplementedError(
@@ -137,7 +141,7 @@ class StacETL(ETL):
     def transform(self, data: PdsDataEnum, *args, **kwargs):
         pds_collections: List[
             PdsRegistryModel
-        ] = self.pds_registry.load_pds_collection_from_cache()
+        ] = self.pds_registry.load_pds_collections_from_cache()
         match data:
             case PdsDataEnum.PDS_CATALOGS:
                 self.report.name = PdsDataEnum.PDS_CATALOGS.name
@@ -152,7 +156,7 @@ class StacETL(ETL):
                 self.report.name = PdsDataEnum.PDS_RECORDS.name
                 self.report.start_report()
                 self.stac_records_transformer.init()
-                self.stac_records_transformer.read_root_catalog()
+                self.stac_records_transformer.load_root_catalog()
                 self.stac_records_transformer.to_stac(
                     self.pds_records, pds_collections
                 )

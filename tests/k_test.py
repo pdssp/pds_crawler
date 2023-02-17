@@ -208,7 +208,7 @@
 #     pds_ode_catalogs = PDSCatalogsDescription(database)
 #     pds_collections: List[
 #         PdsRegistryModel
-#     ] = pds_registry.load_pds_collection_from_cache()
+#     ] = pds_registry.load_pds_collections_from_cache()
 #     transform = Transform()
 #     transform.to_stac(pds_collections)
 #     transform.describe()
