@@ -30,10 +30,10 @@ from contextlib import closing
 from json.decoder import JSONDecodeError
 from string import Template
 from typing import Any
+from typing import cast
 from typing import Dict
 from typing import Iterator
 from typing import List
-from typing import Optional
 from typing import Union
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
@@ -189,9 +189,7 @@ class Crawler:
             links.append({"url": a["href"], "name": a.text})
         return links
 
-    def _get_content(
-        self, host: str, query: str
-    ) -> Optional[List[Dict[str, str]]]:
+    def _get_content(self, host: str, query: str) -> List[Dict[str, str]]:
         """Get the content of an URL based on the host and the query
 
         Args:
@@ -202,11 +200,11 @@ class Crawler:
             NoFileExistInFolder: When there is no file in the folder
 
         Returns:
-            Optional[List[Dict[str, str]]]: links (url/name)
+            List[Dict[str, str]]: links (url/name)
         """
         url = host + "/" + query
         if Crawler.is_file(url):
-            return None
+            raise ValueError(f"URL {url} is a file")
 
         content: str = Crawler.query(url)
         if "No files exist in this folder" in content:
@@ -215,11 +213,11 @@ class Crawler:
         links = self._get_subdirs_file(soup)
         return links
 
-    def parse(self) -> Optional[List[Dict[str, str]]]:
+    def parse(self) -> List[Dict[str, str]]:
         """Parse the URL
 
         Returns:
-            Optional[List[Dict[str, str]]]: links (url/name)
+            List[Dict[str, str]]: links (url/name)
         """
         return self._get_content(self.host, self.fragment)
 
@@ -313,12 +311,12 @@ class PDSCatalogDescription(Observable):
 
     def _initialize_values(self):
         """Initialize the values"""
-        self.__pds_collection: PdsRegistryModel = None
-        self.__record: PdsRecordModel = None
-        self.__url: str = None
-        self.__volume_desc_url: str = None
-        self.__vol_desc_cat: VolumeModel = None
-        self.__catalogs_urls: List[str] = None
+        self.__pds_collection: PdsRegistryModel
+        self.__record: PdsRecordModel
+        self.__url: str
+        self.__volume_desc_url: str
+        self.__vol_desc_cat: VolumeModel
+        self.__catalogs_urls: List[str]
 
     @property
     def url(self) -> str:
@@ -608,10 +606,10 @@ class PDSCatalogDescription(Observable):
         try:
             cat_obj = file_storage.get_catalog(
                 catalog_name,
-                PdsParserFactory.FileGrammary.get_enum_from(cat_type),
+                PdsParserFactory.FileGrammary.get_enum_from(cat_type),  # type: ignore
             )
             if cat_type in result:
-                result[cat_type].append(cat_obj)
+                cast(List, result[cat_type]).append(cat_obj)
             else:
                 result[cat_type] = cat_obj
         except KeyError as err:
@@ -666,17 +664,17 @@ class PDSCatalogDescription(Observable):
                 ] = self._get_urls_from_volume_catalog()
             except NoFileExistInFolder as err:
                 logger.exception(f"[NoFileExistInFolder]: {err}")
-                self.notify_observers(MessageModel(pds_collection, err))
+                self.notify_observers(MessageModel(str(pds_collection), err))
             except UnexpectedCharacters as err:
                 logger.exception(f"[ParserError]: {err}")
-                self.notify_observers(MessageModel(pds_collection, err))
+                self.notify_observers(MessageModel(str(pds_collection), err))
             except ConnectionError as err:
                 logger.exception(f"[ConnectionError]: {err}")
-                self.notify_observers(MessageModel(pds_collection, err))
+                self.notify_observers(MessageModel(str(pds_collection), err))
         except StopIteration:
             logger.error(f"No record for {pds_collection}")
             self.notify_observers(
-                MessageModel(pds_collection, Exception("No record"))
+                MessageModel(str(pds_collection), Exception("No record"))
             )
         except JSONDecodeError:
             logger.error(
@@ -684,7 +682,7 @@ class PDSCatalogDescription(Observable):
             )
             self.notify_observers(
                 MessageModel(
-                    pds_collection,
+                    str(pds_collection),
                     Exception("[CorruptedFile] Please remove the file"),
                 )
             )
@@ -717,9 +715,7 @@ class PDSCatalogDescription(Observable):
                 self.database.get_directory_storage_for(pds_collection)
             )
             result["volume"] = file_storage.get_volume_description()
-            catalogs: Dict[
-                str, Union[str, List[str]]
-            ] = file_storage.list_catalogs()
+            catalogs = file_storage.list_catalogs()
             for cat_type in catalogs.keys():
                 catalog_value: Union[str, List[str]] = catalogs[cat_type]
                 if catalog_value is None:

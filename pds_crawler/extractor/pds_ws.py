@@ -31,6 +31,7 @@ from typing import Any
 from typing import Dict
 from typing import Iterator
 from typing import List
+from typing import Optional
 from typing import Set
 from typing import Tuple
 
@@ -98,7 +99,9 @@ class PdsRegistry(Observable):
         """
         return self.__database
 
-    def _build_request_params(self, target: str = None) -> Dict[str, str]:
+    def _build_request_params(
+        self, target: Optional[str] = None
+    ) -> Dict[str, str]:
         """Build the query parameters.
 
         Args:
@@ -159,7 +162,7 @@ class PdsRegistry(Observable):
         Returns:
             Tuple[Dict[str, int], List[PdsRegistryModel]]: statistic dictionary and a list of PdsRegistryModel objects
         """
-        iiptset_dicts = response["ODEResults"]["IIPTSets"]["IIPTSet"]
+        iiptset_dicts = response["ODEResults"]["IIPTSets"]["IIPTSet"]  # type: ignore
         nb_records: int = 0
         total: int = len(iiptset_dicts)
         errors: int = 0
@@ -189,8 +192,8 @@ class PdsRegistry(Observable):
 
     @timeit
     def get_pds_collections(
-        self, planet: str = None
-    ) -> Tuple[Dict[str, str], List[PdsRegistryModel]]:
+        self, planet: Optional[str] = None
+    ) -> Tuple[Dict[str, int], List[PdsRegistryModel]]:
         """Retrieve a list of Planetary Data System (PDS) data collections
         from the PDS ODE (Outer Planets Data Exploration) web service.
 
@@ -382,7 +385,7 @@ class PdsRecords(Observable):
         pagination_start = offset
         while pagination_start <= total:
             params_paginations.append(
-                (target, ihid, iid, pt, total, pagination_start, limit)
+                (target, ihid, iid, pt, total, pagination_start, limit)  # type: ignore
             )
             pagination_start = pagination_start + limit
         return params_paginations
@@ -405,7 +408,7 @@ class PdsRecords(Observable):
         all_pagination_params: List[
             Tuple[str]
         ] = self._generate_all_pagination_params(
-            pds_collection.ODEMetaDB.lower(),
+            pds_collection.ODEMetaDB.lower(),  # type: ignore
             pds_collection.IHID,
             pds_collection.IID,
             pds_collection.PT,
@@ -418,7 +421,7 @@ class PdsRecords(Observable):
         for pagination_params in all_pagination_params:
             param_url = [*pagination_params[0:4], *pagination_params[5:7]]
             request_params: Dict[str, str] = self._build_request_params(
-                *param_url
+                *param_url  # type: ignore
             )
             url = PdsRecords.SERVICE_ODE_END_POINT + urllib.parse.urlencode(
                 request_params
@@ -460,7 +463,7 @@ class PdsRecords(Observable):
             self.database.get_directory_storage_for(pds_collection)
         )
         urls: List[str] = self.database.load_urls(pds_collection)
-        parallel_requests(file_storage.directory, urls, time_sleep=0.001)
+        parallel_requests(file_storage.directory, urls, time_sleep=1)
 
     def download_pds_records_for_all_collections(
         self, pds_collections: List[PdsRegistryModel]

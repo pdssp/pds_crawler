@@ -12,9 +12,9 @@ from dataclasses import field
 from datetime import datetime
 from typing import Any
 from typing import Dict
+from typing import Iterator
 from typing import List
 from typing import Optional
-from typing import Union
 from urllib.parse import urlparse
 
 import pystac
@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True, eq=True)
 class ProductFile(AbstractModel):
     FileName: str
-    Type: str = field(default=None, repr=True, compare=True)
+    Type: Optional[str] = field(default=None, repr=True, compare=True)
     KBytes: Optional[float] = field(default=None, repr=False, compare=False)
     URL: Optional[str] = field(default=None, repr=False, compare=False)
     Description: Optional[str] = field(default=None, repr=False, compare=False)
@@ -176,7 +176,7 @@ class PdsRegistryModel(AbstractModel):
         range: Optional[pystac.RangeSummary] = None
         if self.MinOrbit is not None and self.MaxOrbit is not None:
             range = pystac.RangeSummary(
-                minimum=int(self.MinOrbit), maximum=int(self.MaxOrbit)
+                minimum=int(self.MinOrbit), maximum=int(self.MaxOrbit)  # type: ignore
             )
         return range
 
@@ -187,8 +187,8 @@ class PdsRegistryModel(AbstractModel):
             and self.MaxSpecialValue1 is not None
         ):
             range = pystac.RangeSummary(
-                minimum=float(self.MinSpecialValue1),
-                maximum=float(self.MaxSpecialValue1),
+                minimum=float(self.MinSpecialValue1),  # type: ignore
+                maximum=float(self.MaxSpecialValue1),  # type: ignore
             )
         return range
 
@@ -199,7 +199,7 @@ class PdsRegistryModel(AbstractModel):
             and self.MaxSpecialValue2 is not None
         ):
             range = pystac.RangeSummary(
-                minimum=self.MinSpecialValue2, maximum=self.MaxSpecialValue2
+                minimum=self.MinSpecialValue2, maximum=self.MaxSpecialValue2  # type: ignore
             )
         return range
 
@@ -210,8 +210,8 @@ class PdsRegistryModel(AbstractModel):
             and self.MaxObservationTime is not None
         ):
             range = pystac.RangeSummary(
-                minimum=self.MinObservationTime,
-                maximum=self.MaxObservationTime,
+                minimum=self.MinObservationTime,  # type: ignore
+                maximum=self.MaxObservationTime,  # type: ignore
             )
         return range
 
@@ -224,9 +224,9 @@ class PdsRegistryModel(AbstractModel):
         if range_orbits is not None:
             summaries["orbit"] = range_orbits
         if range_special_value1 is not None:
-            summaries[self.SpecialValue1] = range_special_value1
+            summaries[self.SpecialValue1] = range_special_value1  # type: ignore
         if range_special_value2 is not None:
-            summaries[self.SpecialValue2] = range_special_value2
+            summaries[self.SpecialValue2] = range_special_value2  # type: ignore
         if range_time is not None:
             summaries["observation_time"] = range_time
         result: Optional[pystac.Summaries]
@@ -379,6 +379,16 @@ class PdsRecordModel(AbstractModel):
     """Product creation time (UTC)"""
     Target_name: str
     """Product target (example: Mars)"""
+    Data_Set_Id: str = field(repr=True, compare=True)
+    """PDS Data Set Id"""
+    Easternmost_longitude: float = field(repr=False, compare=False)
+    """Longitude 0-360 Easternmost longitude of the footprint"""
+    Maximum_latitude: float = field(repr=False, compare=False)
+    """Planetocentric maximum latitude of the footprint"""
+    Minimum_latitude: float = field(repr=False, compare=False)
+    """Planetocentric minimum latitude of the footprint"""
+    Westernmost_longitude: float = field(repr=False, compare=False)
+    """Longitude 0-360 Westernmost longitude of the footprint"""
     Product_version_id: Optional[str] = field(
         default=None, repr=False, compare=False
     )
@@ -394,8 +404,6 @@ class PdsRecordModel(AbstractModel):
         default=None, repr=False, compare=False
     )
     """Pointer to PDS4 XML label for PDS4 products"""
-    Data_Set_Id: Optional[str] = field(default=None)
-    """PDS Data Set Id"""
     PDSVolume_Id: Optional[str] = field(default=None)
     """Volume Id"""
     Label_product_type: Optional[str] = field(
@@ -541,22 +549,6 @@ class PdsRecordModel(AbstractModel):
         default=None, repr=False, compare=False
     )
     """T if the product has a footprint bounding box"""
-    Easternmost_longitude: Optional[float] = field(
-        default=None, repr=False, compare=False
-    )
-    """Longitude 0-360 Easternmost longitude of the footprint"""
-    Maximum_latitude: Optional[float] = field(
-        default=None, repr=False, compare=False
-    )
-    """Planetocentric maximum latitude of the footprint"""
-    Minimum_latitude: Optional[float] = field(
-        default=None, repr=False, compare=False
-    )
-    """Planetocentric minimum latitude of the footprint"""
-    Westernmost_longitude: Optional[float] = field(
-        default=None, repr=False, compare=False
-    )
-    """Longitude 0-360 Westernmost longitude of the footprint"""
     Easternmost_longitude_text: Optional[str] = field(
         default=None, repr=False, compare=False
     )
@@ -682,7 +674,7 @@ class PdsRecordModel(AbstractModel):
     FilesURL: Optional[str] = field(default=None, repr=False, compare=False)
     ProductURL: Optional[str] = field(default=None, repr=False, compare=False)
     LabelURL: Optional[str] = field(default=None, repr=False, compare=False)
-    Product_files: List[ProductFile] = field(
+    Product_files: Optional[List[ProductFile]] = field(
         default=None, repr=False, compare=False
     )
     browse: Optional[str] = field(default=None, repr=False, compare=False)
@@ -754,7 +746,7 @@ class PdsRecordModel(AbstractModel):
                 stop_date = None
         return stop_date
 
-    def get_geometry(self) -> wkt:
+    def get_geometry(self) -> Dict[str, Any]:
         return geometry.mapping(wkt.loads(self.Footprint_C0_geometry))
 
     def get_bbox(self) -> list[float]:
@@ -785,11 +777,13 @@ class PdsRecordModel(AbstractModel):
             logger.warning(
                 f"Cannot find {self.Observation_time}, use Product_creation_time as datetime for {self}"
             )
-        else:
+        elif self.Product_release_date:
             date_obs = self.Product_release_date
             logger.warning(
                 f"Cannot find {self.Observation_time}, use Product_creation_time as datetime for {self}"
             )
+        else:
+            raise ValueError("No datetime")
         return datetime.fromisoformat(utc_to_iso(date_obs))
 
     def get_properties(self) -> Dict[str, Any]:
@@ -846,7 +840,7 @@ class PdsRecordModel(AbstractModel):
 
     def set_common_metadata(
         self, item: pystac.Item, pds_registry: PdsRegistryModel
-    ) -> Dict[str, Any]:
+    ):
         item.common_metadata.license = "CC0-1.0"
         item.common_metadata.instruments = [self.get_instrument(pds_registry)]
         item.common_metadata.platform = self.get_plateform(pds_registry)
@@ -863,7 +857,12 @@ class PdsRecordModel(AbstractModel):
             item.common_metadata.gsd = gsd
 
     def add_assets_product_types(self, item: pystac.Item):
+        if not self.Product_files:
+            return
+
         for product_file in self.Product_files:
+            if not product_file.URL:
+                continue
             item.add_asset(
                 product_file.FileName,
                 pystac.Asset(
@@ -1008,7 +1007,7 @@ class PdsRecordModel(AbstractModel):
             parameters = inspect.signature(cls).parameters
             data = env.copy()
             if "Product_files" in data:
-                data["Product_files"]: List[ProductFile] = [
+                data["Product_files"] = [
                     ProductFile.from_dict(item)
                     for item in data["Product_files"]["Product_file"]
                 ]
@@ -1130,7 +1129,9 @@ class PdsRecordsModel(AbstractModel):
             )
         return result
 
-    def to_stac_item_iter(self, pds_registry: PdsRegistryModel) -> pystac.Item:
+    def to_stac_item_iter(
+        self, pds_registry: PdsRegistryModel
+    ) -> Iterator[pystac.Item]:
         for pds_record_model in tqdm(
             self.pds_records_model,
             desc="pystac.Item processing",

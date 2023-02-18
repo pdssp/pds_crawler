@@ -43,7 +43,7 @@ class StorageCollectionDirectory:
         self, files_base_directory: str, pds_collection: PdsRegistryModel
     ):
         self.__files_base_directory: str = files_base_directory
-        self.__pds_collection: str = pds_collection
+        self.__pds_collection: PdsRegistryModel = pds_collection
         self._init_storage_directory()
 
     def _init_storage_directory(self):
@@ -85,7 +85,7 @@ class StorageCollectionDirectory:
             voldesc, PdsParserFactory.FileGrammary.VOL_DESC
         )
 
-    def list_catalogs(self) -> Dict[str, str]:
+    def list_catalogs(self) -> Dict[str, Any]:
         volume: VolumeModel = self.get_volume_description()
         return {
             key: volume.CATALOG.__dict__[key]
@@ -158,7 +158,7 @@ class Database:
             value = pds_collection_dict[key]
             # when type is a dictionnary or list, a specific datatype is needed to encode an attribute in HDF5
             if isinstance(value, dict) or isinstance(value, list):
-                store_db.attrs[key] = np.string_(str(value))
+                store_db.attrs[key] = np.string_(str(value))  # type: ignore
             elif value is not None:
                 store_db.attrs[key] = value
 
@@ -230,7 +230,7 @@ class Database:
         Returns:
             bool: True when both the node is a h5py.Group and node has attributes
         """
-        return isinstance(node, h5py.Group) and node.attrs
+        return isinstance(node, h5py.Group) and node.attrs  # type: ignore
 
     def _read_and_convert_attributes(self, node: Any) -> Dict[str, Any]:
         """Read and converts convert attributs encoded a nb_bytes_.
@@ -325,7 +325,7 @@ class Database:
                 group_path + Database.HDF_SEP + Database.DS_URLS, None
             )
             if dset is not None:
-                urls = [item.decode("utf-8") for item in list(dset)]
+                urls = [item.decode("utf-8") for item in list(dset)]  # type: ignore
         return urls
 
     @staticmethod

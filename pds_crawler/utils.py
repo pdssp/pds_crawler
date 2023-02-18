@@ -29,9 +29,8 @@ from urllib3 import Retry
 from .exception import DateConversionError
 
 logger = logging.getLogger(__name__)
-
-requests.urllib3.disable_warnings(
-    requests.urllib3.exceptions.InsecureRequestWarning
+requests.urllib3.disable_warnings(  # type: ignore
+    requests.urllib3.exceptions.InsecureRequestWarning  # type: ignore
 )
 
 
@@ -79,12 +78,15 @@ class GrammarEnum(Enum):
 
 
 class UtilsMath:
+    @staticmethod
     def is_integer(value: str) -> bool:
         return isint(value)
 
+    @staticmethod
     def is_float(value: str) -> bool:
         return isfloat(str)
 
+    @staticmethod
     def is_bool(value: str) -> bool:
         if not isinstance(value, str):
             return False
@@ -99,6 +101,7 @@ class UtilsMath:
             "no",
         ]
 
+    @staticmethod
     def convert_dt(value: str) -> Any:
         result: Any
         if not isinstance(value, str):
@@ -249,7 +252,7 @@ def parallel_requests(
 
 def compute_downloaded_filepath(directory: str, url: str) -> str:
     parsed_url = urlparse(url)
-    params: Dict[str, str] = parse_qs(parsed_url.query)
+    params: Dict[str, str] = parse_qs(parsed_url.query)  # type: ignore
     filename: str
     if "ihid" in params:
         filename = f"{params['target'][0]}_{params['ihid'][0]}_{params['iid'][0]}_{params['pt'][0]}_{params['offset'][0]}.json"
@@ -283,7 +286,7 @@ def inverse_mapping(f):
     return mapping
 
 
-def utc_to_iso(utc_time, timespec="auto"):
+def utc_to_iso(utc_time: str, timespec: str = "auto") -> str:
     """Convert UTC time string to ISO format string (STAC standard)."""
     # set valid datatime formats 2018-08-23T23:24:36.865Z
     valid_formats = [

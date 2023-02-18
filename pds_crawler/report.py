@@ -8,6 +8,8 @@ import os
 from dataclasses import asdict
 from dataclasses import dataclass
 from json import dumps
+from typing import Any
+from typing import IO
 
 from .load import Database
 from .utils import Observer
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class MessageModel:
     resource: str
-    explanation: Exception
+    explanation: Any
 
     @classmethod
     def from_dict(cls, env):
@@ -33,18 +35,14 @@ class MessageModel:
         return dumps(self.__dict__, indent=None)
 
     def __repr__(self) -> str:
-        return f"MessageModel({self.ressource}, {self.explanation})"
+        return f"MessageModel({self.resource}, {self.explanation})"
 
 
 class CrawlerReport(Observer):
     def __init__(self, db: Database):
         self.__db = db
         self.__name: str = "default_report"
-        self.__file = None
-
-    @property
-    def output(self):
-        return self.__output
+        self.__file: IO
 
     @property
     def name(self):
@@ -73,7 +71,7 @@ class CrawlerReport(Observer):
     def close_report(self):
         self.__file.flush()
         self.__file.close()
-        self.__file = None
+        del self.__file
 
     def notify(self, observable, *args, **kwargs):
         """Receives the notification.
