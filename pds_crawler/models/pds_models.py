@@ -319,6 +319,19 @@ class DataSetModel(AbstractModel):
                 DataSetReferenceInformationModel.from_dict(elem)
                 for elem in data["DATA_SET_REFERENCE_INFORMATION"]
             ]
+        if (
+            isinstance(data["DATA_SET_ID"], list)
+            and len(data["DATA_SET_ID"]) > 1
+        ):
+            raise ValueError(
+                f"An array of DATA_SET_ID is fobidden : {data['DATA_SET_ID']}"
+            )
+        elif (
+            isinstance(data["DATA_SET_ID"], list)
+            and len(data["DATA_SET_ID"]) == 1
+        ):
+            data["DATA_SET_ID"] = data["DATA_SET_ID"][0]
+
         return cls(**{k: v for k, v in data.items()})
 
     def create_stac_collection(

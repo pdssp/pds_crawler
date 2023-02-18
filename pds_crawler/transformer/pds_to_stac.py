@@ -94,7 +94,7 @@ class StacTransformer(ABC, Observable):
         return parent_dir
 
     def get_strategy(self) -> CustomLayoutStrategy:
-        """Creates a stategy to define the directories name in STAC catalog and children
+        """Creates a strategy to define the directories name in STAC catalog and childrens
 
         Returns:
             CustomLayoutStrategy: A custom strategy for the name of the directories
