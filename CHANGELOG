@@ -1,4 +1,14 @@
-### Add comments and improve methods name (HEAD -> main)
+### Add strategy to custom directories name during STAC creation (HEAD -> main)
+>Sat, 18 Feb 2023 06:16:18 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add comments and improve methods name (origin/main)
 >Fri, 17 Feb 2023 13:14:00 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Update README.md (origin/main)
+### Update README.md
 >Thu, 16 Feb 2023 13:34:20 +0100
 
 >Author: Jean-Christophe Malapert (jcmalapert@googlemail.com)

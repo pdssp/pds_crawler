@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
 from typing import Any
+from typing import cast
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -53,7 +54,9 @@ class DataSetInformationModel(AbstractModel):
     )
     START_TIME: str = field(repr=False, compare=False)
     STOP_TIME: str = field(repr=False, compare=False)
-    DATA_OBJECT_TYPE: str = field(default=None, repr=False, compare=False)
+    DATA_OBJECT_TYPE: Optional[str] = field(
+        default=None, repr=False, compare=False
+    )
     ABSTRACT_DESC: Optional[str] = field(
         default=None, repr=False, compare=False
     )
@@ -103,7 +106,9 @@ class DataSetInformationModel(AbstractModel):
     def _get_start_date(self) -> Optional[datetime]:
         start_date = Optional[datetime]
         try:
-            start_date = datetime.strptime(utc_to_iso(self.START_TIME))
+            start_date = datetime.strptime(
+                utc_to_iso(self.START_TIME), "%Y-%m-%dT%H:%M:%S.%f%z"
+            )
         except:  # noqa: E722
             start_date = None
         return start_date
@@ -111,7 +116,9 @@ class DataSetInformationModel(AbstractModel):
     def _get_stop_date(self) -> Optional[datetime]:
         stop_date = Optional[datetime]
         try:
-            stop_date = datetime.strptime(utc_to_iso(self.STOP_TIME))
+            stop_date = datetime.strptime(
+                utc_to_iso(self.STOP_TIME), "%Y-%m-%dT%H:%M:%S.%f%z"
+            )
         except:  # noqa: E722
             stop_date = None
         return stop_date
@@ -121,7 +128,7 @@ class DataSetInformationModel(AbstractModel):
         start_date = self._get_start_date()
         stop_date = self._get_stop_date()
         if start_date is not None and stop_date is not None:
-            range = pystac.RangeSummary(minimum=start_date, maximum=stop_date)
+            range = pystac.RangeSummary(minimum=start_date, maximum=stop_date)  # type: ignore
         return range
 
     def _set_extent(self, stac_collection: pystac.Collection):
@@ -137,7 +144,7 @@ class DataSetInformationModel(AbstractModel):
         range_time = self._get_range_time()
 
         if stac_collection.summaries and range_time is not None:
-            stac_collection.summaries["observation_time"] = range_time
+            stac_collection.summaries.add("observation_time", range_time)
         elif stac_collection.summaries is None and range_time is not None:
             stac_collection.summaries = pystac.Summaries(summaries=summaries)
 
@@ -168,7 +175,7 @@ class DataSetInformationModel(AbstractModel):
     def update_stac(self, stac_collection: pystac.Collection):
         stac_collection.title = self._get_title()
         if self._get_description():
-            stac_collection.description = self._get_description()
+            stac_collection.description = cast(str, self._get_description())
 
         self._set_extent(stac_collection)
         self._add_providers(stac_collection)
@@ -201,10 +208,14 @@ class DataSetHostModel(AbstractModel):
     INSTRUMENT_ID: str
 
     def get_instrument_id(self):
-        return f"urn:pdssp:pds:instru:{self.INSTRUMENT_ID}"
+        instru_stac_name_compatible: str = self.INSTRUMENT_ID.replace("/", "_")
+        return f"urn:pdssp:pds:instru:{instru_stac_name_compatible}"
 
     def get_plateform_id(self):
-        return f"urn:pdssp:pds:plateform:{self.INSTRUMENT_HOST_ID}"
+        plateform_stac_name_compatible: str = self.INSTRUMENT_HOST_ID.replace(
+            "/", "_"
+        )
+        return f"urn:pdssp:pds:plateform:{plateform_stac_name_compatible}"
 
     def update_stac(self, stac_collection: pystac.Collection):
         if not stac_collection.extra_fields:
@@ -241,12 +252,13 @@ class DataSetModel(AbstractModel):
     DATA_SET_REFERENCE_INFORMATION: List[
         DataSetReferenceInformationModel
     ] = field(repr=False, compare=False)
-    DATA_SET_MISSION: DataSetMissionModel = field(
+    DATA_SET_MISSION: Optional[DataSetMissionModel] = field(
         default=None, repr=False, compare=False
     )
 
     def collection_id(self) -> str:
-        return f"urn:pdssp:pds:collection:{self.DATA_SET_ID}"
+        dataset_name_stac_compatible: str = self.DATA_SET_ID.replace("/", "_")
+        return f"urn:pdssp:pds:collection:{dataset_name_stac_compatible}"
 
     def _add_citations(
         self,
@@ -260,9 +272,9 @@ class DataSetModel(AbstractModel):
                 if citation.REFERENCE_KEY_ID is not None
             }
             publi_list = [
-                references.get(citation)
+                references.get(citation.REFERENCE_KEY_ID)
                 for citation in self.DATA_SET_REFERENCE_INFORMATION
-                if references.get(citation) is not None
+                if references.get(citation.REFERENCE_KEY_ID) is not None
             ]
             if stac_collection.extra_fields:
                 stac_collection.extra_fields.update({})
@@ -271,8 +283,8 @@ class DataSetModel(AbstractModel):
     def _add_providers(
         self,
         stac_collection: pystac.Collection,
-        data_supplier: "DataSupplierModel",
-        data_producer: "DataProducerModel",
+        data_supplier: Optional["DataSupplierModel"],
+        data_producer: Optional["DataProducerModel"],
     ):
         providers: List[pystac.Provider] = list()
         if data_supplier:
@@ -311,9 +323,9 @@ class DataSetModel(AbstractModel):
 
     def create_stac_collection(
         self,
-        citations: ReferencesModel,
-        data_supplier: "DataSupplierModel",
-        data_producer: "DataProducerModel",
+        citations: Optional[ReferencesModel],
+        data_supplier: Optional["DataSupplierModel"],
+        data_producer: Optional["DataProducerModel"],
     ) -> pystac.Collection:
         stac_collection = pystac.Collection(
             id=self.collection_id(),
@@ -368,10 +380,14 @@ class InstrumentModel(AbstractModel):
     )
 
     def get_plateform_id(self):
-        return f"urn:pdssp:pds:plateform:{self.INSTRUMENT_HOST_ID}"
+        plateform_name_stac_compatible: str = self.INSTRUMENT_HOST_ID.replace(
+            "/", "_"
+        )
+        return f"urn:pdssp:pds:plateform:{plateform_name_stac_compatible}"
 
     def get_instrument_id(self):
-        return f"urn:pdssp:pds:instru:{self.INSTRUMENT_ID}"
+        instru_name_stac_compatible: str = self.INSTRUMENT_ID.replace("/", "_")
+        return f"urn:pdssp:pds:instru:{instru_name_stac_compatible}"
 
     def _add_citations(
         self,
@@ -385,9 +401,9 @@ class InstrumentModel(AbstractModel):
                 if citation.REFERENCE_KEY_ID is not None
             }
             publi_list = [
-                references.get(citation)
+                references.get(citation.REFERENCE_KEY_ID)
                 for citation in self.INSTRUMENT_REFERENCE_INFO
-                if references.get(citation) is not None
+                if references.get(citation.REFERENCE_KEY_ID) is not None
             ]
             if not stac_catalog.extra_fields:
                 stac_catalog.extra_fields = dict()
@@ -453,7 +469,10 @@ class InstrumentHostModel(AbstractModel):
     ] = field(repr=False, compare=False)
 
     def get_plateform_id(self) -> str:
-        return f"urn:pdssp:pds:plateform:{self.INSTRUMENT_HOST_ID}"
+        plateform_stac_compatible: str = self.INSTRUMENT_HOST_ID.replace(
+            "/", "_"
+        )
+        return f"urn:pdssp:pds:plateform:{plateform_stac_compatible}"
 
     def _add_citations(
         self,
@@ -467,9 +486,9 @@ class InstrumentHostModel(AbstractModel):
                 if citation.REFERENCE_KEY_ID is not None
             }
             publi_list = [
-                references.get(citation)
+                references.get(citation.REFERENCE_KEY_ID)
                 for citation in self.INSTRUMENT_HOST_REFERENCE_INFO
-                if references.get(citation) is not None
+                if references.get(citation.REFERENCE_KEY_ID) is not None
             ]
             if not stac_catalog.extra_fields:
                 stac_catalog.extra_fields = dict()
@@ -514,7 +533,10 @@ class MissionInformationModel(AbstractModel):
     MISSION_STOP_DATE: str
 
     def get_mission_id(self):
-        return f"urn:pdssp:pds:mission:{self.MISSION_ALIAS_NAME}"
+        alias_name_stac_compatible: str = self.MISSION_ALIAS_NAME.replace(
+            "/", "_"
+        )
+        return f"urn:pdssp:pds:mission:{alias_name_stac_compatible}"
 
     @classmethod
     def from_dict(cls, env):
@@ -629,13 +651,15 @@ class MissionModel(AbstractModel):
                 if citation.REFERENCE_KEY_ID is not None
             }
             publi_list = [
-                references.get(citation)
+                references.get(citation.REFERENCE_KEY_ID)
                 for citation in self.MISSION_REFERENCE_INFORMATION
-                if references.get(citation) is not None
+                if references.get(citation.REFERENCE_KEY_ID) is not None
             ]
             if not stac_catalog.extra_fields:
                 stac_catalog.extra_fields = dict()
-            stac_catalog.extra_fields["publications"]: publi_list
+
+            if len(publi_list) > 0:
+                stac_catalog.extra_fields["publications"]: publi_list  # type: ignore
 
     @classmethod
     def from_dict(cls, env: Dict):
@@ -689,7 +713,9 @@ class PersonnelInformationModel(AbstractModel):
 class PersonnelElectronicMailModel(AbstractModel):
     ELECTRONIC_MAIL_ID: str
     ELECTRONIC_MAIL_TYPE: str = field(repr=False, compare=False)
-    PREFERENCE_ID: str = field(default=None, repr=False, compare=False)
+    PREFERENCE_ID: Optional[str] = field(
+        default=None, repr=False, compare=False
+    )
 
 
 @dataclass(frozen=True, eq=True)
@@ -933,27 +959,19 @@ class VolumeModel(AbstractModel):
         data = env.copy()
 
         if "CATALOG" in data:
-            data["CATALOG"]: CatalogModel = CatalogModel.from_dict(
-                data["CATALOG"]
-            )
+            data["CATALOG"] = CatalogModel.from_dict(data["CATALOG"])
         if "DATA_PRODUCER" in data:
-            data[
-                "DATA_PRODUCER"
-            ]: DataProducerModel = DataProducerModel.from_dict(
+            data["DATA_PRODUCER"] = DataProducerModel.from_dict(
                 data["DATA_PRODUCER"]
             )
         if "DATA_SUPPLIER" in data:
-            data[
-                "DATA_SUPPLIER"
-            ]: DataSupplierModel = DataSupplierModel.from_dict(
+            data["DATA_SUPPLIER"] = DataSupplierModel.from_dict(
                 data["DATA_SUPPLIER"]
             )
         if "FILE" in data:
-            data["FILE"]: FileModel = FileModel.from_dict(data["FILE"])
+            data["FILE"] = FileModel.from_dict(data["FILE"])
         if "DIRECTORY" in data:
-            data["DIRECTORY"]: DirectoryModel = DirectoryModel.from_dict(
-                data["DIRECTORY"]
-            )
+            data["DIRECTORY"] = DirectoryModel.from_dict(data["DIRECTORY"])
 
         parameters = inspect.signature(cls).parameters
         return cls(**{k: v for k, v in data.items() if k in parameters})

@@ -26,6 +26,8 @@ import logging
 import os
 from abc import ABC
 from typing import Any
+from typing import Callable
+from typing import cast
 from typing import Dict
 from typing import Iterable
 from typing import Iterator
@@ -34,6 +36,9 @@ from typing import Optional
 from typing import Union
 
 import pystac
+from pystac.layout import CustomLayoutStrategy
+from pystac.utils import join_path_or_url
+from pystac.utils import JoinType
 from tqdm import tqdm
 
 from ..exception import CrawlerError
@@ -73,6 +78,81 @@ class StacTransformer(ABC, Observable):
     def database(self) -> Database:
         return self.__database
 
+    def _remove_filename_if_needed(
+        self, parent_dir: str, filename: str
+    ) -> str:
+        if filename in parent_dir:
+            parent_dir = parent_dir.replace(filename, "")
+        return parent_dir
+
+    def _fix_parent_directory(self, parent_dir: str) -> str:
+        if "urn:" in parent_dir:
+            paths: List[str] = parent_dir.split("/")
+            base = paths[:-1]
+            directory = paths[-1].split(":")[-1]
+            parent_dir = os.path.join("/".join(base), directory)
+        return parent_dir
+
+    def get_strategy(self) -> CustomLayoutStrategy:
+        """Creates a stategy to define the directories name in STAC catalog and children
+
+        Returns:
+            CustomLayoutStrategy: A custom strategy for the name of the directories
+        """
+
+        def get_custom_catalog_func() -> (
+            Callable[[pystac.Catalog, str, bool], str]
+        ):
+            def fn(col: pystac.Catalog, parent_dir: str, is_root: bool) -> str:
+                parent_dir = self._remove_filename_if_needed(
+                    parent_dir, "catalog.json"
+                )
+                path: str
+                if is_root:
+                    parent_dir = self._fix_parent_directory(parent_dir)
+                    path = join_path_or_url(
+                        JoinType.URL, parent_dir, "catalog.json"
+                    )
+                else:
+                    new_id = col.id.split(":")[-1]
+                    path = join_path_or_url(
+                        JoinType.URL, parent_dir, new_id, "catalog.json"
+                    )
+                return path
+
+            return fn
+
+        def get_custom_collection_func() -> (
+            Callable[[pystac.Collection, str, bool], str]
+        ):
+            def fn(
+                col: pystac.Collection, parent_dir: str, is_root: bool
+            ) -> str:
+                parent_dir = self._remove_filename_if_needed(
+                    parent_dir, "collection.json"
+                )
+                path: str
+                if is_root:
+                    parent_dir = self._fix_parent_directory(parent_dir)
+                    path = join_path_or_url(
+                        JoinType.URL, parent_dir, "collection.json"
+                    )
+                else:
+                    new_id = col.id.split(":")[-1]
+                    path = join_path_or_url(
+                        JoinType.URL, parent_dir, new_id, "collection.json"
+                    )
+                return path
+
+            return fn
+
+        strategy = CustomLayoutStrategy(
+            catalog_func=get_custom_catalog_func(),
+            collection_func=get_custom_collection_func(),
+        )
+
+        return strategy
+
 
 class StacRecordsTransformer(StacTransformer):
     """Convert the records to STAC."""
@@ -90,7 +170,7 @@ class StacRecordsTransformer(StacTransformer):
         self.init()
 
     def init(self):
-        self.__catalog: pystac.Catalog = None
+        self.__catalog: pystac.Catalog
 
     @property
     def catalog(self) -> pystac.Catalog:
@@ -190,20 +270,33 @@ class StacRecordsTransformer(StacTransformer):
             else:
                 tqdm.write(f"{len(items_stac.items)} items to add")
 
-            stac_collection: pystac.Collection = self.catalog.get_child(
-                pds_collection.get_collection_id(), recursive=True
+            stac_collection = cast(
+                pystac.Collection,
+                self.catalog.get_child(
+                    pds_collection.get_collection_id(), recursive=True
+                ),
             )
-            stac_instru: pystac.Catalog = self.catalog.get_child(
-                pds_collection.get_instrument_id(), recursive=True
+            stac_instru = cast(
+                pystac.Catalog,
+                self.catalog.get_child(
+                    pds_collection.get_instrument_id(), recursive=True
+                ),
             )
-            stac_host: pystac.Catalog = self.catalog.get_child(
-                pds_collection.get_plateform_id(), recursive=True
+            stac_host = cast(
+                pystac.Catalog,
+                self.catalog.get_child(
+                    pds_collection.get_plateform_id(), recursive=True
+                ),
             )
-            stac_mission: pystac.Catalog = self.catalog.get_child(
-                pds_collection.get_mission_id(), recursive=True
+            stac_mission: pystac.Catalog = cast(
+                pystac.Catalog,
+                self.catalog.get_child(
+                    pds_collection.get_mission_id(), recursive=True
+                ),
             )
-            stac_planet: pystac.Catalog = self.catalog.get_child(
-                pds_collection.get_planet_id()
+            stac_planet: pystac.Catalog = cast(
+                pystac.Catalog,
+                self.catalog.get_child(pds_collection.get_planet_id()),
             )
             new_catalog: Optional[
                 Union[pystac.Catalog, pystac.Collection]
@@ -252,12 +345,18 @@ class StacRecordsTransformer(StacTransformer):
             stac_collection.add_items(items_stac)
 
             if new_catalog is None:
+                stac_collection.normalize_hrefs(
+                    stac_collection.self_href, strategy=self.get_strategy()
+                )
                 stac_collection.save()
-                parent = stac_collection.get_parent()
+                parent = cast(pystac.Collection, stac_collection.get_parent())
                 parent.save_object(include_self_link=False)
             else:
+                new_catalog.normalize_hrefs(
+                    new_catalog.self_href, strategy=self.get_strategy()
+                )
                 new_catalog.save()
-                parent = new_catalog.get_parent()
+                parent = cast(pystac.Catalog, new_catalog.get_parent())
                 parent.save_object(include_self_link=False)
 
     def describe(self):
@@ -403,9 +502,11 @@ class StacCatalogTransformer(StacTransformer):
             references
         )
         if not self._is_already_exists(pystac_plateform_cat.id):
-            self.catalog.get_child(mission_id, recursive=True).add_child(
-                pystac_plateform_cat
+            catalog = cast(
+                pystac.Catalog,
+                self.catalog.get_child(mission_id, recursive=True),
             )
+            catalog.add_child(pystac_plateform_cat)
 
     def _add_instruments_to_plateform(
         self,
@@ -442,9 +543,13 @@ class StacCatalogTransformer(StacTransformer):
             references
         )
         if not self._is_already_exists(instrument.get_instrument_id()):
-            self.catalog.get_child(
-                instrument.get_plateform_id(), recursive=True
-            ).add_child(pystac_instru_cat)
+            catalog = cast(
+                pystac.Catalog,
+                self.catalog.get_child(
+                    instrument.get_plateform_id(), recursive=True
+                ),
+            )
+            catalog.add_child(pystac_instru_cat)
 
     def _add_collections_to_instrument(
         self,
@@ -495,9 +600,11 @@ class StacCatalogTransformer(StacTransformer):
                     references, data_supplier, data_producer
                 )
             )
-            self.catalog.get_child(instrument_id, recursive=True).add_child(
-                stac_collection
+            catalog = cast(
+                pystac.Catalog,
+                self.catalog.get_child(instrument_id, recursive=True),
             )
+            catalog.add_child(stac_collection)
 
     def _build_stac_catalogs_and_collections(
         self, catalogs: Iterator[Dict[str, Any]]
@@ -509,11 +616,16 @@ class StacCatalogTransformer(StacTransformer):
         """
         for catalog in catalogs:
             stac_mission: pystac.Catalog
-            references_ode: ReferencesModel = catalog.get(
-                PdsParserFactory.FileGrammary.REFERENCE_CATALOG.name
+            references_ode: ReferencesModel = cast(
+                ReferencesModel,
+                catalog.get(
+                    PdsParserFactory.FileGrammary.REFERENCE_CATALOG.name
+                ),
             )
-            pds_collection: PdsRegistryModel = catalog.get("collection")
-            volume_desc: VolumeModel = catalog.get("volume")
+            pds_collection: PdsRegistryModel = cast(
+                PdsRegistryModel, catalog.get("collection")
+            )
+            volume_desc: VolumeModel = cast(VolumeModel, catalog.get("volume"))
 
             if not self._is_already_exists(pds_collection.get_planet_id()):
                 pystac_planet_cat = pds_collection.create_stac_planet_catalog()
@@ -527,9 +639,11 @@ class StacCatalogTransformer(StacTransformer):
                     references_ode
                 )
                 if not self._is_already_exists(stac_mission.id):
-                    self.catalog.get_child(
-                        pds_collection.get_planet_id()
-                    ).add_child(stac_mission)
+                    collection = cast(
+                        pystac.Collection,
+                        self.catalog.get_child(pds_collection.get_planet_id()),
+                    )
+                    collection.add_child(stac_mission)
             else:
                 self.notify_observers(
                     MessageModel(
@@ -545,13 +659,13 @@ class StacCatalogTransformer(StacTransformer):
                 if isinstance(plateform_ode_cat, list):
                     self._add_plateforms_to_mission(
                         plateform_ode_cat,
-                        stac_mission.id,
+                        stac_mission.id,  # type: ignore
                         references_ode,
                     )
                 else:
                     self._add_plateform_to_mission(
                         plateform_ode_cat,
-                        stac_mission.id,
+                        stac_mission.id,  # type: ignore
                         references_ode,
                     )
             else:
@@ -644,4 +758,5 @@ class StacCatalogTransformer(StacTransformer):
         self.catalog.normalize_and_save(
             self.database.stac_directory,
             catalog_type=pystac.CatalogType.SELF_CONTAINED,
+            strategy=self.get_strategy(),
         )
