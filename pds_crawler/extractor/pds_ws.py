@@ -521,7 +521,7 @@ class PdsRecords(Observable):
         )
         # TODO : remove glob.glob(f"{directory_path}/*json")[0:2]
         for file in tqdm(
-            glob.glob(f"{directory_path}/*json"),
+            glob.glob(f"{directory_path}/*json")[0:1],
             desc="Downloaded responses from the collection",
             disable=disable_tqdm,
             position=1,

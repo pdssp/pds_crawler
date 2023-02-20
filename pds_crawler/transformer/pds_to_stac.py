@@ -36,15 +36,13 @@ from typing import Optional
 from typing import Union
 
 import pystac
-from pystac.layout import CustomLayoutStrategy
-from pystac.utils import join_path_or_url
-from pystac.utils import JoinType
 from tqdm import tqdm
 
 from ..exception import CrawlerError
 from ..load import Database
 from ..report import MessageModel
 from ..utils import Observable
+from .strategy import LargeDataVolumeStrategy
 from pds_crawler.extractor import PDSCatalogsDescription
 from pds_crawler.extractor import PdsRecords
 from pds_crawler.load import PdsParserFactory
@@ -52,7 +50,6 @@ from pds_crawler.models import DataSetModel
 from pds_crawler.models import InstrumentHostModel
 from pds_crawler.models import InstrumentModel
 from pds_crawler.models import MissionModel
-from pds_crawler.models import PdsRecordModel
 from pds_crawler.models import PdsRecordsModel
 from pds_crawler.models import PdsRegistryModel
 from pds_crawler.models import ReferencesModel
@@ -73,10 +70,15 @@ class StacTransformer(ABC, Observable):
                 "[StacTransformer] must be initialized with database attribute of type Dtabase."
             )
         self.__database = database
+        self.__layout = LargeDataVolumeStrategy()
 
     @property
     def database(self) -> Database:
         return self.__database
+
+    @property
+    def layout(self) -> LargeDataVolumeStrategy:
+        return self.__layout
 
     def _remove_filename_if_needed(
         self, parent_dir: str, filename: str
@@ -92,66 +94,6 @@ class StacTransformer(ABC, Observable):
             directory = paths[-1].split(":")[-1]
             parent_dir = os.path.join("/".join(base), directory)
         return parent_dir
-
-    def get_strategy(self) -> CustomLayoutStrategy:
-        """Creates a strategy to define the directories name in STAC catalog and childrens
-
-        Returns:
-            CustomLayoutStrategy: A custom strategy for the name of the directories
-        """
-
-        def get_custom_catalog_func() -> (
-            Callable[[pystac.Catalog, str, bool], str]
-        ):
-            def fn(col: pystac.Catalog, parent_dir: str, is_root: bool) -> str:
-                parent_dir = self._remove_filename_if_needed(
-                    parent_dir, "catalog.json"
-                )
-                path: str
-                if is_root:
-                    parent_dir = self._fix_parent_directory(parent_dir)
-                    path = join_path_or_url(
-                        JoinType.URL, parent_dir, "catalog.json"
-                    )
-                else:
-                    new_id = col.id.split(":")[-1]
-                    path = join_path_or_url(
-                        JoinType.URL, parent_dir, new_id, "catalog.json"
-                    )
-                return path
-
-            return fn
-
-        def get_custom_collection_func() -> (
-            Callable[[pystac.Collection, str, bool], str]
-        ):
-            def fn(
-                col: pystac.Collection, parent_dir: str, is_root: bool
-            ) -> str:
-                parent_dir = self._remove_filename_if_needed(
-                    parent_dir, "collection.json"
-                )
-                path: str
-                if is_root:
-                    parent_dir = self._fix_parent_directory(parent_dir)
-                    path = join_path_or_url(
-                        JoinType.URL, parent_dir, "collection.json"
-                    )
-                else:
-                    new_id = col.id.split(":")[-1]
-                    path = join_path_or_url(
-                        JoinType.URL, parent_dir, new_id, "collection.json"
-                    )
-                return path
-
-            return fn
-
-        strategy = CustomLayoutStrategy(
-            catalog_func=get_custom_catalog_func(),
-            collection_func=get_custom_collection_func(),
-        )
-
-        return strategy
 
 
 class StacRecordsTransformer(StacTransformer):
@@ -346,14 +288,15 @@ class StacRecordsTransformer(StacTransformer):
 
             if new_catalog is None:
                 stac_collection.normalize_hrefs(
-                    stac_collection.self_href, strategy=self.get_strategy()
+                    stac_collection.self_href,
+                    strategy=self.layout.get_strategy(),
                 )
                 stac_collection.save()
                 parent = cast(pystac.Collection, stac_collection.get_parent())
                 parent.save_object(include_self_link=False)
             else:
                 new_catalog.normalize_hrefs(
-                    new_catalog.self_href, strategy=self.get_strategy()
+                    new_catalog.self_href, strategy=self.layout.get_strategy()
                 )
                 new_catalog.save()
                 parent = cast(pystac.Catalog, new_catalog.get_parent())
@@ -758,5 +701,5 @@ class StacCatalogTransformer(StacTransformer):
         self.catalog.normalize_and_save(
             self.database.stac_directory,
             catalog_type=pystac.CatalogType.SELF_CONTAINED,
-            strategy=self.get_strategy(),
+            strategy=self.layout.get_strategy(),
         )
