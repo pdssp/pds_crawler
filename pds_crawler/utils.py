@@ -7,8 +7,10 @@ import concurrent.futures
 import logging
 import os
 import time
+import tracemalloc
 from datetime import datetime
 from enum import Enum
+from functools import partial
 from functools import wraps
 from pathlib import Path
 from typing import Any
@@ -45,36 +47,6 @@ class DocEnum(Enum):
         if doc is not None:
             self.__doc__ = doc
         return self
-
-
-class GrammarEnum(Enum):
-    """Enum where we can add documentation and grammar."""
-
-    def __new__(cls, *args):
-        obj = object.__new__(cls)
-        obj._value_ = str(args[1])  # keep the value of the enum
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(  # pylint: disable=too-many-arguments
-        self,
-        value: str,
-        grammar: str,
-        class_name: str,
-        doc=None,
-    ):
-        self._grammar_: str = grammar
-        self._class_name_: str = class_name
-        if doc is not None:
-            self.__doc__ = doc
-
-    @property
-    def grammar(self) -> str:
-        return self._grammar_
-
-    @property
-    def class_name(self) -> str:
-        return self._class_name_
 
 
 class UtilsMath:
@@ -115,23 +87,6 @@ class UtilsMath:
         else:
             result = value
         return result
-
-
-def timeit(func):
-    """Decorator to measure the time spent in an function"""
-
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter()
-        total_time = end_time - start_time
-        logger.info(
-            f"Function {func.__name__}{args} {kwargs} Took {total_time:.4f} seconds"
-        )
-        return result
-
-    return timeit_wrapper
 
 
 def cache_download(func):
@@ -273,19 +228,6 @@ def compute_download_directory_path(
     return os.path.join(directory, os.path.sep.join(items))
 
 
-def inverse_mapping(f):
-    mapping = dict()
-    for item in f.items():
-        keyword = item[0]
-        val = item[1]
-        if isinstance(val, list):
-            for elt in val:
-                mapping[elt] = keyword
-        else:
-            mapping[val] = keyword
-    return mapping
-
-
 def utc_to_iso(utc_time: str, timespec: str = "auto") -> str:
     """Convert UTC time string to ISO format string (STAC standard)."""
     # set valid datatime formats 2018-08-23T23:24:36.865Z
@@ -359,3 +301,107 @@ class Observer:  # pylint: disable=R0903
             observable (Observable): Observable
         """
         print("Got", args, kwargs, "From", observable)
+
+
+class UtilsMonitoring:  # noqa: R0205
+    """Some Utilities."""
+
+    # pylint: disable:invalid_name
+    @staticmethod
+    def io_display(
+        func=None, input=True, output=True, level=15
+    ):  # pylint: disable=W0622
+        """Monitor the input/output of a function.
+
+        NB : Do not use this monitoring method on an __init__ if the class
+        implements __repr__ with attributes
+
+        Parameters
+        ----------
+        func: func
+            function to monitor (default: {None})
+        input: bool
+            True when the function must monitor the input (default: {True})
+        output: bool
+            True when the function must monitor the output (default: {True})
+        level: int
+            Level from which the function must log
+        Returns
+        -------
+        object : the result of the function
+        """
+        if func is None:
+            return partial(
+                UtilsMonitoring.io_display,
+                input=input,
+                output=output,
+                level=level,
+            )
+
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            name = func.__qualname__
+            logger = logging.getLogger(__name__ + "." + name)
+
+            if input and logger.getEffectiveLevel() >= level:
+                msg = f"[{name}] Entering '{name}' (args={args}, kwargs={kwargs})"
+                logger.log(level, msg)
+
+            result = func(*args, **kwargs)
+
+            if output and logger.getEffectiveLevel() >= level:
+                msg = f"[{name}] Exiting '{name}' (result={result})"
+                logger.log(level, msg)
+
+            return result
+
+        return wrapped
+
+    @staticmethod
+    def timeit(func):
+        """Decorator to measure the time spent in an function"""
+
+        @wraps(func)
+        def timeit_wrapper(*args, **kwargs):
+            start_time = time.perf_counter()
+            result = func(*args, **kwargs)
+            end_time = time.perf_counter()
+            total_time = end_time - start_time
+            logger.info(
+                f"Function {func.__name__}{args} {kwargs} Took {total_time:.4f} seconds"
+            )
+            return result
+
+        return timeit_wrapper
+
+    @staticmethod
+    def measure_memory(func=None, level=logging.DEBUG):
+        """Measure the memory of the function
+
+        Args:
+            func (func, optional): Function to measure. Defaults to None.
+            level (int, optional): Level of the log. Defaults to logging.INFO.
+
+        Returns:
+            object : the result of the function
+        """
+        if func is None:
+            return partial(UtilsMonitoring.measure_memory, level=level)
+
+        @wraps(func)
+        def newfunc(*args, **kwargs):
+            name = func.__qualname__
+            logger = logging.getLogger(__name__ + "." + name)
+            tracemalloc.start()
+            result = func(*args, **kwargs)
+            current, peak = tracemalloc.get_traced_memory()
+            msg = f"""
+            \033[37mFunction Name       :\033[35;1m {func.__name__}\033[0m
+            \033[37mCurrent memory usage:\033[36m {current / 10 ** 6}MB\033[0m
+            \033[37mPeak                :\033[36m {peak / 10 ** 6}MB\033[0m
+            """
+            logger.log(level, msg)
+            tracemalloc.stop()
+            return result
+
+        return newfunc

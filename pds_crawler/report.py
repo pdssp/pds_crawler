@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from json import dumps
 from typing import Any
 from typing import IO
+from typing import Optional
 
 from .load import Database
 from .utils import Observer
@@ -42,7 +43,7 @@ class CrawlerReport(Observer):
     def __init__(self, db: Database):
         self.__db = db
         self.__name: str = "default_report"
-        self.__file: IO
+        self.__file: Optional[IO] = None
 
     @property
     def name(self):

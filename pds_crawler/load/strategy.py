@@ -13,7 +13,27 @@ Description:
 
 Classes:
     LargeDataVolumeStrategy:
-        Specific strategy
+        Specific strategy for organizing the STAC catalogs and items.
+
+.. mermaid::
+
+    classDiagram
+        class LargeDataVolumeStrategy {
+            - _remove_filename_if_needed(parent_dir: str, filename: str) -> str
+            - _fix_parent_directory(parent_dir: str) -> str
+            - _hash_storage(key, base_path) -> str
+            + get_strategy() -> CustomLayoutStrategy
+        }
+        class CustomLayoutStrategy {
+            + catalog_func
+            + collection_func
+            + item_func
+            + __init__(catalog_func, collection_func, item_func)
+        }
+        LargeDataVolumeStrategy --> CustomLayoutStrategy
+        CustomLayoutStrategy --> pystac.Catalog
+        CustomLayoutStrategy --> pystac.Collection
+        CustomLayoutStrategy --> pystac.Item
 
 Author:
     Jean-Christophe Malapert
@@ -29,6 +49,9 @@ from pystac.utils import JoinType
 
 
 class LargeDataVolumeStrategy:
+    """Custom layout strategy for organizing the STAC catalogs and items for large items
+    in a collection."""
+
     def __init__(self) -> None:
         pass
 
@@ -50,7 +73,7 @@ class LargeDataVolumeStrategy:
             parent_dir = os.path.join("/".join(base), directory)
         return parent_dir
 
-    def _hash_storage(self, key, base_path):
+    def _hash_storage(self, key):
         # Use the Python hash to generate an unique integer for the key
         hashed_key = hash(key)
 
@@ -115,7 +138,7 @@ class LargeDataVolumeStrategy:
 
         def get_custom_item_func() -> Callable[[pystac.Item, str], str]:
             def fn(item: pystac.Item, parent_dir: str) -> str:
-                dir_index: str = self._hash_storage(item.id, parent_dir)
+                dir_index: str = self._hash_storage(item.id)
                 path = join_path_or_url(
                     JoinType.URL,
                     parent_dir,

@@ -9,8 +9,9 @@ import logging
 import os
 import signal
 import sys
+from argparse import ArgumentParser
 
-from .pdssp_crawler import Crawler
+from .pds_crawler import Crawler
 from pds_crawler import __author__
 from pds_crawler import __copyright__
 from pds_crawler import __description__
@@ -60,6 +61,77 @@ def str2bool(string_to_test: str) -> bool:
     return string_to_test.lower() in ("yes", "true", "True", "t", "1")
 
 
+def extraction_parser(subparser):
+    extraction = subparser.add_parser(
+        name="extract", description="Data extraction from PDS"
+    )
+    extraction.add_argument(
+        "--type_extract",
+        required=True,
+        type=str,
+        choices=["pds_objects", "ode_collections", "ode_records", "list"],
+        help="Extract from a PDS location",
+    )
+    extraction.add_argument(
+        "--planet",
+        required=False,
+        type=str,
+        help="Extract a planet",
+    )
+    extraction.add_argument(
+        "--dataset_id",
+        required=False,
+        type=str,
+        help="Extract a dataset",
+    )
+    extraction.add_argument(
+        "--nb_workers",
+        required=False,
+        type=int,
+        default=3,
+        help="Number of workers to download data (default: %(default)s)",
+    )
+
+
+def check_extraction_parser(subparser):
+    check_extraction = subparser.add_parser(
+        name="check_extract", description="Check extraction from PDS"
+    )
+    check_extraction.add_argument(
+        "--check",
+        required=True,
+        type=str,
+        choices=["pds_objects", "ode_records"],
+        help="Check Extraction of PDS3 catalog or PDS records",
+    )
+
+    check_extraction.add_argument(
+        "--planet",
+        required=False,
+        type=str,
+        help="Extract a planet",
+    )
+    check_extraction.add_argument(
+        "--dataset_id",
+        required=False,
+        type=str,
+        help="Extract a dataset",
+    )
+
+
+def transform_parser(subparser):
+    transform = subparser.add_parser(
+        name="transform", description="Data transformation"
+    )
+    transform.add_argument(
+        "--type_stac",
+        required=True,
+        type=str,
+        choices=["catalog", "records"],
+        help="Convert to STAC",
+    )
+
+
 def parse_cli() -> argparse.Namespace:
     """Parse command line inputs.
 
@@ -94,31 +166,14 @@ def parse_cli() -> argparse.Namespace:
     parser.add_argument(
         "-d",
         "--database",
-        help="Name and path of the database (default: %(default)s)",
-        default=os.path.join("work", "database", "pds.h5"),
+        help="Path of the database (default: %(default)s)",
+        default=os.path.join("work", "database"),
     )
 
     subparser = parser.add_subparsers()
-    extraction = subparser.add_parser(
-        name="extract", description="Data extraction from PDS"
-    )
-    extraction.add_argument(
-        "--type_extract",
-        required=True,
-        type=str,
-        choices=["pds_objects", "ode_collections", "ode_records"],
-        help="Extract from a PDS location",
-    )
-    transform = subparser.add_parser(
-        name="transform", description="Data transformation"
-    )
-    transform.add_argument(
-        "--type_stac",
-        required=True,
-        type=str,
-        choices=["catalog", "records"],
-        help="Convert to STAC",
-    )
+    extraction_parser(subparser)
+    check_extraction_parser(subparser)
+    transform_parser(subparser)
 
     return parser.parse_args()
 

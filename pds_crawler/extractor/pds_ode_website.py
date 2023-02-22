@@ -24,7 +24,6 @@ Author:
     Jean-Christophe Malapert
 """
 import logging
-import os
 import time
 from contextlib import closing
 from json.decoder import JSONDecodeError
@@ -42,20 +41,18 @@ from bs4 import BeautifulSoup
 from bs4 import element
 from lark.exceptions import UnexpectedCharacters
 from requests.exceptions import ConnectionError
-from tqdm import tqdm
 
 from ..exception import NoFileExistInFolder
 from ..exception import PdsCatalogDescriptionError
 from ..load import Database
+from ..load import PdsCollectionStorage
 from ..load import PdsParserFactory
-from ..load import StorageCollectionDirectory
 from ..models import CatalogModel
 from ..models import PdsRecordModel
 from ..models import PdsRecordsModel
 from ..models import PdsRegistryModel
 from ..models import VolumeModel
 from ..report import MessageModel
-from ..utils import inverse_mapping
 from ..utils import Observable
 from ..utils import parallel_requests
 from ..utils import requests_retry_session
@@ -284,7 +281,7 @@ class PDSCatalogDescription(Observable):
                 - get_url_for_multiple_catalogs(catalogs: List[str], catalogs_from_desc_cat: Dict[str, str]) List[str]
                 - get_url_for_simple_catalog(catalog_name: str, catalogs_from_desc_cat: Dict[str, str]) List[str]
                 - get_urls_from_catalog_type(catalog_name: Union[str, List[str]], catalogs_from_desc_cat: Dict[str, str]) List[str]
-                - parse_catalog(file_storage: StorageCollectionDirectory, catalog_name: str, cat_type: str, result: Dict[str, Union[str, List[str]]])
+                - parse_catalog(file_storage: PdsStorage, catalog_name: str, cat_type: str, result: Dict[str, Union[str, List[str]]])
                 + load_catalogs_urls() List[str]
                 + get_ode_catalogs(pds_collection: PdsRegistryModel)  Dict[str, Any]
                 + __repr__(self) str
@@ -316,7 +313,7 @@ class PDSCatalogDescription(Observable):
         self.__url: str
         self.__volume_desc_url: str
         self.__vol_desc_cat: VolumeModel
-        self.__catalogs_urls: List[str]
+        self.__catalogs_urls: List[str] = list()
 
     @property
     def url(self) -> str:
@@ -582,7 +579,7 @@ class PDSCatalogDescription(Observable):
 
     def _parse_catalog(
         self,
-        file_storage: StorageCollectionDirectory,
+        file_storage: PdsCollectionStorage,
         catalog_name: str,
         cat_type: str,
         result: Dict[str, Union[str, List[str]]],
@@ -590,7 +587,7 @@ class PDSCatalogDescription(Observable):
         """Parses the PDS object (`catalog_name`), represented by a catalog type and stored
         on the file storage with a specific implementation associated to the catalog_type.
 
-        The catalog is parsed by using the `get_catalog`method from the StorageCollectionDirectory
+        The catalog is parsed by using the `get_catalog`method from the PdsStorage
         object. The result is then stored in result variable where the key is the `catalog_type`.
         At each `catalog_type` is associated one or several catalogs.
 
@@ -598,7 +595,7 @@ class PDSCatalogDescription(Observable):
         object.
 
         Args:
-            file_storage (StorageCollectionDirectory): storage where the PDS objects have been downloaded
+            file_storage (PdsCollectionStorage): storage where the PDS objects have been downloaded
             catalog_name (str): catalog name that must be parsed
             cat_type (str): Type of catalog where an implementation is associated
             result (Dict[str, Union[str, List[str]]]): the catalogs in the Volume description
@@ -672,7 +669,9 @@ class PDSCatalogDescription(Observable):
                 logger.exception(f"[ConnectionError]: {err}")
                 self.notify_observers(MessageModel(str(pds_collection), err))
         except StopIteration:
-            logger.error(f"No record for {pds_collection}")
+            logger.error(
+                f"No record for {pds_collection}. Please download them"
+            )
             self.notify_observers(
                 MessageModel(str(pds_collection), Exception("No record"))
             )
@@ -692,8 +691,8 @@ class PDSCatalogDescription(Observable):
     ) -> Dict[str, Any]:
         """Returns the PDS objects for a given space mission collection.
 
-        The function retrieves the StorageCollectionDirectory object associated
-        with the PdsRegistryModel using get_directory_storage_for(), and then
+        The function retrieves the PdsStorage object associated
+        with the PdsRegistryModel using get_pds_storage_for(), and then
         retrieves the description of the volume containing the PDS objects with
         get_volume_description(). It then lists the different types of catalogs
         in the directory using list_catalogs(), and for each catalog, it uses
@@ -711,8 +710,8 @@ class PDSCatalogDescription(Observable):
         result = dict()
         result["collection"] = pds_collection
         try:
-            file_storage: StorageCollectionDirectory = (
-                self.database.get_directory_storage_for(pds_collection)
+            file_storage: PdsCollectionStorage = (
+                self.database.pds_storage.get_pds_storage_for(pds_collection)
             )
             result["volume"] = file_storage.get_volume_description()
             catalogs = file_storage.list_catalogs()
@@ -809,7 +808,7 @@ class PDSCatalogsDescription(Observable):
 
         This method is responsible for downloading the PDS objects for the given
         collections of space missions. It does so by building a list of URLs of
-        PDS objects, creating a StorageCollectionDirectory instance for the given
+        PDS objects, creating a PdsStorage instance for the given
         collection, and using the parallel_requests method to download each PDS object.
         The parallel_requests function is likely using threading or multiprocessing to
         download the objects in parallel, which is a good optimization to speed up the
@@ -821,10 +820,12 @@ class PDSCatalogsDescription(Observable):
         for pds_collection in pds_collections:
             urls_list: List[str] = self._build_all_urls(pds_collection)
             try:
-                file_storage: StorageCollectionDirectory = (
-                    self.database.get_directory_storage_for(pds_collection)
+                file_storage: PdsCollectionStorage = (
+                    self.database.pds_storage.get_pds_storage_for(
+                        pds_collection
+                    )
                 )
-                parallel_requests(file_storage.directory, urls_list, timeout=5)
+                file_storage.download(urls_list, timeout=5)
             except UnexpectedCharacters as err:
                 logger.exception(f"[ParserError]: {err}")
             except ConnectionError as err:

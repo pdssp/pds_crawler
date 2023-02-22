@@ -12,6 +12,8 @@ Description:
     the information in tha appropriate model.
 
 Classes:
+    GrammarEnum:
+        Abstract Enum to create a concrete grammar for Lark
     PdsTransformer :
         Common parser, used by others parsers.
     MissionCatalogTransformer :
@@ -38,6 +40,57 @@ Classes:
     PdsParserFactory :
         Factory to select the right parser and the related Lark grammar.
 
+
+.. mermaid::
+
+    classDiagram
+        class PdsTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : Any
+        }
+        class ProjectionDescriptionTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : DataSetMapProjectionModel
+            -__result : DataSetMapProjectionModel
+        }
+        class MissionCatalogTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : MissionModel
+            -__result : MissionModel
+        }
+        class ReferenceCatalogTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : ReferencesModel
+            -__result : ReferencesModel
+        }
+        class PersonCatalogTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : PersonnelsModel
+            -__result : PersonnelsModel
+        }
+        class VolumeDescriptionTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : VolumeModel
+            -__result : VolumeModel
+        }
+        class InstrumentCatalogTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : InstrumentModel
+            -__result : InstrumentModel
+        }
+        class DataSetCatalogTransformer{
+            +__init__(visit_tokens: bool = True)
+            +result() : DataSetModel
+            -__result : DataSetModel
+        }
+        PdsTransformer <|-- ProjectionDescriptionTransformer
+        PdsTransformer <|-- MissionCatalogTransformer
+        PdsTransformer <|-- ReferenceCatalogTransformer
+        PdsTransformer <|-- PersonCatalogTransformer
+        PdsTransformer <|-- VolumeDescriptionTransformer
+        PdsTransformer <|-- InstrumentCatalogTransformer
+        PdsTransformer <|-- DataSetCatalogTransformer
+
 Author:
     Jean-Christophe Malapert
 """
@@ -47,9 +100,9 @@ import os
 from abc import ABC
 from abc import abstractproperty
 from contextlib import closing
+from enum import Enum
 from pathlib import Path
 from typing import Any
-from typing import Dict
 
 from lark import Lark
 from lark import Transformer
@@ -64,10 +117,39 @@ from ..models import MissionModel
 from ..models import PersonnelsModel
 from ..models import ReferencesModel
 from ..models import VolumeModel
-from ..utils import GrammarEnum
 from ..utils import requests_retry_session
 
 logger = logging.getLogger(__name__)
+
+
+class GrammarEnum(Enum):
+    """Enum where we can add documentation and grammar."""
+
+    def __new__(cls, *args):
+        obj = object.__new__(cls)
+        obj._value_ = str(args[1])  # keep the value of the enum
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(  # pylint: disable=too-many-arguments
+        self,
+        value: str,
+        grammar: str,
+        class_name: str,
+        doc=None,
+    ):
+        self._grammar_: str = grammar
+        self._class_name_: str = class_name
+        if doc is not None:
+            self.__doc__ = doc
+
+    @property
+    def grammar(self) -> str:
+        return self._grammar_
+
+    @property
+    def class_name(self) -> str:
+        return self._class_name_
 
 
 class PdsTransformer(Transformer):
@@ -846,10 +928,14 @@ class PdsParserFactory(ABC):
         """
         parser: Lark
         content: str
-        if Path(uri).is_file:
+        logger.debug(f"[PdsParserFactory] {uri}")
+        if Path(uri).is_file and not uri.startswith("PDS_VERSION_ID"):
+            # Path(uri).is_file is not enough for the test
+            logger.debug("[PdsParserFactory] URI is a file")
             with open(uri, encoding="utf8", errors="ignore") as f:
                 content = f.read()
         elif uri.lower().startswith("http"):
+            logger.debug("[PdsParserFactory] URI is an URL")
             with closing(
                 requests_retry_session().get(
                     uri, stream=True, verify=False, timeout=(180, 1800)
@@ -860,6 +946,7 @@ class PdsParserFactory(ABC):
                 else:
                     raise Exception(uri)
         else:
+            logger.debug("[PdsParserFactory] URI is a content")
             content = uri
 
         grammary_file: str = os.path.join(

@@ -16,11 +16,19 @@ Exported components:
 - `database`: A module that stores/loads data from ODE services.
 - `PdsParserFactory`: A module that parses any PDS3 catalogs by providing the parser and stores the
 information in the appropriate model.
-- `StorageCollectionDirectory`: Storage directory to save downloaded files
+- `PdsStorage`: Storage directory to save downloaded files
 
 """
 from .database import Database
-from .database import StorageCollectionDirectory
+from .database import Hdf5Storage
+from .database import PdsCollectionStorage
+from .database import PdsStorage
 from .pds_objects import PdsParserFactory
 
-__all__ = ["PdsParserFactory", "Database", "StorageCollectionDirectory"]
+__all__ = [
+    "PdsParserFactory",
+    "Database",
+    "PdsStorage",
+    "PdsCollectionStorage",
+    "Hdf5Storage",
+]

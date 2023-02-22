@@ -8,8 +8,8 @@ import os
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
-from typing import Iterator
 from typing import List
+from typing import Optional
 
 import pystac
 
@@ -39,7 +39,11 @@ class AbstractDataEnum(DocEnum):
 class PdsSourceEnum(AbstractSourceEnum):
     COLLECTIONS_INDEX = (
         "collections",
-        "Names of the PDS collection for the georeferenced products",
+        "Get the georeferenced products",
+    )
+    COLLECTIONS_INDEX_SAVE = (
+        "collections_save",
+        "Get and save the PDS collection for the georeferenced products",
     )
     PDS_CATALOGS = (
         "catalogs",
@@ -85,6 +89,9 @@ class StacETL(ETL):
         self.__stac_records_transformer = StacRecordsTransformer(
             db, report=self.__report
         )
+        self.__planet: Optional[str] = None
+
+        self.__dataset_id: Optional[str] = None
 
     @property
     def report(self) -> CrawlerReport:
@@ -110,18 +117,48 @@ class StacETL(ETL):
     def stac_records_transformer(self) -> StacRecordsTransformer:
         return self.__stac_records_transformer
 
-    def extract(self, source: PdsSourceEnum, *args, **kwargs):
+    @property
+    def planet(self) -> Optional[str]:
+        return self.__planet
+
+    @planet.setter
+    def planet(self, name: str):
+        self.__planet = name
+
+    @property
+    def dataset_id(self) -> Optional[str]:
+        return self.__dataset_id
+
+    @dataset_id.setter
+    def dataset_id(self, value: str):
+        self.__dataset_id = value
+
+    def extract(
+        self, source: PdsSourceEnum, *args, **kwargs
+    ) -> Optional[List[PdsRegistryModel]]:
         match source:
             case PdsSourceEnum.COLLECTIONS_INDEX:
                 (
                     stats,
                     collections_pds,
-                ) = self.pds_registry.get_pds_collections()
+                ) = self.pds_registry.get_pds_collections(
+                    self.planet, self.dataset_id
+                )
+                return collections_pds
+            case PdsSourceEnum.COLLECTIONS_INDEX_SAVE:
+                (
+                    stats,
+                    collections_pds,
+                ) = self.pds_registry.get_pds_collections(
+                    self.planet, self.dataset_id
+                )
                 self.pds_registry.cache_pds_collections(collections_pds)
             case PdsSourceEnum.PDS_RECORDS:
                 pds_collections: List[
                     PdsRegistryModel
-                ] = self.pds_registry.load_pds_collections_from_cache()
+                ] = self.pds_registry.load_pds_collections_from_cache(
+                    self.planet, self.dataset_id
+                )
                 self.pds_records.generate_urls_for_all_collections(
                     pds_collections
                 )
@@ -131,8 +168,40 @@ class StacETL(ETL):
             case PdsSourceEnum.PDS_CATALOGS:
                 pds_collections: List[
                     PdsRegistryModel
-                ] = self.pds_registry.load_pds_collections_from_cache()
+                ] = self.pds_registry.load_pds_collections_from_cache(
+                    self.planet, self.dataset_id
+                )
                 self.pds_ode_catalogs.download(pds_collections)
+            case _:
+                raise NotImplementedError(
+                    f"Extraction is not implemented for {source}"
+                )
+
+    def check_extract(self, source: PdsSourceEnum, *args, **kwargs):
+        match source:
+            case PdsSourceEnum.PDS_RECORDS:
+                pds_collections: List[
+                    PdsRegistryModel
+                ] = self.pds_registry.load_pds_collections_from_cache(
+                    self.planet, self.dataset_id
+                )
+                for pds_collection in pds_collections:
+                    for (
+                        iter
+                    ) in self.pds_records.parse_pds_collection_from_cache(
+                        pds_collection
+                    ):
+                        pass
+            case PdsSourceEnum.PDS_CATALOGS:
+                pds_collections: List[
+                    PdsRegistryModel
+                ] = self.pds_registry.load_pds_collections_from_cache(
+                    self.planet, self.dataset_id
+                )
+                for collection in self.pds_ode_catalogs.get_ode_catalogs(
+                    pds_collections
+                ):
+                    pass
             case _:
                 raise NotImplementedError(
                     f"Extraction is not implemented for {source}"
@@ -141,7 +210,9 @@ class StacETL(ETL):
     def transform(self, data: PdsDataEnum, *args, **kwargs):
         pds_collections: List[
             PdsRegistryModel
-        ] = self.pds_registry.load_pds_collections_from_cache()
+        ] = self.pds_registry.load_pds_collections_from_cache(
+            self.planet, self.dataset_id
+        )
         match data:
             case PdsDataEnum.PDS_CATALOGS:
                 self.report.name = PdsDataEnum.PDS_CATALOGS.name

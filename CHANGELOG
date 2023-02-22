@@ -1,4 +1,14 @@
-### Add new storage strategy to handle a large number of items in one collection (HEAD -> main)
+### Refactoring Add tests (HEAD -> main)
+>Wed, 22 Feb 2023 18:31:39 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add new storage strategy to handle a large number of items in one collection (origin/main)
 >Mon, 20 Feb 2023 13:44:31 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Fix bug (origin/main)
+### Fix bug
 >Sat, 18 Feb 2023 14:45:44 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

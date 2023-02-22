@@ -22,9 +22,9 @@ Classes:
 Author:
     Jean-Christophe Malapert
 """
-import glob
 import json
 import logging
+import os
 import urllib.parse
 from contextlib import closing
 from typing import Any
@@ -39,17 +39,12 @@ from tqdm import tqdm
 
 from ..exception import PdsCollectionAttributeError
 from ..load import Database
-from ..load import StorageCollectionDirectory
+from ..load import PdsCollectionStorage
 from ..models import PdsRecordsModel
 from ..models import PdsRegistryModel
-from ..models import VolumeModel
 from ..report import MessageModel
-from ..utils import compute_download_directory_path
-from ..utils import inverse_mapping
 from ..utils import Observable
-from ..utils import parallel_requests
 from ..utils import requests_retry_session
-from ..utils import timeit
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +65,7 @@ class PdsRegistry(Observable):
                 + get_pds_collections(planet: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]
                 + cache_pds_collections(pds_collections: List[PdsRegistryModel])
                 + load_pds_collections_from_cache() List[PdsRegistryModel]
-                + query_cache(dataset_id: str) List[PdsRegistryModel]
+                + query_cache(dataset_id: str) Optional[PdsRegistryModel]
                 + distinct_dataset_values() Set
             }
     """
@@ -151,13 +146,14 @@ class PdsRegistry(Observable):
         return content
 
     def _parse_collection_response(
-        self, response: str
+        self, response: str, dataset_id: Optional[str] = None
     ) -> Tuple[Dict[str, int], List[PdsRegistryModel]]:
         """Parses the JSON response and returns a tuple that contains a
         statistic dictionary and a list of PdsRegistryModel objects.
 
         Args:
             response (str): JSON response
+            dataset_id (Optional[str]): dataset_id parameter, used to filter the response. Defaults to None
 
         Returns:
             Tuple[Dict[str, int], List[PdsRegistryModel]]: statistic dictionary and a list of PdsRegistryModel objects
@@ -174,7 +170,10 @@ class PdsRegistry(Observable):
                 pds_collection: PdsRegistryModel = PdsRegistryModel.from_dict(
                     iiptset_dict
                 )
-                if pds_collection is not None:
+                if pds_collection is not None and (
+                    dataset_id is None
+                    or pds_collection.DataSetId.upper() == dataset_id.upper()
+                ):
                     nb_records += pds_collection.NumberProducts
                     pds_collections.append(pds_collection)
             except PdsCollectionAttributeError as err:
@@ -190,9 +189,8 @@ class PdsRegistry(Observable):
         }
         return (stats, pds_collections)
 
-    @timeit
     def get_pds_collections(
-        self, planet: Optional[str] = None
+        self, planet: Optional[str] = None, dataset_id: Optional[str] = None
     ) -> Tuple[Dict[str, int], List[PdsRegistryModel]]:
         """Retrieve a list of Planetary Data System (PDS) data collections
         from the PDS ODE (Outer Planets Data Exploration) web service.
@@ -208,16 +206,18 @@ class PdsRegistry(Observable):
 
         Args:
             planet (str, optional): planet. Defaults to None.
+            dataset_id (str, optional): dataset ID. Defaults to None.
 
         Returns:
             Tuple[Dict[str, str], List[PdsRegistryModel]]: a dictionary of s
             tatistics and a list of PdsRegistryModel objects representing the
             data collections
         """
-
         request_params: Dict[str, str] = self._build_request_params(planet)
         response: str = self._get_response(request_params)
-        (stats, pds_collection) = self._parse_collection_response(response)
+        (stats, pds_collection) = self._parse_collection_response(
+            response, dataset_id
+        )
         logger.info(
             f"""
         ODE Summary
@@ -236,18 +236,24 @@ class PdsRegistry(Observable):
         Args:
             pds_collections (List[PdsRegistryModel]): the PDS collections information
         """
-        self.database.save_collections(pds_collections)
+        self.database.hdf5_storage.save_collections(pds_collections)
 
-    def load_pds_collections_from_cache(self) -> List[PdsRegistryModel]:
+    def load_pds_collections_from_cache(
+        self, planet: Optional[str] = None, dataset_id: Optional[str] = None
+    ) -> List[PdsRegistryModel]:
         """Loads the PDS collections information from the cache by loading
         the information from the database.
+
+        Args:
+            planet (Optional[str], optional): name of the planet to get. Defaults to None.
+            dataset_id (Optional[str], optional): Dataset ID parameter, used to filter the collection. Defaults to None.
 
         Returns:
             List[PdsRegistryModel]: the PDS collections information
         """
-        return self.database.load_collections()
+        return self.database.hdf5_storage.load_collections(planet, dataset_id)
 
-    def query_cache(self, dataset_id: str) -> List[PdsRegistryModel]:
+    def query_cache(self, dataset_id: str) -> Optional[PdsRegistryModel]:
         """Query a local cache of PDS data collections for a specific
         dataset identified by its ID.
 
@@ -255,16 +261,14 @@ class PdsRegistry(Observable):
             dataset_id (str): ID of thr dataset
 
         Returns:
-            List[PdsRegistryModel]: PDS data collections
+            Optional[PdsRegistryModel]: PDS data collection
         """
-        pds_collections: List[
-            PdsRegistryModel
-        ] = self.load_pds_collections_from_cache()
-        return [
-            pds_collection
-            for pds_collection in pds_collections
-            if pds_collection.DataSetId == dataset_id
-        ]
+        result: Optional[PdsRegistryModel] = None
+        for collection in self.load_pds_collections_from_cache():
+            if collection.DataSetId == dataset_id:
+                result = collection
+                break
+        return result
 
     def distinct_dataset_values(self) -> Set:
         """Gets a set of distinct values for the DataSetId attribute of
@@ -298,7 +302,7 @@ class PdsRecords(Observable):
                 + generate_urls_for_one_collection(pds_collection: PdsRegistryModel, offset: int = 1, limit: int = 5000):
                 + generate_urls_for_all_collections(pds_collection: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
                 + generate_urls_for_all_collections(pds_collections: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
-                + download_pds_records_for_one_collection(pds_collection: PdsRegistryModel)
+                + download_pds_records_for_one_collection(pds_collection: PdsRegistryModel, limit: Optional[int] = None)
                 + download_pds_records_for_all_collections(pds_collections: List[PdsRegistryModel])
                 + parse_pds_collection_from_cache(pds_collection: PdsRegistryModel, disable_tqdm: bool = False) Iterator[PdsRecordsModel]
             }
@@ -312,6 +316,7 @@ class PdsRecords(Observable):
         if kwargs.get("report"):
             self.__report = kwargs.get("report")
             self.subscribe(self.__report)
+        self.__nb_workers: int = 3
 
     @property
     def database(self) -> Database:
@@ -321,6 +326,19 @@ class PdsRecords(Observable):
             Database: database
         """
         return self.__database
+
+    @property
+    def nb_workers(self) -> int:
+        """Returns the number of workers
+
+        Returns:
+            int: number of workers
+        """
+        return self.__nb_workers
+
+    @nb_workers.setter
+    def nb_workers(self, value: int):
+        self.__nb_workers = value
 
     def _build_request_params(
         self,
@@ -428,7 +446,7 @@ class PdsRecords(Observable):
             )
             urls.append(url)
 
-        self.database.save_urls(pds_collection, urls)
+        self.database.hdf5_storage.save_urls(pds_collection, urls)
 
     def generate_urls_for_all_collections(
         self,
@@ -451,32 +469,42 @@ class PdsRecords(Observable):
             )
 
     def download_pds_records_for_one_collection(
-        self, pds_collection: PdsRegistryModel
+        self, pds_collection: PdsRegistryModel, limit: Optional[int] = None
     ):
         """Download records for a given PDS collection based on the set of
         URLs loaded from the database.
 
         Args:
             pds_collection (PdsRegistryModel): PDS collection
+            limit (Optional[int], optional): _description_. Defaults to None.
         """
-        file_storage: StorageCollectionDirectory = (
-            self.database.get_directory_storage_for(pds_collection)
+        urls: List[str] = self.database.hdf5_storage.load_urls(pds_collection)
+        if len(urls) == 0:
+            self.generate_urls_for_one_collection(pds_collection)
+            urls = self.database.hdf5_storage.load_urls(pds_collection)
+        if limit is not None:
+            urls = urls[0:limit]
+
+        file_storage: PdsCollectionStorage = (
+            self.database.pds_storage.get_pds_storage_for(pds_collection)
         )
-        urls: List[str] = self.database.load_urls(pds_collection)
-        parallel_requests(file_storage.directory, urls, time_sleep=1)
+        file_storage.download(urls, time_sleep=1, nb_workers=self.nb_workers)
 
     def download_pds_records_for_all_collections(
-        self, pds_collections: List[PdsRegistryModel]
+        self,
+        pds_collections: List[PdsRegistryModel],
+        limit: Optional[int] = None,
     ):
         """Download PDS records for all collections
 
         Args:
-            pds_collections (List[PdsRegistryModel]): All the PDS collections
+            pds_collections (List[PdsRegistryModel]): _description_
+            limit (Optional[int], optional): _description_. Defaults to None.
         """
         for pds_collection in tqdm(
             pds_collections, desc="Getting collections", position=0
         ):
-            self.download_pds_records_for_one_collection(pds_collection)
+            self.download_pds_records_for_one_collection(pds_collection, limit)
 
     def parse_pds_collection_from_cache(
         self, pds_collection: PdsRegistryModel, disable_tqdm: bool = False
@@ -511,22 +539,18 @@ class PdsRecords(Observable):
                 return None
             return dct
 
-        directory_path: str = compute_download_directory_path(
-            self.database.files_base_directory,
-            pds_collection.ODEMetaDB,
-            pds_collection.IHID,
-            pds_collection.IID,
-            pds_collection.PT,
-            pds_collection.DataSetId,
-        )
         # TODO : remove glob.glob(f"{directory_path}/*json")[0:2]
+        collection_storage: PdsCollectionStorage = (
+            self.database.pds_storage.get_pds_storage_for(pds_collection)
+        )
         for file in tqdm(
-            glob.glob(f"{directory_path}/*json")[0:1],
+            collection_storage.list_files(),
             desc="Downloaded responses from the collection",
             disable=disable_tqdm,
             position=1,
             leave=False,
         ):
+            file = os.path.join(collection_storage.directory, file)
             content: str
             with open(file, encoding="utf8", errors="ignore") as f:
                 content = f.read()

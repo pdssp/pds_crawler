@@ -12,7 +12,7 @@
 # from pds_crawler.extractor import PdsRegistry
 # from pds_crawler.load import Database
 # from pds_crawler.load import PdsParserFactory
-# from pds_crawler.load import StorageCollectionDirectory
+# from pds_crawler.load import PdsStorage
 # from pds_crawler.models import DataSetModel
 # from pds_crawler.models import InstrumentHostModel
 # from pds_crawler.models import InstrumentModel

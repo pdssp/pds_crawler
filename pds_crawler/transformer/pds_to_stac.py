@@ -23,10 +23,8 @@ Author:
     Jean-Christophe Malapert
 """
 import logging
-import os
 from abc import ABC
 from typing import Any
-from typing import Callable
 from typing import cast
 from typing import Dict
 from typing import Iterable
@@ -39,23 +37,22 @@ import pystac
 from tqdm import tqdm
 
 from ..exception import CrawlerError
+from ..extractor import PDSCatalogsDescription
+from ..extractor import PdsRecords
 from ..load import Database
+from ..load import PdsParserFactory
+from ..models import DataSetModel
+from ..models import InstrumentHostModel
+from ..models import InstrumentModel
+from ..models import MissionModel
+from ..models import PdsRecordsModel
+from ..models import PdsRegistryModel
+from ..models import ReferencesModel
+from ..models import VolumeModel
+from ..models.pds_models import DataProducerModel
+from ..models.pds_models import DataSupplierModel
 from ..report import MessageModel
 from ..utils import Observable
-from .strategy import LargeDataVolumeStrategy
-from pds_crawler.extractor import PDSCatalogsDescription
-from pds_crawler.extractor import PdsRecords
-from pds_crawler.load import PdsParserFactory
-from pds_crawler.models import DataSetModel
-from pds_crawler.models import InstrumentHostModel
-from pds_crawler.models import InstrumentModel
-from pds_crawler.models import MissionModel
-from pds_crawler.models import PdsRecordsModel
-from pds_crawler.models import PdsRegistryModel
-from pds_crawler.models import ReferencesModel
-from pds_crawler.models import VolumeModel
-from pds_crawler.models.pds_models import DataProducerModel
-from pds_crawler.models.pds_models import DataSupplierModel
 
 logger = logging.getLogger(__name__)
 
@@ -70,30 +67,10 @@ class StacTransformer(ABC, Observable):
                 "[StacTransformer] must be initialized with database attribute of type Dtabase."
             )
         self.__database = database
-        self.__layout = LargeDataVolumeStrategy()
 
     @property
     def database(self) -> Database:
         return self.__database
-
-    @property
-    def layout(self) -> LargeDataVolumeStrategy:
-        return self.__layout
-
-    def _remove_filename_if_needed(
-        self, parent_dir: str, filename: str
-    ) -> str:
-        if filename in parent_dir:
-            parent_dir = parent_dir.replace(filename, "")
-        return parent_dir
-
-    def _fix_parent_directory(self, parent_dir: str) -> str:
-        if "urn:" in parent_dir:
-            paths: List[str] = parent_dir.split("/")
-            base = paths[:-1]
-            directory = paths[-1].split(":")[-1]
-            parent_dir = os.path.join("/".join(base), directory)
-        return parent_dir
 
 
 class StacRecordsTransformer(StacTransformer):
@@ -120,8 +97,9 @@ class StacRecordsTransformer(StacTransformer):
 
     def load_root_catalog(self):
         """Loads the root catalog"""
-        self.__catalog = pystac.Catalog.from_file(
-            os.path.join(self.database.stac_directory, "catalog.json")
+        self.database.stac_storage.refresh()
+        self.__catalog = cast(
+            pystac.Catalog, self.database.stac_storage.root_catalog
         )
 
     def _create_items_stac(
@@ -150,18 +128,9 @@ class StacRecordsTransformer(StacTransformer):
                     position=2,
                     leave=False,
                 ):
-                    directory: str = os.path.join(
-                        self.database.stac_directory,
-                        record.get_planet_id(),
-                        record.get_mission_id(),
-                        record.get_plateform_id(),
-                        record.get_instrument_id(),
-                        record.get_collection_id(),
-                        record.get_id(),
-                    )
-                    if os.path.exists(directory):
+                    if self.database.stac_storage.item_exists(record):
                         logger.warning(
-                            f"this record exists in {directory}, skip it"
+                            f"this {record} exists in STAC directory, skip it"
                         )
                         continue
                     try:
@@ -287,18 +256,11 @@ class StacRecordsTransformer(StacTransformer):
             stac_collection.add_items(items_stac)
 
             if new_catalog is None:
-                stac_collection.normalize_hrefs(
-                    stac_collection.self_href,
-                    strategy=self.layout.get_strategy(),
-                )
-                stac_collection.save()
+                self.database.stac_storage.normalize_and_save(stac_collection)
                 parent = cast(pystac.Collection, stac_collection.get_parent())
                 parent.save_object(include_self_link=False)
             else:
-                new_catalog.normalize_hrefs(
-                    new_catalog.self_href, strategy=self.layout.get_strategy()
-                )
-                new_catalog.save()
+                self.database.stac_storage.normalize_and_save(new_catalog)
                 parent = cast(pystac.Catalog, new_catalog.get_parent())
                 parent.save_object(include_self_link=False)
 
@@ -698,8 +660,4 @@ class StacCatalogTransformer(StacTransformer):
 
     def save(self):
         """Save on disk the catalog"""
-        self.catalog.normalize_and_save(
-            self.database.stac_directory,
-            catalog_type=pystac.CatalogType.SELF_CONTAINED,
-            strategy=self.layout.get_strategy(),
-        )
+        self.database.stac_storage.root_normalize_and_save(self.catalog)
