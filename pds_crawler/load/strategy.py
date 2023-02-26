@@ -15,25 +15,21 @@ Classes:
     LargeDataVolumeStrategy:
         Specific strategy for organizing the STAC catalogs and items.
 
-.. mermaid::
+.. uml::
 
-    classDiagram
-        class LargeDataVolumeStrategy {
-            - _remove_filename_if_needed(parent_dir: str, filename: str) -> str
-            - _fix_parent_directory(parent_dir: str) -> str
-            - _hash_storage(key, base_path) -> str
-            + get_strategy() -> CustomLayoutStrategy
-        }
-        class CustomLayoutStrategy {
-            + catalog_func
-            + collection_func
-            + item_func
-            + __init__(catalog_func, collection_func, item_func)
-        }
-        LargeDataVolumeStrategy --> CustomLayoutStrategy
-        CustomLayoutStrategy --> pystac.Catalog
-        CustomLayoutStrategy --> pystac.Collection
-        CustomLayoutStrategy --> pystac.Item
+    class LargeDataVolumeStrategy {
+        - _remove_filename_if_needed(parent_dir: str, filename: str) -> str
+        - _fix_parent_directory(parent_dir: str) -> str
+        - _hash_storage(key, base_path) -> str
+        + get_strategy() -> CustomLayoutStrategy
+    }
+    class CustomLayoutStrategy {
+        + catalog_func
+        + collection_func
+        + item_func
+        + __init__(catalog_func, collection_func, item_func)
+    }
+    LargeDataVolumeStrategy --> CustomLayoutStrategy
 
 Author:
     Jean-Christophe Malapert

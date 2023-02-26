@@ -41,55 +41,54 @@ Classes:
         Factory to select the right parser and the related Lark grammar.
 
 
-.. mermaid::
+.. uml::
 
-    classDiagram
-        class PdsTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : Any
-        }
-        class ProjectionDescriptionTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : DataSetMapProjectionModel
-            -__result : DataSetMapProjectionModel
-        }
-        class MissionCatalogTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : MissionModel
-            -__result : MissionModel
-        }
-        class ReferenceCatalogTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : ReferencesModel
-            -__result : ReferencesModel
-        }
-        class PersonCatalogTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : PersonnelsModel
-            -__result : PersonnelsModel
-        }
-        class VolumeDescriptionTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : VolumeModel
-            -__result : VolumeModel
-        }
-        class InstrumentCatalogTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : InstrumentModel
-            -__result : InstrumentModel
-        }
-        class DataSetCatalogTransformer{
-            +__init__(visit_tokens: bool = True)
-            +result() : DataSetModel
-            -__result : DataSetModel
-        }
-        PdsTransformer <|-- ProjectionDescriptionTransformer
-        PdsTransformer <|-- MissionCatalogTransformer
-        PdsTransformer <|-- ReferenceCatalogTransformer
-        PdsTransformer <|-- PersonCatalogTransformer
-        PdsTransformer <|-- VolumeDescriptionTransformer
-        PdsTransformer <|-- InstrumentCatalogTransformer
-        PdsTransformer <|-- DataSetCatalogTransformer
+    class PdsTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : Any
+    }
+    class ProjectionDescriptionTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : DataSetMapProjectionModel
+        -__result : DataSetMapProjectionModel
+    }
+    class MissionCatalogTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : MissionModel
+        -__result : MissionModel
+    }
+    class ReferenceCatalogTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : ReferencesModel
+        -__result : ReferencesModel
+    }
+    class PersonCatalogTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : PersonnelsModel
+        -__result : PersonnelsModel
+    }
+    class VolumeDescriptionTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : VolumeModel
+        -__result : VolumeModel
+    }
+    class InstrumentCatalogTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : InstrumentModel
+        -__result : InstrumentModel
+    }
+    class DataSetCatalogTransformer{
+        +__init__(visit_tokens: bool = True)
+        +result() : DataSetModel
+        -__result : DataSetModel
+    }
+    PdsTransformer <|-- ProjectionDescriptionTransformer
+    PdsTransformer <|-- MissionCatalogTransformer
+    PdsTransformer <|-- ReferenceCatalogTransformer
+    PdsTransformer <|-- PersonCatalogTransformer
+    PdsTransformer <|-- VolumeDescriptionTransformer
+    PdsTransformer <|-- InstrumentCatalogTransformer
+    PdsTransformer <|-- DataSetCatalogTransformer
 
 Author:
     Jean-Christophe Malapert

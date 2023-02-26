@@ -3,21 +3,23 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
-"""ETL to index PDS data to pdssp
-
-The system architecture consists of several components that work together to crawl
+"""The system architecture consists of several components that work together to crawl
 planetary data. The main component can be grouped in two layers:
-- persistence layer that includes three storage systems: STAC_Storage,
-PDS_Storage, and HDF5_Storage, which store data in the File System.
-- busisness layer contains the Extractor and Transformer components.
+
+* persistence layer that includes three storage systems: STAC_Storage, PDS_Storage, and HDF5_Storage, which store data in the File System.
+* busisness layer contains the Extractor and Transformer components.
 
 The Extractor component extracts data from the Planetary Data System, which comprises
 a web service and a website and sends the retrieved data to both PDS and HDF5 storage.
 The Transformer component then transforms the data into the STAC format and stores it
 in the STAC_Storage.
 
-The Models component, used by layers, includes four groups of models: PDS3 objects - catalogs,
-ODE WS - collections, ODE WS - records, and STAC.
+The Models component, used by layers, includes four groups of models:
+
+* PDS3 objects - catalogs,
+* ODE WS - collections,
+* ODE WS - records,
+* and STAC.
 
 The diagram below shows the control flow of the components
 
@@ -122,11 +124,9 @@ from ._version import __title__
 from ._version import __url__
 from ._version import __version__
 from .custom_logging import LogRecord
-from .custom_logging import UtilsLogs
 
 getLogger(__name__).addHandler(NullHandler())
 
-UtilsLogs.add_logging_level("TRACE", 15)
 try:
     PATH_TO_CONF = os.path.dirname(os.path.realpath(__file__))
     logging.config.fileConfig(

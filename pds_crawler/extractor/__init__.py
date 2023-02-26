@@ -7,11 +7,12 @@
 Package: extractor
 
 Description:
-This package contains a collection of modules to extract information from PDS WS, PDS web site, PDS catalogs.
+This package contains a collection of modules to extract information from PDS WS and PDS web site.
 
 Exported components:
-- `pds_ode_website`: A module that parses the PDS3 Dataset explorer to get the different catalogs.
-- `pds_ws`: A module that provides the metadata for the observations by querying ODE web services.
+
+* `pds_ode_website`: A module that parses the PDS3 Dataset explorer to get the different catalogs.
+* `pds_ode_ws`: A module that provides the metadata for the observations by querying ODE web services.
 
 Usage:
 To use this package, you can import and use the exported components as follows:
@@ -52,8 +53,8 @@ Knowing the collection and one record, it is possible to retrieve extra metadata
 """
 from .pds_ode_website import PDSCatalogDescription
 from .pds_ode_website import PDSCatalogsDescription
-from .pds_ws import PdsRecords
-from .pds_ws import PdsRegistry
+from .pds_ode_ws import PdsRecords
+from .pds_ode_ws import PdsRegistry
 
 __all__ = [
     "PdsRegistry",

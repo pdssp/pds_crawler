@@ -5,10 +5,10 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 """
 Module Name:
-    pds_ws
+    pds_ode_ws
 
 Description:
-    the pds_ws provides the metadata for the observations by querying ODE web services.
+    the pds_ode_ws provides the metadata for the observations by querying ODE web services.
 
 Classes:
     PdsRegistry :
@@ -54,20 +54,19 @@ class PdsRegistry(Observable):
     a list of Planetary Data System (PDS) data collections rom the
     PDS ODE (Outer Planets Data Exploration) web service.
 
-    .. mermaid::
+    .. uml::
 
-        classDiagram
-            class PdsRegistry {
-                +Database database
-                - build_params(target: str = None) Dict[str, str]
-                - get_response(params: Dict[str, str]) str
-                - parse_response_collection(response: str) Tuple[Dict[str, int], List[PdsRegistryModel]]
-                + get_pds_collections(planet: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]
-                + cache_pds_collections(pds_collections: List[PdsRegistryModel])
-                + load_pds_collections_from_cache() List[PdsRegistryModel]
-                + query_cache(dataset_id: str) Optional[PdsRegistryModel]
-                + distinct_dataset_values() Set
-            }
+        class PdsRegistry {
+            +Database database
+            - build_params(target: str = None) Dict[str, str]
+            - get_response(params: Dict[str, str]) str
+            - parse_response_collection(response: str) Tuple[Dict[str, int], List[PdsRegistryModel]]
+            + get_pds_collections(planet: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]
+            + cache_pds_collections(pds_collections: List[PdsRegistryModel])
+            + load_pds_collections_from_cache() List[PdsRegistryModel]
+            + query_cache(dataset_id: str) Optional[PdsRegistryModel]
+            + distinct_dataset_values() Set
+        }
     """
 
     SERVICE_ODE_END_POINT = "https://oderest.rsl.wustl.edu/live2/?"
@@ -105,7 +104,7 @@ class PdsRegistry(Observable):
         Returns:
             Dict[str, str]: Query parameters
         """
-        params = {"query": "iipy", "output": "json"}
+        params = {"query": "iipt", "output": "json"}
         if target is not None:
             params["odemetadb"] = target
         return params
@@ -236,7 +235,8 @@ class PdsRegistry(Observable):
         Args:
             pds_collections (List[PdsRegistryModel]): the PDS collections information
         """
-        self.database.hdf5_storage.save_collections(pds_collections)
+        if not self.database.hdf5_storage.save_collections(pds_collections):
+            logger.info("[PdsRegistry] No new collection to process")
 
     def load_pds_collections_from_cache(
         self, planet: Optional[str] = None, dataset_id: Optional[str] = None
@@ -291,21 +291,20 @@ class PdsRecords(Observable):
     Responsible to download and stores the JSON response in the database. This class is also
     responsible to parse the stored JSON and converts each record in the PdsRecordsModel.
 
-    .. mermaid::
+    .. uml::
 
-        classDiagram
-            class PdsRecords {
-                +Database database
-                - build_params(target: str, ihid: str, iid: str, pt: str, offset: int, limit: int = 1000,) Dict[str, str]
-                - generate_all_pagination_params(target: str, ihid: str, iid: str, pt: str, total: int, offset: int = 1, limit: int = 1000) List[Tuple[str, Any]]
-                - __repr__(self) str
-                + generate_urls_for_one_collection(pds_collection: PdsRegistryModel, offset: int = 1, limit: int = 5000):
-                + generate_urls_for_all_collections(pds_collection: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
-                + generate_urls_for_all_collections(pds_collections: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
-                + download_pds_records_for_one_collection(pds_collection: PdsRegistryModel, limit: Optional[int] = None)
-                + download_pds_records_for_all_collections(pds_collections: List[PdsRegistryModel])
-                + parse_pds_collection_from_cache(pds_collection: PdsRegistryModel, disable_tqdm: bool = False) Iterator[PdsRecordsModel]
-            }
+        class PdsRecords {
+            +Database database
+            - build_params(target: str, ihid: str, iid: str, pt: str, offset: int, limit: int = 1000,) Dict[str, str]
+            - generate_all_pagination_params(target: str, ihid: str, iid: str, pt: str, total: int, offset: int = 1, limit: int = 1000) List[Tuple[str, Any]]
+            - __repr__(self) str
+            + generate_urls_for_one_collection(pds_collection: PdsRegistryModel, offset: int = 1, limit: int = 5000):
+            + generate_urls_for_all_collections(pds_collection: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
+            + generate_urls_for_all_collections(pds_collections: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
+            + download_pds_records_for_one_collection(pds_collection: PdsRegistryModel, limit: Optional[int] = None)
+            + download_pds_records_for_all_collections(pds_collections: List[PdsRegistryModel])
+            + parse_pds_collection_from_cache(pds_collection: PdsRegistryModel, disable_tqdm: bool = False) Iterator[PdsRecordsModel]
+        }
     """
 
     SERVICE_ODE_END_POINT = "https://oderest.rsl.wustl.edu/live2/?"
@@ -539,7 +538,6 @@ class PdsRecords(Observable):
                 return None
             return dct
 
-        # TODO : remove glob.glob(f"{directory_path}/*json")[0:2]
         collection_storage: PdsCollectionStorage = (
             self.database.pds_storage.get_pds_storage_for(pds_collection)
         )

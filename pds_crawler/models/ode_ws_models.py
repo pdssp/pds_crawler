@@ -3,7 +3,84 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
-"""ODE services models"""
+"""ODE services models
+
+.. uml::
+
+    class PdsRegistryModel {
+        +ODEMetaDB: str
+        +IHID: str
+        +IHName: str
+        +IID: str
+        +IName: str
+        +PT: str
+        +PTName: str
+        +DataSetId: str
+        +NumberProducts: int
+        +ValidTargets: Dict[str, List[str]]
+        +MinOrbit: Optional[int]
+        +MaxOrbit: Optional[int]
+        +MinObservationTime: Optional[str]
+        +MaxObservationTime: Optional[str]
+        +NumberObservations: Optional[int]
+        +SpecialValue1: Optional[str]
+        +MinSpecialValue1: Optional[float]
+        +MaxSpecialValue1: Optional[float]
+        +SpecialValue2: Optional[str]
+        +MinSpecialValue2: Optional[float]
+        +MaxSpecialValue2: Optional[float]
+    }
+
+    class PdsRecordModel {
+        +ode_id: str
+        +pdsid: str
+        +ihid: str
+        +iid: str
+        +pt: str
+        +LabelFileName: str
+        +Product_creation_time: str
+        +Target_name: str
+        +Data_Set_Id: str
+        +Easternmost_longitude: float
+        +Maximum_latitude: float
+        +Minimum_latitude: float
+        +Westernmost_longitude: float
+        +Product_version_id: Optional[str]
+        +RelativePathtoVol: Optional[str]
+        +label: Optional[str]
+        +PDS4LabelURL: Optional[str]
+        +PDSVolume_Id: Optional[str]
+        +Label_product_type: Optional[str]
+        +Observation_id: Optional[str]
+        +Observation_number: Optional[int]
+        +Observation_type: Optional[str]
+        +Producer_id: Optional[str]
+        +Product_name: Optional[str]
+        +Product_release_date: Optional[str]
+        +Activity_id: Optional[str]
+        +Predicted_dust_opacity: Optional[float]
+        +Predicted_dust_opacity_text: Optional[str]
+        +Observation_time: Optional[str]
+        +SpaceCraft_clock_start_count: Optional[str]
+        +SpaceCraft_clock_stop_count: Optional[str]
+        +Start_orbit_number: Optional[int]
+        +Stop_orbit_number: Optional[int]
+        +UTC_start_time: Optional[str]
+        +UTC_stop_time: Optional[str]
+        +Emission_angle: Optional[float]
+    }
+
+    class ProductFile {
+        +FileName: str
+        +Type: Optional[str]
+        +KBytes: Optional[float]
+        +URL: Optional[str]
+        +Description: Optional[str]
+        +Creation_date: Optional[str]
+    }
+
+    PdsRecordModel --> ProductFile
+"""
 import inspect
 import logging
 import os
@@ -17,6 +94,7 @@ from typing import List
 from typing import Optional
 from urllib.parse import urlparse
 
+import numpy as np
 import pystac
 from shapely import geometry
 from shapely import wkt
@@ -345,6 +423,22 @@ class PdsRegistryModel(AbstractModel):
             )
         )
         return catalog
+
+    def to_hdf5(self, store_db: Any):
+        """Saves the information in the attributes of a HDF5 node
+
+        Args:
+            store_db (Any): HDF5 node
+        """
+        pds_collection_dict = self.__dict__
+        for key in pds_collection_dict.keys():
+            value = pds_collection_dict[key]
+            # when type is a dictionnary or list, a specific datatype
+            # is needed to encode an attribute in HDF5
+            if isinstance(value, dict) or isinstance(value, list):
+                store_db.attrs[key] = np.string_(str(value))  # type: ignore
+            elif value is not None:
+                store_db.attrs[key] = value
 
 
 @dataclass(frozen=True, eq=True)

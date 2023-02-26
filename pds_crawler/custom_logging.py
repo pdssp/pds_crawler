@@ -5,55 +5,6 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 """Module for customizing ths logs."""
 import logging
-from typing import Optional
-
-
-class UtilsLogs:  # pylint: disable=R0903
-    """Utility class for logs."""
-
-    @staticmethod
-    def add_logging_level(
-        level_name: str, level_num: int, method_name: Optional[str] = None
-    ) -> None:
-        """Add a new logging level to the `logging` module.
-
-        Parameters
-        ----------
-        level_name: str
-            level name of the logging
-        level_num: int
-            level number related to the level name
-        method_name: Optional[str]
-            method for both `logging` itself and the class returned by
-            `logging.Logger`
-
-        Returns
-        -------
-            None
-
-        Raises
-        ------
-        AttributeError
-            If this levelName or methodName is already defined in the
-            logger.
-
-        """
-        if not method_name:
-            method_name = level_name.lower()
-
-        def log_for_level(self, message, *args, **kwargs):
-            if self.isEnabledFor(level_num):
-                self._log(  # pylint: disable=W0212
-                    level_num, message, args, **kwargs
-                )
-
-        def log_to_root(message, *args, **kwargs):
-            logging.log(level_num, message, *args, **kwargs)
-
-        logging.addLevelName(level_num, level_name)
-        setattr(logging, level_name, level_num)
-        setattr(logging.getLoggerClass(), method_name, log_for_level)
-        setattr(logging, method_name, log_to_root)
 
 
 class LogRecord(logging.LogRecord):  # pylint: disable=R0903
@@ -79,12 +30,10 @@ class LogRecord(logging.LogRecord):  # pylint: disable=R0903
 class CustomColorFormatter(logging.Formatter):
     """Color formatter."""
 
-    UtilsLogs.add_logging_level("TRACE", 15)
     # Reset
     color_Off = "\033[0m"  # Text Reset
 
     log_colors = {
-        logging.TRACE: "\033[0;36m",  # type: ignore # pylint: disable=no-member # cyan
         logging.DEBUG: "\033[1;34m",  # blue
         logging.INFO: "\033[0;32m",  # green
         logging.WARNING: "\033[1;33m",  # yellow

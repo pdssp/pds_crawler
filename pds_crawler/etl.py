@@ -4,26 +4,22 @@
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 import logging
-import os
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
 from typing import List
 from typing import Optional
 
-import pystac
-
 from .extractor import PDSCatalogsDescription
 from .extractor import PdsRecords
 from .extractor import PdsRegistry
 from .load import Database
-from .models import PdsRecordModel
-from .models import PdsRecordsModel
 from .models import PdsRegistryModel
 from .report import CrawlerReport
 from .transformer import StacCatalogTransformer
 from .transformer import StacRecordsTransformer
 from .utils import DocEnum
+from .utils import UtilsMonitoring
 
 logger = logging.getLogger(__name__)
 
@@ -38,26 +34,72 @@ class AbstractDataEnum(DocEnum):
 
 class PdsSourceEnum(AbstractSourceEnum):
     COLLECTIONS_INDEX = (
-        "collections",
+        "ode_collections",
         "Get the georeferenced products",
     )
     COLLECTIONS_INDEX_SAVE = (
-        "collections_save",
-        "Get and save the PDS collection for the georeferenced products",
+        "ode_collections_save",
+        "Get and save the PDS collections for the georeferenced products",
     )
     PDS_CATALOGS = (
-        "catalogs",
+        "pds_objects",
         "PDS objects describing a catalog (mission, instrument, plateform, ...)",
     )
-    PDS_RECORDS = ("records", "Records metadata for a given collection")
+    PDS_RECORDS = ("ode_records", "Records metadata for a given collection")
+
+    @staticmethod
+    def find_enum(name: str):
+        """Find enum based on its value
+
+        Args:
+            name (str): enum value
+
+        Raises:
+            UnknownPFEnum: Unknown value
+
+        Returns:
+            PdsSourceEnum: Enum
+        """
+        result = None
+        for pf_name in PdsSourceEnum.__members__:
+            val = str(PdsSourceEnum[pf_name].value)
+            if val == name:
+                result = PdsSourceEnum[pf_name]
+                break
+        if result is None:
+            raise ValueError(f"Unknown enum value for {name}")
+        return result
 
 
 class PdsDataEnum(AbstractDataEnum):
     PDS_CATALOGS = (
-        "catalogs",
+        "pds_objects",
         "PDS objects describing a catalog (mission, instrument, plateform, ...)",
     )
-    PDS_RECORDS = ("records", "Records metadata for a given collection")
+    PDS_RECORDS = ("ode_records", "Records metadata for a given collection")
+
+    @staticmethod
+    def find_enum(name: str):
+        """Find enum based on its value
+
+        Args:
+            name (str): enum value
+
+        Raises:
+            UnknownPFEnum: Unknown value
+
+        Returns:
+            PdsDataEnum: Enum
+        """
+        result = None
+        for pf_name in PdsDataEnum.__members__:
+            val = str(PdsDataEnum[pf_name].value)
+            if val == name:
+                result = PdsDataEnum[pf_name]
+                break
+        if result is None:
+            raise ValueError(f"Unknown enum value for {name}")
+        return result
 
 
 class ETL(ABC):
@@ -133,9 +175,8 @@ class StacETL(ETL):
     def dataset_id(self, value: str):
         self.__dataset_id = value
 
-    def extract(
-        self, source: PdsSourceEnum, *args, **kwargs
-    ) -> Optional[List[PdsRegistryModel]]:
+    @UtilsMonitoring.timeit
+    def extract(self, source: PdsSourceEnum, *args, **kwargs):
         match source:
             case PdsSourceEnum.COLLECTIONS_INDEX:
                 (
@@ -144,7 +185,8 @@ class StacETL(ETL):
                 ) = self.pds_registry.get_pds_collections(
                     self.planet, self.dataset_id
                 )
-                return collections_pds
+                for collection in collections_pds:
+                    print(collection)
             case PdsSourceEnum.COLLECTIONS_INDEX_SAVE:
                 (
                     stats,
@@ -177,6 +219,7 @@ class StacETL(ETL):
                     f"Extraction is not implemented for {source}"
                 )
 
+    @UtilsMonitoring.timeit
     def check_extract(self, source: PdsSourceEnum, *args, **kwargs):
         match source:
             case PdsSourceEnum.PDS_RECORDS:
@@ -207,6 +250,7 @@ class StacETL(ETL):
                     f"Extraction is not implemented for {source}"
                 )
 
+    @UtilsMonitoring.timeit
     def transform(self, data: PdsDataEnum, *args, **kwargs):
         pds_collections: List[
             PdsRegistryModel

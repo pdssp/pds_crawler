@@ -3,7 +3,303 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
-"""PDS models for catalogs"""
+"""PDS models for catalogs
+
+.. uml::
+
+    class ReferenceModel {
+        REFERENCE_KEY_ID: str
+        REFERENCE_DESC: str
+    }
+
+    class ReferencesModel {
+        REFERENCES: List[ReferenceModel]
+    }
+
+    ReferencesModel --> ReferenceModel
+
+.. uml::
+
+    class DataSetInformationModel {
+        CONFIDENCE_LEVEL_NOTE: str
+        DATA_SET_COLLECTION_MEMBER_FLG: str
+        DATA_SET_DESC: str
+        DATA_SET_NAME: str
+        DATA_SET_RELEASE_DATE: str
+        DETAILED_CATALOG_FLAG: str
+        PRODUCER_FULL_NAME: Union[str, List[str]]
+        START_TIME: str
+        STOP_TIME: str
+        DATA_OBJECT_TYPE: Optional[str]
+        ABSTRACT_DESC: Optional[str]
+        CITATION_DESC: Optional[str]
+        DATA_SET_TERSE_DESC: Optional[str]
+    }
+
+    class DataSetTargetModel {
+        TARGET_NAME: str
+    }
+
+    class DataSetHostModel {
+        INSTRUMENT_HOST_ID: str
+        INSTRUMENT_ID: str
+    }
+
+    class DataSetMissionModel {
+        MISSION_NAME: str
+    }
+
+    class DataSetReferenceInformationModel {
+        REFERENCE_KEY_ID: str
+    }
+
+    class DataSetModel {
+        DATA_SET_ID: str
+        DATA_SET_INFORMATION: DataSetInformationModel
+        DATA_SET_TARGET: List[DataSetTargetModel]
+        DATA_SET_HOST: DataSetHostModel
+        DATA_SET_REFERENCE_INFORMATION: List[DataSetReferenceInformationModel]
+        DATA_SET_MISSION: Optional[DataSetMissionModel]
+    }
+
+    DataSetModel --> DataSetInformationModel
+    DataSetModel --> DataSetTargetModel
+    DataSetModel --> DataSetHostModel
+    DataSetModel --> DataSetReferenceInformationModel
+    DataSetModel --> DataSetMissionModel
+
+.. uml::
+
+    class InstrumentReferenceInfoModel {
+        REFERENCE_KEY_ID: str
+    }
+
+    class InstrumentInformationModel {
+        INSTRUMENT_DESC: str
+        INSTRUMENT_NAME: str
+        INSTRUMENT_TYPE: str
+    }
+
+    class InstrumentModel {
+        INSTRUMENT_HOST_ID: str
+        INSTRUMENT_ID: str
+        INSTRUMENT_INFORMATION: InstrumentInformationModel
+        INSTRUMENT_REFERENCE_INFO: List[InstrumentReferenceInfoModel]
+    }
+
+    class InstrumentHostInformationModel {
+        INSTRUMENT_HOST_DESC: str
+        INSTRUMENT_HOST_NAME: str
+        INSTRUMENT_HOST_TYPE: str
+    }
+
+    class InstrumentHostReferenceInfoModel {
+        REFERENCE_KEY_ID: str
+    }
+
+    class InstrumentHostModel {
+        INSTRUMENT_HOST_ID: str
+        INSTRUMENT_HOST_INFORMATION: InstrumentHostInformationModel
+        INSTRUMENT_HOST_REFERENCE_INFO: List[InstrumentHostReferenceInfoModel]
+    }
+
+    InstrumentHostModel --> InstrumentHostInformationModel
+    InstrumentHostModel --> InstrumentHostReferenceInfoModel
+    InstrumentModel --> InstrumentInformationModel
+    InstrumentModel --> InstrumentReferenceInfoModel
+
+.. uml::
+
+    class MissionInformationModel {
+        MISSION_ALIAS_NAME: str
+        MISSION_DESC: str
+        MISSION_OBJECTIVES_SUMMARY: str
+        MISSION_START_DATE: str
+        MISSION_STOP_DATE: str
+    }
+
+    class MissionTargetModel {
+        TARGET_NAME: str
+    }
+
+    class MissionHostModel {
+        INSTRUMENT_HOST_ID: str
+        MISSION_TARGET: List[MissionTargetModel]
+    }
+
+    class MissionReferenceInformationModel {
+        REFERENCE_KEY_ID: str
+    }
+
+    class MissionModel {
+        MISSION_NAME: str
+        MISSION_HOST: MissionHostModel
+        MISSION_INFORMATION: MissionInformationModel
+        MISSION_REFERENCE_INFORMATION: List[MissionReferenceInformationModel]
+    }
+
+    MissionModel --> MissionHostModel
+    MissionModel --> MissionInformationModel
+    MissionModel --> MissionReferenceInformationModel
+    MissionHostModel --> MissionTargetModel
+
+.. uml::
+
+    class DataSetMapProjectionRefInfoModel {
+        REFERENCE_KEY_ID: str
+    }
+
+    class DataSetMapProjectionInfoModel {
+        MAP_PROJECTION_DESC: str
+        MAP_PROJECTION_TYPE: str
+        ROTATIONAL_ELEMENT_DESC: str
+        DS_MAP_PROJECTION_REF_INFO: List[DataSetMapProjectionRefInfoModel]
+    }
+
+    class DataSetMapProjectionModel {
+        DATA_SET_ID: str
+        DATA_SET_MAP_PROJECTION_INFO: DataSetMapProjectionInfoModel
+    }
+
+    DataSetMapProjectionModel --> DataSetMapProjectionInfoModel
+    DataSetMapProjectionInfoModel --> DataSetMapProjectionRefInfoModel
+
+.. uml::
+
+    class PersonnelInformationModel {
+        ADDRESS_TEXT: str
+        ALTERNATE_TELEPHONE_NUMBER: str
+        FAX_NUMBER: str
+        FULL_NAME: str
+        INSTITUTION_NAME: str
+        LAST_NAME: str
+        NODE_ID: str
+        PDS_AFFILIATION: str
+        REGISTRATION_DATE: str
+        TELEPHONE_NUMBER: str
+        PDS_ADDRESS_BOOK_FLAG: Optional[str]
+    }
+
+    class PersonnelElectronicMailModel {
+        ELECTRONIC_MAIL_ID: str
+        ELECTRONIC_MAIL_TYPE: str
+        PREFERENCE_ID: Optional[str]
+    }
+
+    class PersonnelModel {
+        PDS_USER_ID: str
+        PERSONNEL_ELECTRONIC_MAIL: PersonnelElectronicMailModel
+        PERSONNEL_INFORMATION: PersonnelInformationModel
+    }
+
+    class PersonnelsModel {
+        PERSONNELS: List[PersonnelModel]
+    }
+
+    PersonnelsModel --> PersonnelElectronicMailModel
+    PersonnelsModel --> PersonnelInformationModel
+    PersonnelsModel --> PersonnelModel
+
+.. uml::
+
+    class CatalogModel {
+        DATA_SET_CATALOG: Optional[Union[str, List[str]]]
+        INSTRUMENT_CATALOG: Optional[str]
+        INSTRUMENT_HOST_CATALOG: Optional[str]
+        MISSION_CATALOG: Optional[str]
+        LOGICAL_VOLUME_PATHNAME: Optional[str]
+        LOGICAL_VOLUMES: Optional[str]
+        DATA_SET_ID: Optional[str]
+        DATA_SET_COLLECTION_CATALOG: Optional[str]
+        PERSONNEL_CATALOG: Optional[str]
+        REFERENCE_CATALOG: Optional[str]
+        TARGET_CATALOG: Optional[str]
+    }
+
+    class DataProducerModel {
+        INSTITUTION_NAME: str
+        FACILITY_NAME: str
+        FULL_NAME: str
+        ADDRESS_TEXT: str
+        DISCIPLINE_NAME: Optional[str]
+        NODE_NAME: Optional[str] = field(default=None, repr=False, compare=False)
+        TELEPHONE_NUMBER: Optional[str]
+        ELECTRONIC_MAIL_TYPE: Optional[str]
+        ELECTRONIC_MAIL_ID: Optional[str]
+    }
+
+    class FileModel {
+        RECORD_TYPE: str
+        DESCRIPTION: Optional[str]
+        ENCODING_TYPE: Optional[str]
+        FILE_NAME: Optional[str]
+        FILE_RECORDS: Optional[str]
+        INTERCHANGE_FORMAT: Optional[str]
+        LABEL_RECORDS: Optional[str]
+        RECORD_BYTES: Optional[str]
+        REQUIRED_STORAGE_BYTES: Optional[str]
+        SEQUENCE_NUMBER: Optional[str]
+        UNCOMPRESSED_FILE_NAME: Optional[str]
+    }
+
+    class DirectoryModel {
+        NAME: str
+        FILE: List[FileModel]
+        RECORD_TYPE: Optional[str]
+        SEQUENCE_NUMBER: Optional[str]
+    }
+
+    class DataSupplierModel {
+        INSTITUTION_NAME: str
+        FACILITY_NAME: str
+        FULL_NAME: str
+        ADDRESS_TEXT: str
+        TELEPHONE_NUMBER: str
+        ELECTRONIC_MAIL_TYPE: str
+        ELECTRONIC_MAIL_ID: str
+        DISCIPLINE_NAME: Optional[str]
+        NODE_NAME: Optional[str]
+    }
+
+    class VolumeModel {
+        DATA_SET_ID: str
+        DESCRIPTION: str
+        MEDIUM_TYPE: str
+        PUBLICATION_DATE: str
+        VOLUME_FORMAT: str
+        VOLUME_ID: str
+        VOLUME_NAME: str
+        VOLUME_SERIES_NAME: str
+        VOLUME_SET_NAME: str
+        VOLUME_SET_ID: str
+        VOLUME_VERSION_ID: str
+        VOLUMES: str
+        CATALOG: CatalogModel
+        DATA_PRODUCER: DataProducerModel
+        DIRECTORY: Optional[DirectoryModel]
+        FILE: Optional[FileModel]
+        DATA_SUPPLIER: Optional[DataSupplierModel]
+        BLOCK_BYTES: Optional[str]
+        DATA_SET_COLLECTION_ID: Optional[str]
+        FILES: Optional[str]
+        HARDWARE_MODEL_ID: Optional[str]
+        LOGICAL_VOLUMES: Optional[str]
+        LOGICAL_VOLUME_PATH_NAME: Optional[str]
+        MEDIUM_FORMAT: Optional[str]
+        NOTE: Optional[str]
+        OPERATING_SYSTEM_ID
+        PRODUCT_TYPE: Optional[str]
+        TRANSFER_COMMAND_TEXT: Optional[str]
+        VOLUME_INSERT_TEXT: Optional[str]
+    }
+
+    VolumeModel --> CatalogModel
+    VolumeModel --> DataProducerModel
+    VolumeModel --> DirectoryModel
+    VolumeModel --> FileModel
+    VolumeModel --> DataSupplierModel
+
+"""
 import inspect
 from dataclasses import dataclass
 from dataclasses import field

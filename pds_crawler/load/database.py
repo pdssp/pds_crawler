@@ -25,99 +25,98 @@ Classes:
         PDS collection storage
 
 
-.. mermaid::
+.. uml::
 
-    classDiagram
-        class Database {
-            - __base_directory: str
-            - __pds_dir: str
-            - __stac_dir: str
-            - __hdf5_name: str
-            - __stac_storage: StacStorage
-            - __pds_storage: PdsStorage
-            - __hdf5_storage: Hdf5Storage
+    class Database {
+        - __base_directory: str
+        - __pds_dir: str
+        - __stac_dir: str
+        - __hdf5_name: str
+        - __stac_storage: StacStorage
+        - __pds_storage: PdsStorage
+        - __hdf5_storage: Hdf5Storage
 
-            + base_directory: str
-            + pds_dir: str
-            + stac_dir: str
-            + hdf5_name: str
-            + stac_storage: StacStorage
-            + pds_storage: PdsStorage
-            + hdf5_storage: Hdf5Storage
+        + base_directory: str
+        + pds_dir: str
+        + stac_dir: str
+        + hdf5_name: str
+        + stac_storage: StacStorage
+        + pds_storage: PdsStorage
+        + hdf5_storage: Hdf5Storage
 
-            + __init__(base_directory: str) -> None
-            + init_storage() -> None
-            + reset_storage() -> None
-            + __repr__() -> str
-        }
+        + __init__(base_directory: str) -> None
+        + init_storage() -> None
+        + reset_storage() -> None
+        + __repr__() -> str
+    }
 
-        class PdsCollectionStorage {
-            - __directory: str
-            +__init__(self, directory: str) -> None
-            + directory: str
-            + list_files() : List[str]
-            + get_volume_description() : VolumeModel
-            + list_catalogs() : Dict[str, Any]
-            + get_catalog(file: str, catalogue_type: PdsParserFactory.FileGrammary) : Any
-            + download(urls: List[str], nb_workers: int = 3, timeout: int = 180, time_sleep: int = 1) -> None
-            + __repr__() : str
-        }
+    class PdsCollectionStorage {
+        - __directory: str
+        +__init__(self, directory: str) -> None
+        + directory: str
+        + list_files() : List[str]
+        + get_volume_description() : VolumeModel
+        + list_catalogs() : Dict[str, Any]
+        + get_catalog(file: str, catalogue_type: PdsParserFactory.FileGrammary) : Any
+        + download(urls: List[str], nb_workers: int = 3, timeout: int = 180, time_sleep: int = 1) -> None
+        + __repr__() : str
+    }
 
-        class PdsStorage{
-            + __init__(base_directory: str) -> None
-            -__directory: str
-            +init_storage_directory()
-            +reset_storage()
-            +get_pds_storage_for(pds_collection: PdsRegistryModel) -> PdsCollectionStorage
-            +directory: str
-            +__repr__() -> str
-        }
+    class PdsStorage{
+        + __init__(base_directory: str) -> None
+        -__directory: str
+        +init_storage_directory()
+        +reset_storage()
+        +get_pds_storage_for(pds_collection: PdsRegistryModel) -> PdsCollectionStorage
+        +directory: str
+        +__repr__() -> str
+    }
 
-        class Hdf5Storage{
-            - HDF_SEP: str = "/"
-            - DS_URLS: str = "urls"
-            - __name
-            + name
-            + init_storage(name:str)
-            + reset_storage()
-            - _has_changed(store_db:Any, pds_collection:PdsRegistryModel):bool
-            - _has_attribute_in_group(node:Any):bool
-            - _save_information(store_db:Any, pds_collection:PdsRegistryModel)
-            - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool
-            - _read_and_convert_attributes(node:Any):Dict[str,Any]
-            + save_collection(pds_collection:PdsRegistryModel): bool
-            + save_collections(collections_pds:List[PdsRegistryModel]): bool
-            + load_collections(planet:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
-        }
+    class Hdf5Storage{
+        - HDF_SEP: str = "/"
+        - DS_URLS: str = "urls"
+        - __name
+        + name
+        + init_storage(name:str)
+        + reset_storage()
+        - _has_changed(store_db:Any, pds_collection:PdsRegistryModel):bool
+        - _has_attribute_in_group(node:Any):bool
+        - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool
+        - _read_and_convert_attributes(node:Any):Dict[str,Any]
+        + save_collection(pds_collection:PdsRegistryModel): bool
+        + save_collections(collections_pds:List[PdsRegistryModel]): bool
+        + load_collections(planet:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
+    }
 
-        class StacStorage {
-            -__directory: str
-            -__root_catalog: pystac.Catalog
-            -__layout: LargeDataVolumeStrategy
-            +directory: str
-            +root_catalog: pystac.Catalog
-            +__init__(directory: str)
-            -_load_root_catalog()
-            +init_storage_directory()
-            +reset_storage()
-            +refresh()
-            +item_exists(record: PdsRecordModel) -> bool
-            +catalog_normalize_and_save()
-            +root_normalize_and_save(catalog: pystac.Catalog)
-            +normalize_and_save(cat_or_coll: Union[pystac.Collection, pystac.Catalog])
-            +__repr__() -> str
-        }
+    class StacStorage {
+        -__directory: str
+        -__root_catalog: pystac.Catalog
+        -__layout: LargeDataVolumeStrategy
+        +directory: str
+        +root_catalog: pystac.Catalog
+        +__init__(directory: str)
+        -_load_root_catalog()
+        +init_storage_directory()
+        +reset_storage()
+        +refresh()
+        +item_exists(record: PdsRecordModel) -> bool
+        +catalog_normalize_and_save()
+        +root_normalize_and_save(catalog: pystac.Catalog)
+        +normalize_and_save(cat_or_coll: Union[pystac.Collection, pystac.Catalog])
+        +__repr__() -> str
+    }
 
-        Database *-- PdsStorage
-        Database *-- Hdf5Storage
-        Database *-- StacStorage
-        PdsStorage *-- PdsCollectionStorage
+    Database *-- PdsStorage
+    Database *-- Hdf5Storage
+    Database *-- StacStorage
+    PdsStorage *-- PdsCollectionStorage
 
 Author:
     Jean-Christophe Malapert
 """
 import logging
 import os
+import re
 import shutil
 from typing import Any
 from typing import Dict
@@ -134,7 +133,7 @@ from ..models import PdsRegistryModel
 from ..models import VolumeModel
 from ..utils import parallel_requests
 from ..utils import UtilsMonitoring
-from .pds_objects import PdsParserFactory
+from .pds_objects_parser import PdsParserFactory
 from .strategy import LargeDataVolumeStrategy
 
 logger = logging.getLogger(__name__)
@@ -472,25 +471,6 @@ class Hdf5Storage:
         return isinstance(node, h5py.Group) and node.attrs  # type: ignore
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
-    def _save_information(
-        self, store_db: Any, pds_collection: PdsRegistryModel
-    ):
-        """Saves the information in the attributes of a HDF5 node
-
-        Args:
-            store_db (Any): HDF5 node
-            pds_collection (PdsRegistryModel): PDS collection information
-        """
-        pds_collection_dict = pds_collection.__dict__
-        for key in pds_collection_dict.keys():
-            value = pds_collection_dict[key]
-            # when type is a dictionnary or list, a specific datatype is needed to encode an attribute in HDF5
-            if isinstance(value, dict) or isinstance(value, list):
-                store_db.attrs[key] = np.string_(str(value))  # type: ignore
-            elif value is not None:
-                store_db.attrs[key] = value
-
-    @UtilsMonitoring.io_display(level=logging.DEBUG)
     def _save_collection(
         self, pds_collection: PdsRegistryModel, f: Any
     ) -> bool:
@@ -510,11 +490,11 @@ class Hdf5Storage:
                 "[StacStorage] _save_collection - store_hdf does not exist"
             )
             store_hdf = f.create_group(group_path)
-            self._save_information(store_hdf, pds_collection)
+            pds_collection.to_hdf5(store_hdf)
             is_saved = True
         elif self._has_changed(store_hdf, pds_collection):
-            logger.debug("[StacStorage] _save_collection - Update HDF5")
-            self._save_information(store_hdf, pds_collection)
+            logger.info("[StacStorage] _save_collection - Update HDF5")
+            pds_collection.to_hdf5(store_hdf)
             is_saved = True
         else:
             logger.warning(
@@ -524,7 +504,7 @@ class Hdf5Storage:
         return is_saved
 
     def _read_and_convert_attributes(self, node: Any) -> Dict[str, Any]:
-        """Read and converts convert attributs encoded a nb_bytes_.
+        """Read and converts convert attributs.
 
         Args:
             node (Any): HDF5 group or dataset
@@ -688,7 +668,7 @@ class Hdf5Storage:
             str: Valid name for HDF5 node
         """
         return Hdf5Storage.HDF_SEP.join(
-            [word.lower().replace("/", "_") for word in words]
+            [re.sub(r"[^a-zA-Z0-9_]", "_", word) for word in words]
         )
 
     def __repr__(self) -> str:

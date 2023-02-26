@@ -56,7 +56,7 @@ from ..report import MessageModel
 from ..utils import Observable
 from ..utils import parallel_requests
 from ..utils import requests_retry_session
-from .pds_ws import PdsRecords
+from .pds_ode_ws import PdsRecords
 
 logger = logging.getLogger(__name__)
 
@@ -69,19 +69,18 @@ class Crawler:
     if a given URL is a file or a directory and raises an exception if no files
     exist in the folder.
 
-    .. mermaid::
+    .. uml::
 
-        classDiagram
-            class Crawler {
-                + str url
-                + str host
-                + str fragment
-                - get_subdirs_file(soup) List[Dict[str, str]]
-                - get_content(host: str, query: str) Optional[List[Dict[str, str]]]
-                + static is_file(url: str) bool
-                + static query(url: str) str
-                + parse() -> Optional[List[Dict[str, str]]]
-            }
+        class Crawler {
+            + str url
+            + str host
+            + str fragment
+            - get_subdirs_file(soup) List[Dict[str, str]]
+            - get_content(host: str, query: str) Optional[List[Dict[str, str]]]
+            + static is_file(url: str) bool
+            + static query(url: str) str
+            + parse() -> Optional[List[Dict[str, str]]]
+        }
     """
 
     def __init__(self, url: str):
@@ -251,41 +250,39 @@ class PDSCatalogDescription(Observable):
 
     This class can :
 
-    * load the URLs of all PDS catalogs for a given collection from the
-    ODE web site.
+    * load the URLs of all PDS catalogs for a given collection from the ODE web site.
     * get ODE catalogs objects from local storage
 
     Note : The download of the PDS catalogs in the local storage is done
     by the PDSCatalogsDescription object, which performs a massive download
     in the local storage
 
-    .. mermaid::
+    .. uml::
 
-        classDiagram
-            class PDSCatalogDescription {
-                - Any report
-                + str url
-                + VolumeModel vol_desc_cat
-                + str volume_desc_url
-                + PdsRecords pds_records
-                + PdsRegistryModel pds_collection
-                + database Database
-                + PdsRecordsModel record
-                + List[str] catalogs_urls
-                - build_url_ode_collection()
-                - find_volume_desc_url() str
-                - parse_volume_desc_cat() VolumeModel
-                - load_volume_description()
-                - find_catalogs_urls() -> List[Dict[str, str]]
-                - is_catalog_exists(catalog_name: Any) -> bool
-                - get_url_for_multiple_catalogs(catalogs: List[str], catalogs_from_desc_cat: Dict[str, str]) List[str]
-                - get_url_for_simple_catalog(catalog_name: str, catalogs_from_desc_cat: Dict[str, str]) List[str]
-                - get_urls_from_catalog_type(catalog_name: Union[str, List[str]], catalogs_from_desc_cat: Dict[str, str]) List[str]
-                - parse_catalog(file_storage: PdsStorage, catalog_name: str, cat_type: str, result: Dict[str, Union[str, List[str]]])
-                + load_catalogs_urls() List[str]
-                + get_ode_catalogs(pds_collection: PdsRegistryModel)  Dict[str, Any]
-                + __repr__(self) str
-            }
+        class PDSCatalogDescription {
+            - Any report
+            + str url
+            + VolumeModel vol_desc_cat
+            + str volume_desc_url
+            + PdsRecords pds_records
+            + PdsRegistryModel pds_collection
+            + database Database
+            + PdsRecordsModel record
+            + List[str] catalogs_urls
+            - build_url_ode_collection()
+            - find_volume_desc_url() str
+            - parse_volume_desc_cat() VolumeModel
+            - load_volume_description()
+            - find_catalogs_urls() -> List[Dict[str, str]]
+            - is_catalog_exists(catalog_name: Any) -> bool
+            - get_url_for_multiple_catalogs(catalogs: List[str], catalogs_from_desc_cat: Dict[str, str]) List[str]
+            - get_url_for_simple_catalog(catalog_name: str, catalogs_from_desc_cat: Dict[str, str]) List[str]
+            - get_urls_from_catalog_type(catalog_name: Union[str, List[str]], catalogs_from_desc_cat: Dict[str, str]) List[str]
+            - parse_catalog(file_storage: PdsStorage, catalog_name: str, cat_type: str, result: Dict[str, Union[str, List[str]]])
+            + load_catalogs_urls() List[str]
+            + get_ode_catalogs(pds_collection: PdsRegistryModel)  Dict[str, Any]
+            + __repr__(self) str
+        }
     """
 
     DATASET_EXPLORER = Template(
@@ -747,18 +744,17 @@ class PDSCatalogDescription(Observable):
 class PDSCatalogsDescription(Observable):
     """Provides the means to download the PDS catalogs (PDS objects).
 
-    .. mermaid::
+    .. uml::
 
-        classDiagram
-            class PDSCatalogsDescription {
-                - Any report
-                + Database database
-                + PDSCatalogDescription pds_object_cats
-                - build_all_urls(pds_collection: PdsRegistryModel) List[str]
-                + download(pds_collections: List[PdsRegistryModel])
-                + get_ode_catalogs(pds_collections: List[PdsRegistryModel]) -> Iterator[Dict[str, Any]]
-                + __repr__(self) str
-            }
+        class PDSCatalogsDescription {
+            - Any report
+            + Database database
+            + PDSCatalogDescription pds_object_cats
+            - build_all_urls(pds_collection: PdsRegistryModel) List[str]
+            + download(pds_collections: List[PdsRegistryModel])
+            + get_ode_catalogs(pds_collections: List[PdsRegistryModel]) -> Iterator[Dict[str, Any]]
+            + __repr__(self) str
+        }
     """
 
     def __init__(self, database: Database, *args, **kwargs):

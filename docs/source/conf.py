@@ -92,6 +92,11 @@ html_theme = "bootstrap"
 
 html_logo = "_static/logo.png"
 latex_logo = "_static/logo.png"
+html_js_files = [
+    "https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js",
+    "js/mermaid.min.js",
+]
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

@@ -30,7 +30,9 @@ try:
 except DistributionNotFound:
     __version__ = "0.0.0"
 __title__ = "pds-crawler"
-__description__ = "ETL to index PDS data to pdssp"
+__description__ = """Crawl and extract PDS planetary data from various sources,
+including a web service and a website, transform the data into the SpatioTemporal Asset
+Catalog (STAC) format."""
 __url__ = "https://github.com/pdssp/pds_crawler"
 __author__ = "Jean-Christophe Malapert"
 __author_email__ = "jean-christophe.malapert@cnes.fr"

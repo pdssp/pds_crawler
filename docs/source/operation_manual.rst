@@ -14,19 +14,92 @@ site, the personnel responsible to do it and when.*
 Set‐up and initialisation
 -------------------------
 
-*The* :term:`SUM` *shall describe any procedures to be performed by the user in \
-order to be identified or authorised to access or install software on the \
-equipment, to perform the installation, to configure the software, to delete \
-or overwrite former files or data, and to enter parameters for software \
-operation.*
+To install a Python package, you can use pip, a Python package manager that allows
+you to download and install packages from PyPI (Python Package Index). First, make
+sure that pip is installed on your machine by running in your terminal.
+
+.. code-block:: console
+
+    $ pip --version
+
+If pip is not installed, you can install it using the command on Python versions 3.4
+and above.
+
+.. code-block:: console
+
+    $ python -m ensurepip --default-pip
+
+Once pip is installed, you can install a package by running the command
+
+.. code-block:: console
+
+    $ pip install git+https://github.com/pdssp/pds_crawler.git
 
 
 Getting started
 ---------------
 
-*The* :term:`SUM` *shall include the step‐by‐step procedures for beginning work, \
-including any options available, and a check‐list for problem determination.*
+for PDS crawler capabilities, run the command to display the help:
 
+.. code-block:: console
+
+    $ pds_crawler -h
+
+    usage: pds_crawler [-h] [-v] [--level {INFO,DEBUG,WARNING,ERROR,CRITICAL,TRACE}] [-d DATABASE] {extract,check_extract,transform} ...
+
+    Crawl and extract PDS planetary data from various sources, including a web service and a website, transform the data into the
+    SpatioTemporal Asset Catalog (STAC) format.
+
+    positional arguments:
+    {extract,check_extract,transform}
+
+    options:
+    -h, --help            show this help message and exit
+    -v, --version         show program's version number and exit
+    --level {INFO,DEBUG,WARNING,ERROR,CRITICAL,TRACE}
+                            set Level log (default: INFO)
+    -d DATABASE, --database DATABASE
+                            Path of the database (default: work/database)
+
+Get PDS collections to retrieve
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To get all georeferenced PDS collections:
+
+.. code-block:: console
+
+    $ pds_crawler extract --type_extract ode_collections
+
+or to get all georeferenced collections from a planet
+
+.. code-block:: console
+
+    $ pds_crawler extract --type_extract ode_collections --planet Mars
+
+
+Retrieve PDS records from collections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: console
+
+    $ pds_crawler extract --type_extract ode_records
+
+Retrieve PDS3 objects from collections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: console
+
+    $ pds_crawler extract --type_extract pds_objects
+
+Transform PDS3 object
+^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: console
+
+    $ pds_crawler transform --type_stac catalog
+
+Transform PDS records
+^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: console
+
+    $ pds_crawler transform --type_stac records
 
 Mode selection and control
 --------------------------
@@ -42,12 +115,56 @@ of the software that are visible to the user, and in particular:*
 Normal operations
 -----------------
 
-*The* :term:`SUM` *shall identify the normal operations, to be performed by the \
-user, for the use of software (function, menu, transaction, or other process \
-being described), including description and options of menus, graphical icons, \
-data entry forms, user inputs, inputs from other software or hardware that may \
-affect the software’s interface with the user, outputs, diagnostic or error \
-messages or alarms.*
+.. uml::
+
+  actor operator as operator
+  participant Airflow as airflow
+  participant pds_crawler as crawler
+  collections "Storage data facility" as storage
+  database    "PDSSP Catalog" as pdssp_cat
+  database    "PDS data repositories" as pds
+
+  operator -> airflow : Start Extraction & Transformation workflow
+  airflow -> crawler : Extract one PDS collection
+  crawler -> pds: Extract PDS records from collection
+  crawler -> pds: Download JSON responses
+  crawler -> storage : Store the JSON responses
+  crawler -> storage : Loads one record
+  crawler -> crawler : Prepare the PDS3 Objets extraction
+  crawler -> pds: Extract the PDS3 Objects from collection
+  crawler -> pds : Download the PDS3 objects
+  crawler -> storage : Store the PDS3 objects
+  crawler -> airflow
+
+  airflow -> crawler : Transform one PDS collection to STAC
+  crawler -> storage: load PDS3 objects
+  crawler -> storage : create report if error
+  crawler -> storage : convert to STAC catalogs and collection
+
+  crawler -> storage: load JSON responses
+  crawler -> storage : create report if error
+  crawler -> storage : convert to STAC items and if necessary collection and catalogs
+  crawler -> airflow
+  airflow -> operator
+
+  operator -> storage : consults the report
+  operator -> storage : correct or create PDS3 objects
+
+  operator -> airflow : Start update PDS3 objects workflow
+  airflow -> crawler : Transform PDS3 objects for one collection
+  crawler -> storage: load PDS3 objects
+  crawler -> storage : create report if error
+  crawler -> storage : convert to STAC catalogs and collection
+  crawler -> airflow
+  airflow -> operator
+  operator -> storage : consults the report
+  operator -> storage : check STAC results
+
+  operator -> airflow : Start STAC ingestion workflow
+  airflow -> crawler : Ingest STAC repository
+  crawler -> pdssp_cat : Ingest STAC repository
+  crawler -> airflow
+  airflow -> operator
 
 
 Normal termination

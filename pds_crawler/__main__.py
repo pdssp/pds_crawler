@@ -11,6 +11,8 @@ import signal
 import sys
 from argparse import ArgumentParser
 
+from .etl import PdsDataEnum
+from .etl import PdsSourceEnum
 from .pds_crawler import Crawler
 from pds_crawler import __author__
 from pds_crawler import __copyright__
@@ -63,14 +65,26 @@ def str2bool(string_to_test: str) -> bool:
 
 def extraction_parser(subparser):
     extraction = subparser.add_parser(
-        name="extract", description="Data extraction from PDS"
+        name="extract",
+        description="Extract information from ODE web service and ODE web site.",
+        formatter_class=SmartFormatter,
     )
     extraction.add_argument(
         "--type_extract",
         required=True,
         type=str,
-        choices=["pds_objects", "ode_collections", "ode_records", "list"],
-        help="Extract from a PDS location",
+        choices=[
+            PdsSourceEnum.COLLECTIONS_INDEX.value,
+            PdsSourceEnum.COLLECTIONS_INDEX_SAVE.value,
+            PdsSourceEnum.PDS_CATALOGS.value,
+            PdsSourceEnum.PDS_RECORDS.value,
+        ],
+        help=f"""R|Extract an information:
+    * {PdsSourceEnum.COLLECTIONS_INDEX.value} : {PdsSourceEnum.COLLECTIONS_INDEX.__doc__}
+    * {PdsSourceEnum.COLLECTIONS_INDEX_SAVE.value} : {PdsSourceEnum.COLLECTIONS_INDEX_SAVE.__doc__}
+    * {PdsSourceEnum.PDS_CATALOGS.value} : {PdsSourceEnum.PDS_CATALOGS.__doc__}
+    * {PdsSourceEnum.PDS_RECORDS.value} : {PdsSourceEnum.PDS_RECORDS.__doc__}
+        """,
     )
     extraction.add_argument(
         "--planet",
@@ -95,14 +109,22 @@ def extraction_parser(subparser):
 
 def check_extraction_parser(subparser):
     check_extraction = subparser.add_parser(
-        name="check_extract", description="Check extraction from PDS"
+        name="check_extract",
+        description="Check extraction from PDS",
+        formatter_class=SmartFormatter,
     )
     check_extraction.add_argument(
         "--check",
         required=True,
         type=str,
-        choices=["pds_objects", "ode_records"],
-        help="Check Extraction of PDS3 catalog or PDS records",
+        choices=[
+            PdsSourceEnum.PDS_CATALOGS.value,
+            PdsSourceEnum.PDS_RECORDS.value,
+        ],
+        help=f"""R|Check Extraction of PDS3 objects or PDS records:
+    * {PdsSourceEnum.PDS_CATALOGS.value} : {PdsSourceEnum.PDS_CATALOGS.__doc__}
+    * {PdsSourceEnum.PDS_RECORDS.value} : {PdsSourceEnum.PDS_RECORDS.__doc__}
+        """,
     )
 
     check_extraction.add_argument(
@@ -121,14 +143,22 @@ def check_extraction_parser(subparser):
 
 def transform_parser(subparser):
     transform = subparser.add_parser(
-        name="transform", description="Data transformation"
+        name="transform",
+        description="Data transformation",
+        formatter_class=SmartFormatter,
     )
     transform.add_argument(
         "--type_stac",
         required=True,
         type=str,
-        choices=["catalog", "records"],
-        help="Convert to STAC",
+        choices=[
+            PdsDataEnum.PDS_CATALOGS.value,
+            PdsDataEnum.PDS_RECORDS.value,
+        ],
+        help=f"""R|Convert to STAC:
+    * {PdsDataEnum.PDS_CATALOGS.value} : {PdsDataEnum.PDS_CATALOGS.__doc__}
+    * {PdsDataEnum.PDS_RECORDS.value} : {PdsDataEnum.PDS_RECORDS.__doc__}
+        """,
     )
 
 
@@ -157,7 +187,6 @@ def parse_cli() -> argparse.Namespace:
             "WARNING",
             "ERROR",
             "CRITICAL",
-            "TRACE",
         ],
         default="INFO",
         help="set Level log (default: %(default)s)",

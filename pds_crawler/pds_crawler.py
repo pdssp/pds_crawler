@@ -50,8 +50,6 @@ class Crawler:
             pds_crawler_logger.setLevel(logging.ERROR)
         elif level == "CRITICAL":
             pds_crawler_logger.setLevel(logging.CRITICAL)
-        elif level == "TRACE":
-            pds_crawler_logger.setLevel(logging.TRACE)  # type: ignore # pylint: disable=no-member
         else:
             pds_crawler_logger.warning(
                 "Unknown level name : %s - setting level to INFO", level
@@ -64,15 +62,8 @@ class Crawler:
         etl = StacETL(database_name)
 
         if hasattr(self.options_cli, "type_stac"):
-            match self.options_cli.type_stac:
-                case "catalog":
-                    etl.transform(data=PdsDataEnum.PDS_CATALOGS)
-                case "records":
-                    etl.transform(data=PdsDataEnum.PDS_RECORDS)
-                case _:
-                    raise TypeError(
-                        f"Unexpected option {self.options_cli.type_stac} for typ_stac"
-                    )
+            enum = PdsDataEnum.find_enum(self.options_cli.type_stac)
+            etl.transform(data=enum)
 
         if hasattr(self.options_cli, "type_extract"):
             if self.options_cli.planet:
@@ -84,24 +75,8 @@ class Crawler:
             if self.options_cli.nb_workers:
                 etl.pds_records.nb_workers = int(self.options_cli.nb_workers)
 
-            match self.options_cli.type_extract:
-                case "list":
-                    pds_collections = cast(
-                        List[PdsRegistryModel],
-                        etl.extract(source=PdsSourceEnum.COLLECTIONS_INDEX),
-                    )
-                    for collection in pds_collections:
-                        print(collection)
-                case "ode_collections":
-                    etl.extract(source=PdsSourceEnum.COLLECTIONS_INDEX_SAVE)
-                case "pds_objects":
-                    etl.extract(source=PdsSourceEnum.PDS_CATALOGS)
-                case "ode_records":
-                    etl.extract(source=PdsSourceEnum.PDS_RECORDS)
-                case _:
-                    raise TypeError(
-                        f"Unexpected option {self.options_cli.type_extract} for type_extract"
-                    )
+            enum = PdsSourceEnum.find_enum(self.options_cli.type_extract)
+            etl.extract(source=enum)
 
         if hasattr(self.options_cli, "check"):
             if self.options_cli.planet:
@@ -111,9 +86,9 @@ class Crawler:
                 etl.dataset_id = self.options_cli.dataset_id
 
             match self.options_cli.check:
-                case "pds_objects":
+                case PdsDataEnum.PDS_CATALOGS.value:
                     etl.check_extract(source=PdsSourceEnum.PDS_CATALOGS)
-                case "ode_records":
+                case PdsDataEnum.PDS_RECORDS.value:
                     etl.check_extract(source=PdsSourceEnum.PDS_RECORDS)
                 case _:
                     raise TypeError(

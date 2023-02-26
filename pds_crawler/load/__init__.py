@@ -23,7 +23,7 @@ from .database import Database
 from .database import Hdf5Storage
 from .database import PdsCollectionStorage
 from .database import PdsStorage
-from .pds_objects import PdsParserFactory
+from .pds_objects_parser import PdsParserFactory
 
 __all__ = [
     "PdsParserFactory",
