@@ -1,4 +1,14 @@
-### Add deploy for gitlab-ci (HEAD -> main)
+### Change make to make user to install the package in the local directory (HEAD -> main)
+>Tue, 28 Feb 2023 12:27:17 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add deploy for gitlab-ci (origin/main)
 >Tue, 28 Feb 2023 12:25:42 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Fix a bug with the integration of time in pymarsseason Change configuratio file for sphinx (origin/main)
+### Fix a bug with the integration of time in pymarsseason Change configuratio file for sphinx
 >Tue, 28 Feb 2023 02:44:56 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
