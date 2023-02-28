@@ -1,4 +1,14 @@
-### Added updating of PDS3 objects Added the creation of STAC based on JSON response without PDS3 objects Added documentation (HEAD -> main)
+### Fix a bug with the integration of time in pymarsseason Change configuratio file for sphinx (HEAD -> main)
+>Tue, 28 Feb 2023 02:44:56 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Added updating of PDS3 objects Added the creation of STAC based on JSON response without PDS3 objects Added documentation
 >Tue, 28 Feb 2023 02:04:44 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

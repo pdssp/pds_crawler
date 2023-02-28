@@ -58,6 +58,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinxcontrib.plantuml",
     "sphinxcontrib.mermaid",
+    "sphinx.ext.githubpages",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

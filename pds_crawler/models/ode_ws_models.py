@@ -902,11 +902,10 @@ class PdsRecordModel(AbstractModel):
         if self.Center_latitude is None:
             logger.warning(f"No latitude for Mars : {self.ode_id}")
             return mars
-
         py_mars_season: Dict[
             Hemisphere | str, Season | float
         ] = PyMarsSeason().compute_season_from_time(
-            Time(self.get_datetime(), format="isot", scale="utc")
+            Time(self.get_datetime().isoformat(), format="isot", scale="utc")
         )
         if self.Solar_longitude is None:
             mars["Solar_longitude"] = py_mars_season["ls"]
