@@ -1,4 +1,14 @@
-### Change make to make user to install the package in the local directory (HEAD -> main)
+### Fix bug in packaging (HEAD -> main)
+>Tue, 28 Feb 2023 13:30:23 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Change make to make user to install the package in the local directory (origin/main)
 >Tue, 28 Feb 2023 12:27:17 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Add deploy for gitlab-ci (origin/main)
+### Add deploy for gitlab-ci
 >Tue, 28 Feb 2023 12:25:42 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
