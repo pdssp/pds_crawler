@@ -307,6 +307,7 @@ from datetime import datetime
 from typing import Any
 from typing import cast
 from typing import Dict
+from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Union
@@ -552,7 +553,7 @@ class DataSetModel(AbstractModel):
         default=None, repr=False, compare=False
     )
 
-    def collection_id(self) -> str:
+    def get_collection_id(self) -> str:
         dataset_name_stac_compatible: str = self.DATA_SET_ID.replace("/", "_")
         return f"urn:pdssp:pds:collection:{dataset_name_stac_compatible}"
 
@@ -637,7 +638,7 @@ class DataSetModel(AbstractModel):
         data_producer: Optional["DataProducerModel"],
     ) -> pystac.Collection:
         stac_collection = pystac.Collection(
-            id=self.collection_id(),
+            id=self.get_collection_id(),
             description="",
             extent=pystac.Extent(
                 pystac.SpatialExtent(bboxes=[[]]),
@@ -944,7 +945,7 @@ class MissionModel(AbstractModel):
     MISSION_INFORMATION: MissionInformationModel = field(
         repr=False, compare=False
     )
-    MISSION_REFERENCE_INFORMATION: List[
+    MISSION_REFERENCE_INFORMATION: Iterable[
         MissionReferenceInformationModel
     ] = field(repr=False, compare=False)
 

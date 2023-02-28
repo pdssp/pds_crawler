@@ -56,7 +56,7 @@ from ..report import MessageModel
 from ..utils import Observable
 from ..utils import parallel_requests
 from ..utils import requests_retry_session
-from .pds_ode_ws import PdsRecords
+from .pds_ode_ws import PdsRecordsWs
 
 logger = logging.getLogger(__name__)
 
@@ -264,7 +264,7 @@ class PDSCatalogDescription(Observable):
             + str url
             + VolumeModel vol_desc_cat
             + str volume_desc_url
-            + PdsRecords pds_records
+            + PdsRecordsWs pds_records
             + PdsRegistryModel pds_collection
             + database Database
             + PdsRecordsModel record
@@ -300,7 +300,7 @@ class PDSCatalogDescription(Observable):
             self.__report = kwargs.get("report")
             self.subscribe(self.__report)
         self.__database: Database = database
-        self.__pds_records = PdsRecords(self.__database)
+        self.__pds_records = PdsRecordsWs(self.__database)
         self._initialize_values()
 
     def _initialize_values(self):
@@ -340,11 +340,11 @@ class PDSCatalogDescription(Observable):
         return self.__volume_desc_url
 
     @property
-    def pds_records(self) -> PdsRecords:
+    def pds_records(self) -> PdsRecordsWs:
         """Returns the PDS records object to access to the data from the local cache.
 
         Returns:
-            PdsRecords: PDS records
+            PdsRecordsWs: PDS records
         """
         return self.__pds_records
 
@@ -710,7 +710,9 @@ class PDSCatalogDescription(Observable):
             file_storage: PdsCollectionStorage = (
                 self.database.pds_storage.get_pds_storage_for(pds_collection)
             )
-            result["volume"] = file_storage.get_volume_description()
+            result[
+                PdsParserFactory.FileGrammary.VOL_DESC.name
+            ] = file_storage.get_volume_description()
             catalogs = file_storage.list_catalogs()
             for cat_type in catalogs.keys():
                 catalog_value: Union[str, List[str]] = catalogs[cat_type]

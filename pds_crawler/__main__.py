@@ -9,8 +9,8 @@ import logging
 import os
 import signal
 import sys
-from argparse import ArgumentParser
 
+from .etl import CheckUpdateEnum
 from .etl import PdsDataEnum
 from .etl import PdsSourceEnum
 from .pds_crawler import Crawler
@@ -107,10 +107,10 @@ def extraction_parser(subparser):
     )
 
 
-def check_extraction_parser(subparser):
+def check_update(subparser):
     check_extraction = subparser.add_parser(
-        name="check_extract",
-        description="Check extraction from PDS",
+        name="check_update",
+        description="Check update",
         formatter_class=SmartFormatter,
     )
     check_extraction.add_argument(
@@ -118,12 +118,12 @@ def check_extraction_parser(subparser):
         required=True,
         type=str,
         choices=[
-            PdsSourceEnum.PDS_CATALOGS.value,
-            PdsSourceEnum.PDS_RECORDS.value,
+            CheckUpdateEnum.CHECK_PDS.value,
+            CheckUpdateEnum.CHECK_CACHE.value,
         ],
-        help=f"""R|Check Extraction of PDS3 objects or PDS records:
-    * {PdsSourceEnum.PDS_CATALOGS.value} : {PdsSourceEnum.PDS_CATALOGS.__doc__}
-    * {PdsSourceEnum.PDS_RECORDS.value} : {PdsSourceEnum.PDS_RECORDS.__doc__}
+        help=f"""R|Check updates:
+    * {CheckUpdateEnum.CHECK_PDS.value} : {CheckUpdateEnum.CHECK_PDS.__doc__}
+    * {CheckUpdateEnum.CHECK_CACHE.value} : {CheckUpdateEnum.CHECK_CACHE.__doc__}
         """,
     )
 
@@ -201,7 +201,7 @@ def parse_cli() -> argparse.Namespace:
 
     subparser = parser.add_subparsers()
     extraction_parser(subparser)
-    check_extraction_parser(subparser)
+    check_update(subparser)
     transform_parser(subparser)
 
     return parser.parse_args()

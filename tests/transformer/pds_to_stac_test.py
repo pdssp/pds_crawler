@@ -7,7 +7,7 @@ from os.path import dirname
 import pytest
 
 from pds_crawler.extractor import PDSCatalogsDescription
-from pds_crawler.extractor import PdsRecords
+from pds_crawler.extractor import PdsRecordsWs
 from pds_crawler.extractor import PdsRegistry
 from pds_crawler.load import Database
 from pds_crawler.transformer import StacCatalogTransformer
@@ -45,7 +45,7 @@ def test_catalog_transformation():
     )
 
     # Download records from the collections
-    pds_records = PdsRecords(database)
+    pds_records = PdsRecordsWs(database)
     pds_records.download_pds_records_for_all_collections(collections, limit=1)
 
     # Download PDS3 objects from the collections
@@ -72,7 +72,7 @@ def test_collection_transformation():
     )
 
     # Download records from the collections
-    pds_records = PdsRecords(database)
+    pds_records = PdsRecordsWs(database)
     pds_records.download_pds_records_for_all_collections(collections, limit=2)
 
     # Download PDS3 objects from the collections

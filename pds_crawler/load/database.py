@@ -150,12 +150,12 @@ class StacStorage:
             directory (str): base directory
         """
         self.__directory = directory
+        self.__layout = LargeDataVolumeStrategy()
         logger.debug(
             f"[StacStorage] Initialize StacDorage with diretory={self.__directory}"
         )
-        self._load_root_catalog()
-        self.__layout = LargeDataVolumeStrategy()
         self.init_storage_directory()
+        self._load_root_catalog()
 
     @property
     def directory(self) -> str:
@@ -184,7 +184,21 @@ class StacStorage:
             logger.debug("[StacStorage] root_catalog found")
         except FileNotFoundError:
             self.__root_catalog = None
-            logger.debug("[StacStorage] root_catalog not found")
+            logger.debug("[StacStorage] root_catalog not found, create one")
+            self.__root_catalog = pystac.Catalog(
+                id="urn:pdssp:pds",
+                title="Planetary Data System",
+                description="Georeferenced data extracted from ode.rsl.wustl.edu",
+            )
+            self.__root_catalog.add_link(
+                pystac.Link(
+                    rel=pystac.RelType.PREVIEW,
+                    target="https://pdsmgmt.gsfc.nasa.gov/images/PDS_Logo.png",
+                    title="PDS logo",
+                    media_type=pystac.MediaType.PNG,
+                )
+            )
+            self.root_normalize_and_save(self.__root_catalog)
 
     def init_storage_directory(self):
         """Creates the storage directory if it doesn't exist."""
@@ -303,6 +317,20 @@ class PdsCollectionStorage:
         files = os.listdir(self.directory)
         return [
             f for f in files if os.path.isfile(os.path.join(self.directory, f))
+        ]
+
+    def list_records_files(self) -> List[str]:
+        """Returns a list of filenames in the directory that are regular files coming from PdsRecordsWs.
+
+        Returns:
+            List[str]: list of filenames
+        """
+        files = os.listdir(self.directory)
+        return [
+            f
+            for f in files
+            if os.path.isfile(os.path.join(self.directory, f))
+            and f.endswith(".json")
         ]
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
@@ -602,7 +630,7 @@ class Hdf5Storage:
             pds_collection (PdsRegistryModel): PDS collection
             urls (List[str]): all pregenerated url to download the data
         """
-        with h5py.File(self.name, "a") as f:
+        with h5py.File(self.name, mode="a") as f:
             group_path: str = Hdf5Storage.define_group_from(
                 [
                     pds_collection.ODEMetaDB.lower(),

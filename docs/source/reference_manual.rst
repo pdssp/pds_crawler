@@ -31,7 +31,7 @@ Searching for collections
 Searching for records in a given collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: PdsRecords
+.. autoclass:: PdsRecordsWs
    :members:
    :private-members:
 

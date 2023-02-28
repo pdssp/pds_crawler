@@ -59,7 +59,7 @@ help:
 # -----------------------------------------------------
 #
 init:
-	python3 setup.py install
+	python3 setup.py install && pip install git+https://github.com/pdssp/pymarsseason.git
 
 #
 # Sotware Installation for user
@@ -69,7 +69,7 @@ init:
 # don’t want to install into it.
 #
 user:
-	python3 setup.py install --user
+	python3 setup.py install --user && pip install git+https://github.com/pdssp/pymarsseason.git
 
 prepare-dev:
 	cp .pypirc ~${USER} && git init && echo "python3 -m venv pds_crawler-env && export PYTHONPATH=. && export PATH=`pwd`/pds_crawler-env/bin:"${PATH}"" > ${VENV} && echo "source \"`pwd`/pds_crawler-env/bin/activate\"" >> ${VENV} && scripts/install-hooks.bash && echo "\nnow source this file: \033[31msource ${VENV}\033[0m"

@@ -96,6 +96,10 @@ from urllib.parse import urlparse
 
 import numpy as np
 import pystac
+from astropy.time import Time
+from pymarsseason import Hemisphere
+from pymarsseason import PyMarsSeason
+from pymarsseason import Season
 from shapely import geometry
 from shapely import wkt
 from tqdm import tqdm
@@ -880,8 +884,43 @@ class PdsRecordModel(AbstractModel):
             raise ValueError("No datetime")
         return datetime.fromisoformat(utc_to_iso(date_obs))
 
+    def add_mars_keywords_if_mars(self) -> Dict[str, Any]:
+        """Add specific keywords for Mars
+
+        If Mars, add solar longitude and season otherwise
+        returns an empty dictionary
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            Dict[str, Any]: _description_
+        """
+        mars: Dict[str, Any] = dict()
+        if self.get_planet() != "Mars":
+            return mars
+        if self.Center_latitude is None:
+            logger.warning(f"No latitude for Mars : {self.ode_id}")
+            return mars
+
+        py_mars_season: Dict[
+            Hemisphere | str, Season | float
+        ] = PyMarsSeason().compute_season_from_time(
+            Time(self.get_datetime(), format="isot", scale="utc")
+        )
+        if self.Solar_longitude is None:
+            mars["Solar_longitude"] = py_mars_season["ls"]
+
+        hemisphere: Hemisphere = (
+            Hemisphere.NORTH
+            if float(self.Center_latitude) > 0
+            else Hemisphere.SOUTH
+        )
+        mars["season"] = hemisphere.value
+        return mars
+
     def get_properties(self) -> Dict[str, Any]:
-        return {
+        properties = {
             key: self.__dict__[key]
             for key in self.__dict__.keys()
             if key
@@ -931,6 +970,8 @@ class PdsRecordModel(AbstractModel):
             ]
             and self.__dict__[key] is not None
         }
+        properties.update(self.add_mars_keywords_if_mars())
+        return properties
 
     def set_common_metadata(
         self, item: pystac.Item, pds_registry: PdsRegistryModel

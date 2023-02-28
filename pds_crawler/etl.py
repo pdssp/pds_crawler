@@ -3,15 +3,30 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
+"""Provides a ETL API.
+
+.. code:: python
+
+    from pds_crawler.etl import PdsSourceEnum, PdsDataEnum, StacETL
+    etl = StacETL("work/database")
+    etl.extract(PdsSourceEnum.COLLECTIONS_INDEX)
+
+
+"""
 import logging
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
+from typing import cast
 from typing import List
 from typing import Optional
+from typing import Tuple
+
+from pystac import Catalog
+from pystac import Collection
 
 from .extractor import PDSCatalogsDescription
-from .extractor import PdsRecords
+from .extractor import PdsRecordsWs
 from .extractor import PdsRegistry
 from .load import Database
 from .models import PdsRegistryModel
@@ -30,6 +45,40 @@ class AbstractSourceEnum(DocEnum):
 
 class AbstractDataEnum(DocEnum):
     pass
+
+
+class CheckUpdateEnum(AbstractSourceEnum):
+    CHECK_PDS = (
+        "pds",
+        "Check updates at PDS",
+    )
+    CHECK_CACHE = (
+        "cache",
+        "Check if some collections in cache are not transformed",
+    )
+
+    @staticmethod
+    def find_enum(name: str):
+        """Find enum based on its value
+
+        Args:
+            name (str): enum value
+
+        Raises:
+            ValuError: Unknown value
+
+        Returns:
+            CheckUpdateEnum: Enum
+        """
+        result = None
+        for pf_name in CheckUpdateEnum.__members__:
+            val = str(CheckUpdateEnum[pf_name].value)
+            if val == name:
+                result = CheckUpdateEnum[pf_name]
+                break
+        if result is None:
+            raise ValueError(f"Unknown enum value for {name}")
+        return result
 
 
 class PdsSourceEnum(AbstractSourceEnum):
@@ -117,11 +166,13 @@ class ETL(ABC):
 
 
 class StacETL(ETL):
+    """ETL to extract and transform PDS information to STAC"""
+
     def __init__(self, full_path_database_name: str) -> None:
         db = Database(full_path_database_name)
         self.__report = CrawlerReport(db)
         self.__pds_registry = PdsRegistry(db, report=self.__report)
-        self.__pds_records = PdsRecords(db, report=self.__report)
+        self.__pds_records = PdsRecordsWs(db, report=self.__report)
         self.__pds_ode_catalogs = PDSCatalogsDescription(
             db, report=self.__report
         )
@@ -139,12 +190,16 @@ class StacETL(ETL):
     def report(self) -> CrawlerReport:
         return self.__report
 
+    @report.setter
+    def report(self, value: CrawlerReport):
+        self.__report = value
+
     @property
     def pds_registry(self) -> PdsRegistry:
         return self.__pds_registry
 
     @property
-    def pds_records(self) -> PdsRecords:
+    def pds_records(self) -> PdsRecordsWs:
         return self.__pds_records
 
     @property
@@ -177,6 +232,21 @@ class StacETL(ETL):
 
     @UtilsMonitoring.timeit
     def extract(self, source: PdsSourceEnum, *args, **kwargs):
+        """Extract the PDS information.
+
+        It exists different types of extraction:
+
+        * COLLECTIONS_INDEX : query the PDS to get the georefereced collections
+        * COLLECTIONS_INDEX_SAVE : like COLLECTIONS_INDEX but save the result in cache
+        * PDS_RECORDS : Load the PDS collections from cache, build and cache all the URLs to get all pages of the PdsRecordsWs and download all pages
+        * PDS_CATALOGS : Load the PDS collections from cache, and download the PDS3 objects
+
+        Args:
+            source (PdsSourceEnum): Type of extraction
+
+        Raises:
+            NotImplementedError: Extraction type is not implemented
+        """
         match source:
             case PdsSourceEnum.COLLECTIONS_INDEX:
                 (
@@ -219,39 +289,117 @@ class StacETL(ETL):
                     f"Extraction is not implemented for {source}"
                 )
 
+    def _check_collections_to_ingest(
+        self, cached_pds_collections: List[PdsRegistryModel]
+    ) -> int:
+        db: Database = self.stac_records_transformer.database
+        root_stac_catalog: Catalog = cast(
+            Catalog, db.stac_storage.root_catalog
+        )
+        nb_to_ingest: int = 0
+        for pds_collection in cached_pds_collections:
+            coll = cast(
+                Collection,
+                root_stac_catalog.get_child(
+                    pds_collection.get_collection_id(), recursive=True
+                ),
+            )
+            if coll is None:
+                nb_to_ingest += 1
+                logger.info("{pds_collection} was not ingested")
+        return nb_to_ingest
+
+    def _check_updates_from_PDS(
+        self,
+        pds_collections: List[PdsRegistryModel],
+        pds_collections_cache: List[PdsRegistryModel],
+    ) -> int:
+        nb_to_update: int = 0
+        for pds_collection_cache in pds_collections_cache:
+            try:
+                pds_collections.index(pds_collection_cache)
+            except ValueError:
+                nb_to_update += 1
+                logger.info(f"{pds_collections_cache} has been updated at PDS")
+        return nb_to_update
+
+    def check_collections_to_ingest_from_pds(
+        self,
+        pds_collections: List[PdsRegistryModel],
+        pds_collections_cache: List[PdsRegistryModel],
+    ) -> Tuple[int, int]:
+        nb_to_ingest: int = 0
+        nb_records: int = 0
+        for pds_collection in pds_collections:
+            try:
+                pds_collections_cache.index(pds_collection)
+            except ValueError:
+                nb_records += pds_collection.NumberProducts
+                nb_to_ingest += 1
+                logger.info(f"{pds_collection} must be ingested")
+        return (nb_to_ingest, nb_records)
+
     @UtilsMonitoring.timeit
-    def check_extract(self, source: PdsSourceEnum, *args, **kwargs):
+    def check_update(self, source: CheckUpdateEnum, *args, **kwargs):
         match source:
-            case PdsSourceEnum.PDS_RECORDS:
+            case CheckUpdateEnum.CHECK_CACHE:
                 pds_collections: List[
                     PdsRegistryModel
                 ] = self.pds_registry.load_pds_collections_from_cache(
                     self.planet, self.dataset_id
                 )
-                for pds_collection in pds_collections:
-                    for (
-                        iter
-                    ) in self.pds_records.parse_pds_collection_from_cache(
-                        pds_collection
-                    ):
-                        pass
-            case PdsSourceEnum.PDS_CATALOGS:
-                pds_collections: List[
-                    PdsRegistryModel
-                ] = self.pds_registry.load_pds_collections_from_cache(
-                    self.planet, self.dataset_id
-                )
-                for collection in self.pds_ode_catalogs.get_ode_catalogs(
+                nb_to_ingest: int = self._check_collections_to_ingest(
                     pds_collections
-                ):
-                    pass
+                )
+                logger.info(
+                    f"""Summary:
+            {nb_to_ingest} collection(s) to ingest from cache"""
+                )
+
+            case CheckUpdateEnum.CHECK_PDS:
+                pds_collections_cache: List[
+                    PdsRegistryModel
+                ] = self.pds_registry.load_pds_collections_from_cache(
+                    self.planet, self.dataset_id
+                )
+                _, pds_collections = self.pds_registry.get_pds_collections(
+                    self.planet, self.dataset_id
+                )
+                nb_to_update: int = self._check_updates_from_PDS(
+                    pds_collections, pds_collections_cache
+                )
+                (
+                    nb_to_ingest,
+                    nb_records,
+                ) = self.check_collections_to_ingest_from_pds(
+                    pds_collections, pds_collections_cache
+                )
+                logger.info(
+                    f"""Summary:
+            - {nb_to_ingest} collection(s) to ingest from PDS, i.e {nb_records} products
+            - {nb_to_update} collection(s) to update"""
+                )
+
             case _:
                 raise NotImplementedError(
-                    f"Extraction is not implemented for {source}"
+                    f"Check update is not implemented for {source}"
                 )
 
     @UtilsMonitoring.timeit
     def transform(self, data: PdsDataEnum, *args, **kwargs):
+        """Transform the downloaded information as STAC
+
+        It exists different types of extraction:
+
+        * PDS_RECORDS : Load the PDS collections from cache, convert to STAC items and parents if parents are not available
+        * PDS_CATALOGS : Load the PDS collections from cache, convert/update to STAC the various catalogs/collections
+
+        Args:
+            data (PdsDataEnum): Type of transformation
+
+        Raises:
+            NotImplementedError: Transformation type is not implemented
+        """
         pds_collections: List[
             PdsRegistryModel
         ] = self.pds_registry.load_pds_collections_from_cache(

@@ -38,21 +38,13 @@ from tqdm import tqdm
 
 from ..exception import CrawlerError
 from ..extractor import PDSCatalogsDescription
-from ..extractor import PdsRecords
+from ..extractor import PdsRecordsWs
 from ..load import Database
-from ..load import PdsParserFactory
-from ..models import DataSetModel
-from ..models import InstrumentHostModel
-from ..models import InstrumentModel
-from ..models import MissionModel
 from ..models import PdsRecordsModel
 from ..models import PdsRegistryModel
-from ..models import ReferencesModel
-from ..models import VolumeModel
-from ..models.pds_models import DataProducerModel
-from ..models.pds_models import DataSupplierModel
 from ..report import MessageModel
 from ..utils import Observable
+from .pds3_objects import StacPdsCollection
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +62,11 @@ class StacTransformer(ABC, Observable):
 
     @property
     def database(self) -> Database:
+        """Returns the database
+
+        Returns:
+            Database: Database
+        """
         return self.__database
 
 
@@ -82,6 +79,15 @@ class StacRecordsTransformer(StacTransformer):
         *args,
         **kwargs,
     ):
+        """Init the transformer of :class:`pds_crawler.extractor.PdsRecordModel`
+        provided by the response :class:`pds_crawler.extractor.PdsRecordsWs`
+
+        In addition, it is possible to pass a class by *report* keyword
+        to notify information to this class
+
+        Args:
+            database (Database): Database
+        """
         super().__init__(database)
         if kwargs.get("report"):
             self.__report = kwargs.get("report")
@@ -93,6 +99,11 @@ class StacRecordsTransformer(StacTransformer):
 
     @property
     def catalog(self) -> pystac.Catalog:
+        """Return a pySTAC catalog
+
+        Returns:
+            pystac.Catalog: pySTAC catalog
+        """
         return self.__catalog
 
     def load_root_catalog(self):
@@ -103,14 +114,14 @@ class StacRecordsTransformer(StacTransformer):
         )
 
     def _create_items_stac(
-        self, pds_records: PdsRecords, pds_collection: PdsRegistryModel
+        self, pds_records: PdsRecordsWs, pds_collection: PdsRegistryModel
     ) -> pystac.ItemCollection:
         """Creates a collection of STAC items of records from a PDS collection.
 
         The records are loaded from the local storage, handled by `PdsRecord`
 
         Args:
-            pds_records (PdsRecords): Object that handle Records
+            pds_records (PdsRecordsWs): Object that handle Records
             pds_collection (PdsRegistryModel): PDS collection data
 
         Returns:
@@ -120,6 +131,18 @@ class StacRecordsTransformer(StacTransformer):
         def create_items(
             pages: Iterator[PdsRecordsModel], pds_collection: PdsRegistryModel
         ) -> Iterable[pystac.Item]:
+            """Creates items
+
+            Args:
+                pages (Iterator[PdsRecordsModel]): the different pages of the web service response
+                pds_collection (PdsRegistryModel): information about the collection
+
+            Returns:
+                Iterable[pystac.Item]: Items
+
+            Yields:
+                Iterator[Iterable[pystac.Item]]: Items
+            """
             for page in pages:
                 for record in tqdm(
                     page.pds_records_model,
@@ -158,13 +181,13 @@ class StacRecordsTransformer(StacTransformer):
 
     def to_stac(
         self,
-        pds_records: PdsRecords,
+        pds_records: PdsRecordsWs,
         pds_collections: List[PdsRegistryModel],
     ):
-        """Create a STAC catalogs with its children.
+        """Create STAC catalogs with its children for all collections.
 
         Args:
-            pds_records (PdsRecords): Objcet that handle the PDS records
+            pds_records (PdsRecordsWs): Web service that handles the query to get the responses for a given collection
             pds_collections (List[PdsRegistryModel]): All PDS collections data
         """
         for pds_collection in tqdm(
@@ -174,6 +197,8 @@ class StacRecordsTransformer(StacTransformer):
             position=0,
         ):
             tqdm.write(f"Processing the collection {pds_collection}")
+
+            # Create items
             items_stac = self._create_items_stac(pds_records, pds_collection)
             if len(items_stac.items) == 0:
                 tqdm.write("No new item, skip the STAC catalogs creation")
@@ -181,34 +206,44 @@ class StacRecordsTransformer(StacTransformer):
             else:
                 tqdm.write(f"{len(items_stac.items)} items to add")
 
+            # load STAC collection if it exists
             stac_collection = cast(
                 pystac.Collection,
                 self.catalog.get_child(
                     pds_collection.get_collection_id(), recursive=True
                 ),
             )
+
+            # load STAC instrument if it exists
             stac_instru = cast(
                 pystac.Catalog,
                 self.catalog.get_child(
                     pds_collection.get_instrument_id(), recursive=True
                 ),
             )
+
+            # load STAC plateform if it exists
             stac_host = cast(
                 pystac.Catalog,
                 self.catalog.get_child(
                     pds_collection.get_plateform_id(), recursive=True
                 ),
             )
+
+            # load STAC mission if it exists
             stac_mission: pystac.Catalog = cast(
                 pystac.Catalog,
                 self.catalog.get_child(
                     pds_collection.get_mission_id(), recursive=True
                 ),
             )
+
+            # load STAC planet if it exists
             stac_planet: pystac.Catalog = cast(
                 pystac.Catalog,
                 self.catalog.get_child(pds_collection.get_planet_id()),
             )
+
             new_catalog: Optional[
                 Union[pystac.Catalog, pystac.Collection]
             ] = None
@@ -287,19 +322,11 @@ class StacCatalogTransformer(StacTransformer):
 
     def init(self):
         """Initialise the catalog"""
-        self.__catalog = pystac.Catalog(
-            id="urn:pdssp:pds",
-            title="Planetary Data System",
-            description="Georeferenced data extracted from ode.rsl.wustl.edu",
+        self.database.stac_storage._load_root_catalog()
+        self.__catalog = cast(
+            pystac.Catalog, self.database.stac_storage.root_catalog
         )
-        self.__catalog.add_link(
-            pystac.Link(
-                rel=pystac.RelType.PREVIEW,
-                target="https://pdsmgmt.gsfc.nasa.gov/images/PDS_Logo.png",
-                title="PDS logo",
-                media_type=pystac.MediaType.PNG,
-            )
-        )
+        self.__stac_pds_collection = StacPdsCollection(self.__catalog)
 
     @property
     def catalog(self) -> pystac.Catalog:
@@ -310,333 +337,17 @@ class StacCatalogTransformer(StacTransformer):
         """
         return self.__catalog
 
-    def _has_mission(self, catalog: Any) -> bool:
-        """Checks if the catalog contains the PDS3 object of the mission
-
-        Args:
-            catalog (Any): list of PDS3 objets
-
-        Returns:
-            bool: True when the catalog contains the PDS3 object of the mission otherwise False
-        """
-        return PdsParserFactory.FileGrammary.MISSION_CATALOG.name in catalog
-
-    def _has_plateform(self, catalog: Any) -> bool:
-        """Checks if the catalog contains the PDS3 object of the plateform
-
-        Args:
-            catalog (Any): list of PDS3 objets
-
-        Returns:
-            bool: True when the catalog contains the PDS3 object of the plateform otherwise False
-        """
-        return (
-            PdsParserFactory.FileGrammary.INSTRUMENT_HOST_CATALOG.name
-            in catalog
-        )
-
-    def _has_instrument(self, catalog: Any) -> bool:
-        """Checks if the catalog contains the PDS3 object of the instrument
-
-        Args:
-            catalog (Any): list of PDS3 objets
-
-        Returns:
-            bool: True when the catalog contains the PDS3 object of the instrument otherwise False
-        """
-        return PdsParserFactory.FileGrammary.INSTRUMENT_CATALOG.name in catalog
-
-    def _has_collection(self, catalog: Any) -> bool:
-        """Checks if the catalog contains the PDS3 object of the dataset
-
-        Args:
-            catalog (Any): list of PDS3 objets
-
-        Returns:
-            bool: True when the catalog contains the PDS3 object of the dataset otherwise False
-        """
-        return PdsParserFactory.FileGrammary.DATA_SET_CATALOG.name in catalog
-
-    def _is_already_exists(self, id: str) -> bool:
-        """Checks if the catalog or collection ID is in the STAC catalog
-
-        Args:
-            id (str): catalog or collection ID
-
-        Returns:
-            bool: True when the catalog or collection ID is in the STAC catalog
-        """
-        return self.catalog.get_child(id, recursive=True) is not None
-
-    def _add_plateforms_to_mission(
-        self,
-        plateforms: List[InstrumentHostModel],
-        mission_id: str,
-        references: Optional[ReferencesModel] = None,
+    def _build_stac_cats_and_colls_for_all_pds_catalogs(
+        self, catalogs_pds_collections: Iterator[Dict[str, Any]]
     ):
-        """Creates a Plateform STAC catalogs and add them to the mission STAC catalog if
-        one of the plateform does not exist
-
-        References are used to add citations in the plateform STAC catalog.
+        """Builds STAC catalogs and collections for all PDS collections
 
         Args:
-            plateforms (List[InstrumentHostModel]): plateforms
-            mission_id (str): mission ID
-            references (Optional[ReferencesModel], optional): _description_. Defaults to None.
+            catalogs_pds_collections (Iterator[Dict[str, Any]]): Catalogs for all PDS collections
         """
-        for plateform in plateforms:
-            self._add_plateform_to_mission(plateform, mission_id, references)
-
-    def _add_plateform_to_mission(
-        self,
-        plateform: InstrumentHostModel,
-        mission_id: str,
-        references: Optional[ReferencesModel] = None,
-    ):
-        """Creates a Plateform STAC catalog and add it to the mission STAC catalog if
-        the plateform does not exist
-
-        References are used to add citations in the plateform STAC catalog.
-
-        Args:
-            plateform (InstrumentHostModel): plateform
-            mission_id (str): mission ID
-            references (Optional[ReferencesModel], optional): citations. Defaults to None.
-        """
-        pystac_plateform_cat: pystac.Catalog = plateform.create_stac_catalog(
-            references
-        )
-        if not self._is_already_exists(pystac_plateform_cat.id):
-            catalog = cast(
-                pystac.Catalog,
-                self.catalog.get_child(mission_id, recursive=True),
-            )
-            catalog.add_child(pystac_plateform_cat)
-
-    def _add_instruments_to_plateform(
-        self,
-        instruments: List[InstrumentModel],
-        references: Optional[ReferencesModel] = None,
-    ):
-        """Creates an Instrument STAC catalogs and add them to the plateform STAC catalog if
-        one of the instrument does not exist
-
-        References are used to add citations in the plateform STAC catalog.
-
-        Args:
-            instruments (List[InstrumentHostModel]): instrument
-            references (Optional[ReferencesModel], optional): _description_. Defaults to None.
-        """
-        for instru in instruments:
-            self._add_instrument_to_plateform(instru, references)
-
-    def _add_instrument_to_plateform(
-        self,
-        instrument: InstrumentModel,
-        references: Optional[ReferencesModel] = None,
-    ):
-        """Creates a Instrument STAC catalog and add it to the plateform STAC catalog if
-        the instrument does not exist
-
-        References are used to add citations in the plateform STAC catalog.
-
-        Args:
-            instrument (InstrumentHostModel): instrument
-            references (Optional[ReferencesModel], optional): citations. Defaults to None.
-        """
-        pystac_instru_cat: pystac.Catalog = instrument.create_stac_catalog(
-            references
-        )
-        if not self._is_already_exists(instrument.get_instrument_id()):
-            catalog = cast(
-                pystac.Catalog,
-                self.catalog.get_child(
-                    instrument.get_plateform_id(), recursive=True
-                ),
-            )
-            catalog.add_child(pystac_instru_cat)
-
-    def _add_collections_to_instrument(
-        self,
-        collections: List[DataSetModel],
-        references: Optional[ReferencesModel] = None,
-        data_supplier: Optional[DataSupplierModel] = None,
-        data_producer: Optional[DataProducerModel] = None,
-    ):
-        """Creates Datasets STAC collections and add them to the instrument STAC catalog if
-        the dataset does not exist.
-
-        References are used to add citations in the collection STAC catalog.
-
-        Args:
-            collections (List[DataSetModel]): datasets
-            references (Optional[ReferencesModel], optional): citations. Defaults to None.
-            data_supplier (Optional[DataSupplierModel], optional): data supplier. Defaults to None,
-            data_producer: (Optional[DataProducerModel], optional): data producer. Defaults to None
-        """
-        for collection in collections:
-            self._add_collection_to_instrument(
-                collection, references, data_supplier, data_producer
-            )
-
-    def _add_collection_to_instrument(
-        self,
-        collection: DataSetModel,
-        references: Optional[ReferencesModel] = None,
-        data_supplier: Optional[DataSupplierModel] = None,
-        data_producer: Optional[DataProducerModel] = None,
-    ):
-        """Creates a Dataset STAC collections and add it to the instrument STAC catalog if
-        the dataset does not exist.
-
-        References are used to add citations in the collection STAC catalog.
-
-        Args:
-            collections (DataSetModel): dataset
-            references (Optional[ReferencesModel], optional): citations. Defaults to None.
-            data_supplier (Optional[DataSupplierModel], optional): data supplier. Defaults to None,
-            data_producer: (Optional[DataProducerModel], optional): data producer. Defaults to None
-        """
-        collection_id: str = collection.DATA_SET_ID
-        if not self._is_already_exists(collection_id):
-            instrument_id: str = collection.DATA_SET_HOST.get_instrument_id()
-            stac_collection: pystac.Catalog = (
-                collection.create_stac_collection(
-                    references, data_supplier, data_producer
-                )
-            )
-            catalog = cast(
-                pystac.Catalog,
-                self.catalog.get_child(instrument_id, recursive=True),
-            )
-            catalog.add_child(stac_collection)
-
-    def _build_stac_catalogs_and_collections(
-        self, catalogs: Iterator[Dict[str, Any]]
-    ):
-        """Builds STAC catalogs and collections
-
-        Args:
-            catalogs (Iterator[Dict[str, Any]]): Catalogs to convert to STAC
-        """
-        for catalog in catalogs:
-            stac_mission: pystac.Catalog
-            references_ode: ReferencesModel = cast(
-                ReferencesModel,
-                catalog.get(
-                    PdsParserFactory.FileGrammary.REFERENCE_CATALOG.name
-                ),
-            )
-            pds_collection: PdsRegistryModel = cast(
-                PdsRegistryModel, catalog.get("collection")
-            )
-            volume_desc: VolumeModel = cast(VolumeModel, catalog.get("volume"))
-
-            if not self._is_already_exists(pds_collection.get_planet_id()):
-                pystac_planet_cat = pds_collection.create_stac_planet_catalog()
-                self.catalog.add_child(pystac_planet_cat)
-
-            if self._has_mission(catalog):
-                mission_ode_cat: MissionModel = catalog[
-                    PdsParserFactory.FileGrammary.MISSION_CATALOG.name
-                ]
-                stac_mission = mission_ode_cat.create_stac_catalog(
-                    references_ode
-                )
-                if not self._is_already_exists(stac_mission.id):
-                    collection = cast(
-                        pystac.Collection,
-                        self.catalog.get_child(pds_collection.get_planet_id()),
-                    )
-                    collection.add_child(stac_mission)
-            else:
-                self.notify_observers(
-                    MessageModel(
-                        pds_collection.get_mission(),
-                        f"Unable to get mission in {pds_collection}",
-                    )
-                )
-
-            if self._has_mission(catalog) and self._has_plateform(catalog):
-                plateform_ode_cat = catalog[
-                    PdsParserFactory.FileGrammary.INSTRUMENT_HOST_CATALOG.name
-                ]
-                if isinstance(plateform_ode_cat, list):
-                    self._add_plateforms_to_mission(
-                        plateform_ode_cat,
-                        stac_mission.id,  # type: ignore
-                        references_ode,
-                    )
-                else:
-                    self._add_plateform_to_mission(
-                        plateform_ode_cat,
-                        stac_mission.id,  # type: ignore
-                        references_ode,
-                    )
-            else:
-                self.notify_observers(
-                    MessageModel(
-                        pds_collection.get_plateform(),
-                        f"Unable to get plateform in {pds_collection}",
-                    )
-                )
-
-            if (
-                self._has_mission(catalog)
-                and self._has_plateform(catalog)
-                and self._has_instrument(catalog)
-            ):
-                instru_ode_cat = catalog[
-                    PdsParserFactory.FileGrammary.INSTRUMENT_CATALOG.name
-                ]
-                if isinstance(instru_ode_cat, list):
-                    self._add_instruments_to_plateform(
-                        instru_ode_cat, references_ode
-                    )
-                else:
-                    self._add_instrument_to_plateform(
-                        instru_ode_cat, references_ode
-                    )
-            else:
-                self.notify_observers(
-                    MessageModel(
-                        pds_collection.get_instrument(),
-                        f"Unable to get instrument in {pds_collection}",
-                    )
-                )
-
-            if (
-                self._has_mission(catalog)
-                and self._has_plateform(catalog)
-                and self._has_instrument(catalog)
-                and self._has_collection(catalog)
-            ):
-                collection_ode_cat = catalog[
-                    PdsParserFactory.FileGrammary.DATA_SET_CATALOG.name
-                ]
-                data_supplier = volume_desc.DATA_SUPPLIER
-                data_producer = volume_desc.DATA_PRODUCER
-                if isinstance(collection_ode_cat, list):
-                    self._add_collections_to_instrument(
-                        collection_ode_cat,
-                        references_ode,
-                        data_supplier,
-                        data_producer,
-                    )
-                else:
-                    self._add_collection_to_instrument(
-                        collection_ode_cat,
-                        references_ode,
-                        data_supplier,
-                        data_producer,
-                    )
-            else:
-                self.notify_observers(
-                    MessageModel(
-                        pds_collection.get_collection(),
-                        f"Unable to get dataset in {pds_collection}",
-                    )
-                )
+        for catalogs_pds_collection in catalogs_pds_collections:
+            self.__stac_pds_collection.catalogs = catalogs_pds_collection
+            self.__stac_pds_collection.to_stac()
 
     def to_stac(
         self,
@@ -652,7 +363,7 @@ class StacCatalogTransformer(StacTransformer):
         catalogs: Iterator[Dict[str, Any]] = pds_ode_catalogs.get_ode_catalogs(
             pds_collections
         )
-        self._build_stac_catalogs_and_collections(catalogs)
+        self._build_stac_cats_and_colls_for_all_pds_catalogs(catalogs)
 
     def describe(self):
         """Describe the catalog"""

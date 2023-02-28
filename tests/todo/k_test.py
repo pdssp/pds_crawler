@@ -8,7 +8,7 @@
 # from typing import Optional
 # import pystac
 # from pds_crawler.extractor import PDSCatalogsDescription
-# from pds_crawler.extractor import PdsRecords
+# from pds_crawler.extractor import PdsRecordsWs
 # from pds_crawler.extractor import PdsRegistry
 # from pds_crawler.load import Database
 # from pds_crawler.load import PdsParserFactory
@@ -204,7 +204,7 @@
 # if __name__ == "__main__":
 #     database = Database("/home/malapert/Work/tmp/data/database/pds.h5")
 #     pds_registry = PdsRegistry(database)
-#     pds_records = PdsRecords(database)
+#     pds_records = PdsRecordsWs(database)
 #     pds_ode_catalogs = PDSCatalogsDescription(database)
 #     pds_collections: List[
 #         PdsRegistryModel

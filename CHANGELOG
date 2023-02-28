@@ -1,4 +1,14 @@
-### Refactoring Improve documentation (HEAD -> main)
+### Added updating of PDS3 objects Added the creation of STAC based on JSON response without PDS3 objects Added documentation (HEAD -> main)
+>Tue, 28 Feb 2023 02:04:44 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Refactoring Improve documentation (origin/main)
 >Sun, 26 Feb 2023 05:04:49 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Refactoring Add tests (origin/main)
+### Refactoring Add tests
 >Wed, 22 Feb 2023 18:31:39 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

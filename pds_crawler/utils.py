@@ -214,7 +214,7 @@ def compute_downloaded_filepath(directory: str, url: str) -> str:
         filename = filename.replace(os.path.sep, "_")
     else:
         path: str = parsed_url.path
-        filename: str = os.path.basename(path)
+        filename: str = os.path.basename(path).lower()
     return os.path.join(directory, filename)
 
 

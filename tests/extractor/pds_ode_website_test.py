@@ -8,7 +8,7 @@ from typing import Optional
 import pytest
 
 from pds_crawler.extractor import PDSCatalogDescription
-from pds_crawler.extractor import PdsRecords
+from pds_crawler.extractor import PdsRecordsWs
 from pds_crawler.extractor import PdsRegistry
 from pds_crawler.load import Database
 from pds_crawler.models import PdsRecordsModel
@@ -37,7 +37,7 @@ def teardown_directory():
 
 def test_load_catalogs_urls():
     database = Database(result_dir)
-    pds_records = PdsRecords(database)
+    pds_records = PdsRecordsWs(database)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
         planet="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
@@ -50,7 +50,7 @@ def test_load_catalogs_urls():
 
 def test_catalogs():
     database = Database(result_dir)
-    pds_records = PdsRecords(database)
+    pds_records = PdsRecordsWs(database)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
         planet="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"

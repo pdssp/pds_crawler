@@ -9,10 +9,10 @@ from typing import cast
 from typing import List
 
 from ._version import __name_soft__
+from .etl import CheckUpdateEnum
 from .etl import PdsDataEnum
 from .etl import PdsSourceEnum
 from .etl import StacETL
-from .models import PdsRegistryModel
 
 logging.basicConfig(level=logging.CRITICAL)
 
@@ -85,12 +85,5 @@ class Crawler:
             if self.options_cli.dataset_id:
                 etl.dataset_id = self.options_cli.dataset_id
 
-            match self.options_cli.check:
-                case PdsDataEnum.PDS_CATALOGS.value:
-                    etl.check_extract(source=PdsSourceEnum.PDS_CATALOGS)
-                case PdsDataEnum.PDS_RECORDS.value:
-                    etl.check_extract(source=PdsSourceEnum.PDS_RECORDS)
-                case _:
-                    raise TypeError(
-                        f"Unexpected option {self.options_cli.type_extract} for type_extract"
-                    )
+            enum = CheckUpdateEnum.find_enum(self.options_cli.check)
+            etl.check_update(source=enum)

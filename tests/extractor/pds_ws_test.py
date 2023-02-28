@@ -7,7 +7,7 @@ from typing import Optional
 
 import pytest
 
-from pds_crawler.extractor import PdsRecords
+from pds_crawler.extractor import PdsRecordsWs
 from pds_crawler.extractor import PdsRegistry
 from pds_crawler.load import Database
 from pds_crawler.models import PdsRecordsModel
@@ -52,7 +52,7 @@ def test_pds_download():
     _, collections = pds_registry.get_pds_collections(
         planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
-    pds_records = PdsRecords(database)
+    pds_records = PdsRecordsWs(database)
     pds_records.download_pds_records_for_all_collections(collections)
     files = database.pds_storage.get_pds_storage_for(
         collections[0]
@@ -81,7 +81,7 @@ def test_pds_load():
     )
     pds_registry.cache_pds_collections(collections)
 
-    pds_records: PdsRecords = PdsRecords(database)
+    pds_records: PdsRecordsWs = PdsRecordsWs(database)
     collections = pds_registry.load_pds_collections_from_cache(
         planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )

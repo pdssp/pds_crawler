@@ -15,7 +15,7 @@ Classes:
         Provides the list of georeferenced PDS collections by retrieving
         a list of Planetary Data System (PDS) data collections rom the
         PDS ODE (Outer Planets Data Exploration) web service.
-    PdsRecords :
+    PdsRecordsWs :
         Handles the PDS records (download, store and load the records for
         one of several PDS collection).
 
@@ -285,18 +285,20 @@ class PdsRegistry(Observable):
         )
 
 
-class PdsRecords(Observable):
-    """Handles the PDS records.
+class PdsRecordsWs(Observable):
+    """Handles the PDS records web service.
 
-    Responsible to download and stores the JSON response in the database. This class is also
-    responsible to parse the stored JSON and converts each record in the PdsRecordsModel.
+    Responsible to download from the web service and stores the JSON response in the database.
+    This class is also responsible to parse the stored JSON and converts each record in the
+    PdsRecordsModel.
 
     .. uml::
 
-        class PdsRecords {
+        class PdsRecordsWs {
             +Database database
             - build_params(target: str, ihid: str, iid: str, pt: str, offset: int, limit: int = 1000,) Dict[str, str]
             - generate_all_pagination_params(target: str, ihid: str, iid: str, pt: str, total: int, offset: int = 1, limit: int = 1000) List[Tuple[str, Any]]
+            - generate_urls_for_pages(self, all_pagination_params: List[Tuple[str]]) -> List[str]
             - __repr__(self) str
             + generate_urls_for_one_collection(pds_collection: PdsRegistryModel, offset: int = 1, limit: int = 5000):
             + generate_urls_for_all_collections(pds_collection: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
@@ -407,6 +409,29 @@ class PdsRecords(Observable):
             pagination_start = pagination_start + limit
         return params_paginations
 
+    def _generate_urls_for_pages(
+        self, all_pagination_params: List[Tuple[str]]
+    ) -> List[str]:
+        """Generates all URLs based on all pagination parameters of the pages
+
+        Args:
+            all_pagination_params (List[Tuple[str]]): pargination parameters for all pages
+
+        Returns:
+            List[str]: all URLs
+        """
+        urls: List[str] = list()
+        for pagination_params in all_pagination_params:
+            param_url = [*pagination_params[0:4], *pagination_params[5:7]]
+            request_params: Dict[str, str] = self._build_request_params(
+                *param_url  # type: ignore
+            )
+            url = PdsRecordsWs.SERVICE_ODE_END_POINT + urllib.parse.urlencode(
+                request_params
+            )
+            urls.append(url)
+        return urls
+
     def generate_urls_for_one_collection(
         self,
         pds_collection: PdsRegistryModel,
@@ -433,18 +458,7 @@ class PdsRecords(Observable):
             offset,
             limit,
         )
-
-        urls: List[str] = list()
-        for pagination_params in all_pagination_params:
-            param_url = [*pagination_params[0:4], *pagination_params[5:7]]
-            request_params: Dict[str, str] = self._build_request_params(
-                *param_url  # type: ignore
-            )
-            url = PdsRecords.SERVICE_ODE_END_POINT + urllib.parse.urlencode(
-                request_params
-            )
-            urls.append(url)
-
+        urls = self._generate_urls_for_pages(all_pagination_params)
         self.database.hdf5_storage.save_urls(pds_collection, urls)
 
     def generate_urls_for_all_collections(
@@ -479,14 +493,20 @@ class PdsRecords(Observable):
         """
         urls: List[str] = self.database.hdf5_storage.load_urls(pds_collection)
         if len(urls) == 0:
+            # No URL in the cache, generate now
             self.generate_urls_for_one_collection(pds_collection)
             urls = self.database.hdf5_storage.load_urls(pds_collection)
+
+        # if a sample is needed
         if limit is not None:
             urls = urls[0:limit]
 
+        # Get the storage for the collection
         file_storage: PdsCollectionStorage = (
             self.database.pds_storage.get_pds_storage_for(pds_collection)
         )
+
+        # Download files in the storage
         file_storage.download(urls, time_sleep=1, nb_workers=self.nb_workers)
 
     def download_pds_records_for_all_collections(
@@ -542,7 +562,7 @@ class PdsRecords(Observable):
             self.database.pds_storage.get_pds_storage_for(pds_collection)
         )
         for file in tqdm(
-            collection_storage.list_files(),
+            collection_storage.list_records_files(),
             desc="Downloaded responses from the collection",
             disable=disable_tqdm,
             position=1,
@@ -564,4 +584,4 @@ class PdsRecords(Observable):
                     self.notify_observers(MessageModel(file, err))
 
     def __repr__(self) -> str:
-        return f"PdsRecords({self.database})"
+        return f"PdsRecordsWs({self.database})"
