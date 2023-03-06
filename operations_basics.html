@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Operations basics &#8212; pds-crawler 0.1.dev1+g206b2dd documentation</title>
+    <title>Operations basics &#8212; pds-crawler 0.1.dev1+g1246389 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g206b2dd</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g1246389</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -222,6 +222,80 @@ the PDS crawler to perform various tasks related to ingestion, extraction,
 transformation, and report generation for PDS data collections.</p>
 <p>The use cases identify user goals and the tasks they must perform to achieve
 those goals, providing a comprehensive overview of the PDS crawler’s requirements.</p>
+<p class="plantuml">
+<img src="_images/plantuml-6ee30feebc9cccf10e2995689f1acfb4b6e08edf.png" alt="rectangle &quot;PDS crawer use cases&quot; {
+
+(Ingestion of all PDS collections) as (UC1)
+(Find all PDS collections) as (UC1_1)
+(Save collection) as (UC1_2)
+(Ingestion one PDS collection) as (UC1_3)
+(Ingest sample) as (UC1_4)
+(Ingest STAC in PDSSP catalog) as (UC4)
+(Reset storage) as (UC5)
+(Reset files) as (UC5_1)
+(Reset STAC) as (UC5_2)
+(Reset collection) as (UC5_3)
+
+  rectangle &quot;Extraction (UC2.)&quot; {
+    (Extract one PDS collection) as (UC2)
+
+    (Extract records for one PDS collection) as (UC2_1)
+    (Extract PDS3 objects) as (UC2_2)
+
+    (Resume record extraction for all PDS collections) as (UC2_3)
+    (Resume PDS3 objects extraction) as (UC2_4)
+
+    (Download and save Data) as (UC2_5)
+
+    UC2 -.-&gt; UC2_1: &lt;includes&gt;
+    UC2 -.-&gt; UC2_2: &lt;includes&gt;
+    UC2_3 --&gt; UC2_1: &lt;extends&gt;
+    UC2_4 --&gt; UC2_2: &lt;extends&gt;
+    UC2_1 -.-&gt; UC2_5: &lt;includes&gt;
+    UC2_2 -.-&gt; UC2_5: &lt;includes&gt;
+
+  }
+
+  rectangle &quot;Transformation (UC3.)&quot; {
+
+    (Transform one PDS collection) as (UC3)
+    (Transform records for one PDS collection) as (UC3_1)
+    (Transform PDS3 objects) as (UC3_2)
+    (Create report for data analysis and correction) as (UC3_3)
+    (Save STAC) as (UC3_4)
+    (Update STAC) as (UC3_5)
+    UC3 -.-&gt; UC3_1: &lt;includes&gt;
+    UC3 -.-&gt; UC3_2: &lt;includes&gt;
+    UC3 -.-&gt; UC3_3: &lt;includes&gt;
+    UC3_1 -.-&gt; UC3_4: &lt;includes&gt;
+    UC3_2 -.-&gt; UC3_4: &lt;includes&gt;
+    UC3_5 --&gt; UC3_4: &lt;extends&gt;
+
+  }
+
+UC1 --&gt; UC1_3: &lt;extends&gt;
+UC1 -.-&gt; UC1_1 : &lt;includes&gt;
+UC1_2 --&gt; UC1_1: &lt;extends&gt;
+UC1_4 --&gt; UC1_3: &lt;extends&gt;
+UC1_3 -.-&gt; UC2 : &lt;includes&gt;
+UC1_3 -.-&gt; UC3 : &lt;includes&gt;
+UC5_1 --&gt; UC5: &lt;extends&gt;
+UC5_2 --&gt; UC5: &lt;extends&gt;
+UC5_3 --&gt; UC5: &lt;extends&gt;
+
+}
+
+Airflow -&gt; UC1_3
+Airflow -&gt; UC4
+Airflow -&gt; UC5
+
+UC1_2 -&gt; Storage_facility
+UC2_5 -&gt; Storage_facility
+UC3_3 -&gt; Storage_facility
+UC3_4 -&gt; Storage_facility
+UC4 -&gt; PDSSP_catalog
+UC1_3 -&gt; PDS_Data_Repositories"/>
+</p>
 <p>The following sections describe the main functions.</p>
 <section id="main-use-case-uc-1-ingestion-of-one-pds-collection">
 <h3>Main use case : UC 1 - Ingestion of one PDS collection<a class="headerlink" href="#main-use-case-uc-1-ingestion-of-one-pds-collection" title="Permalink to this headline">¶</a></h3>
@@ -925,10 +999,68 @@ those goals, providing a comprehensive overview of the PDS crawler’s requireme
 <section id="operations">
 <h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
 <p>The main operations of the PDSSP crawler are the following</p>
+<p class="plantuml">
+<img src="_images/plantuml-4f0bd2ffd8db2995541cb077de82ad8b2fe1202c.png" alt="start
+:Extract goereferenced collections;
+:Extract PDS records for each collection;
+:Extract PDS3 objects for each collection;
+if (Load PDS3 objects went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PD3 objects) then (yes)
+    stop
+  endif
+endif
+:Transform PDS3 objects to STAC;
+:Save STAC objects to disk;
+if (Load PDS records went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PDS records ?) then (yes)
+    stop
+  endif
+endif
+:Transform PDS records to STAC;
+:Update STAC objects to disk;
+stop"/>
+</p>
 <p>After fixing the PDS3 Objects, the operations are the following</p>
+<p class="plantuml">
+<img src="_images/plantuml-13669a094a806ad851d7ed3bc1bb5582adb2a5c8.png" alt="start
+:correct PDS3 objects;
+if (Load PDS3 objects went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PD3 objects) then (yes)
+    stop
+  endif
+endif
+:Transform PDS objects to STAC;
+:Update STAC objects to disk;
+if (Load PDS records went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PDS records ?) then (yes)
+    stop
+  endif
+endif
+:Transform PDS records to STAC;
+:Update STAC objects to disk;
+stop"/>
+</p>
 <p>if there was a problem loading the PDS records, this indicates
 that the extraction of the PDS records went wrong. The operations
 are therefore as follows</p>
+<p class="plantuml">
+<img src="_images/plantuml-9276d1757d18850e9b2a6435c312476dbd6c8356.png" alt="start
+:Remove the invalid PDS records;
+:Extract PDS records;
+if (Load PDS records went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PD3 records ?) then (yes)
+    stop
+  endif
+endif
+:Transform PDS records to STAC;
+:Update STAC objects to disk;
+stop"/>
+</p>
 </section>
 </section>
 

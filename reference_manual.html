@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g206b2dd documentation</title>
+    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g1246389 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g206b2dd</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g1246389</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -312,6 +312,19 @@ one of several PDS collection).</p>
 <dd><p>Provides the list of georeferenced PDS collections by retrieving
 a list of Planetary Data System (PDS) data collections rom the
 PDS ODE (Outer Planets Data Exploration) web service.</p>
+<p class="plantuml">
+<img src="_images/plantuml-8e67e478186b05d8c0998cc0683c7c40284a710d.png" alt="class PdsRegistry {
+    +Database database
+    - build_params(target: str = None) Dict[str, str]
+    - get_response(params: Dict[str, str]) str
+    - parse_response_collection(response: str) Tuple[Dict[str, int], List[PdsRegistryModel]]
+    + get_pds_collections(planet: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]
+    + cache_pds_collections(pds_collections: List[PdsRegistryModel])
+    + load_pds_collections_from_cache() List[PdsRegistryModel]
+    + query_cache(dataset_id: str) Optional[PdsRegistryModel]
+    + distinct_dataset_values() Set
+}"/>
+</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_ws.PdsRegistry.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.Database" title="pds_crawler.load.database.Database"><span class="pre">pds_crawler.load.database.Database</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_ws.html#PdsRegistry.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_ws.PdsRegistry.__init__" title="Permalink to this definition">¶</a></dt>
@@ -506,6 +519,21 @@ dataset identified by its ID.</p>
 <p>Responsible to download from the web service and stores the JSON response in the database.
 This class is also responsible to parse the stored JSON and converts each record in the
 PdsRecordsModel.</p>
+<p class="plantuml">
+<img src="_images/plantuml-1c5c26aacb224cc18c0fd78aefa6990c7f5beb4d.png" alt="class PdsRecordsWs {
+    +Database database
+    - build_params(target: str, ihid: str, iid: str, pt: str, offset: int, limit: int = 1000,) Dict[str, str]
+    - generate_all_pagination_params(target: str, ihid: str, iid: str, pt: str, total: int, offset: int = 1, limit: int = 1000) List[Tuple[str, Any]]
+    - generate_urls_for_pages(self, all_pagination_params: List[Tuple[str]]) -&gt; List[str]
+    - __repr__(self) str
+    + generate_urls_for_one_collection(pds_collection: PdsRegistryModel, offset: int = 1, limit: int = 5000):
+    + generate_urls_for_all_collections(pds_collection: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
+    + generate_urls_for_all_collections(pds_collections: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)
+    + download_pds_records_for_one_collection(pds_collection: PdsRegistryModel, limit: Optional[int] = None)
+    + download_pds_records_for_all_collections(pds_collections: List[PdsRegistryModel])
+    + parse_pds_collection_from_cache(pds_collection: PdsRegistryModel, disable_tqdm: bool = False) Iterator[PdsRecordsModel]
+}"/>
+</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.Database" title="pds_crawler.load.database.Database"><span class="pre">pds_crawler.load.database.Database</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_ws.html#PdsRecordsWs.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.__init__" title="Permalink to this definition">¶</a></dt>
@@ -726,6 +754,18 @@ PDS3 objects from the local storage</p>
 from the given web page and return them as a list. The class also checks
 if a given URL is a file or a directory and raises an exception if no files
 exist in the folder.</p>
+<p class="plantuml">
+<img src="_images/plantuml-7b3350978b78bcf4bbe29d64472c45e2c3a3a397.png" alt="class Crawler {
+    + str url
+    + str host
+    + str fragment
+    - get_subdirs_file(soup) List[Dict[str, str]]
+    - get_content(host: str, query: str) Optional[List[Dict[str, str]]]
+    + static is_file(url: str) bool
+    + static query(url: str) str
+    + parse() -&gt; Optional[List[Dict[str, str]]]
+}"/>
+</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.Crawler.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#Crawler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.Crawler.__init__" title="Permalink to this definition">¶</a></dt>
@@ -905,6 +945,32 @@ it returns True to indicate that the URL points to a file.</p>
 <p>Note : The download of the PDS catalogs in the local storage is done
 by the PDSCatalogsDescription object, which performs a massive download
 in the local storage</p>
+<p class="plantuml">
+<img src="_images/plantuml-a6583f5439d58ae0801c0855eccd92f4ed6c9c7f.png" alt="class PDSCatalogDescription {
+    - Any report
+    + str url
+    + VolumeModel vol_desc_cat
+    + str volume_desc_url
+    + PdsRecordsWs pds_records
+    + PdsRegistryModel pds_collection
+    + database Database
+    + PdsRecordsModel record
+    + List[str] catalogs_urls
+    - build_url_ode_collection()
+    - find_volume_desc_url() str
+    - parse_volume_desc_cat() VolumeModel
+    - load_volume_description()
+    - find_catalogs_urls() -&gt; List[Dict[str, str]]
+    - is_catalog_exists(catalog_name: Any) -&gt; bool
+    - get_url_for_multiple_catalogs(catalogs: List[str], catalogs_from_desc_cat: Dict[str, str]) List[str]
+    - get_url_for_simple_catalog(catalog_name: str, catalogs_from_desc_cat: Dict[str, str]) List[str]
+    - get_urls_from_catalog_type(catalog_name: Union[str, List[str]], catalogs_from_desc_cat: Dict[str, str]) List[str]
+    - parse_catalog(file_storage: PdsStorage, catalog_name: str, cat_type: str, result: Dict[str, Union[str, List[str]]])
+    + load_catalogs_urls() List[str]
+    + get_ode_catalogs(pds_collection: PdsRegistryModel)  Dict[str, Any]
+    + __repr__(self) str
+}"/>
+</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.Database" title="pds_crawler.load.database.Database"><span class="pre">pds_crawler.load.database.Database</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogDescription.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.__init__" title="Permalink to this definition">¶</a></dt>
@@ -1213,6 +1279,17 @@ _parse_catalog() to retrieve information on each catalog.</p>
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pds_crawler.extractor.pds_ode_website.</span></span><span class="sig-name descname"><span class="pre">PDSCatalogsDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.Database" title="pds_crawler.load.database.Database"><span class="pre">pds_crawler.load.database.Database</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogsDescription"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the means to download the PDS catalogs (PDS objects).</p>
+<p class="plantuml">
+<img src="_images/plantuml-5148c32864261007677ff9742328da257726fec1.png" alt="class PDSCatalogsDescription {
+    - Any report
+    + Database database
+    + PDSCatalogDescription pds_object_cats
+    - build_all_urls(pds_collection: PdsRegistryModel) List[str]
+    + download(pds_collections: List[PdsRegistryModel])
+    + get_ode_catalogs(pds_collections: List[PdsRegistryModel]) -&gt; Iterator[Dict[str, Any]]
+    + __repr__(self) str
+}"/>
+</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.Database" title="pds_crawler.load.database.Database"><span class="pre">pds_crawler.load.database.Database</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogsDescription.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription.__init__" title="Permalink to this definition">¶</a></dt>
@@ -1575,6 +1652,91 @@ The stored information comes from the models:
 </dl>
 </dd>
 </dl>
+<p class="plantuml">
+<img src="_images/plantuml-4a168193b84af8a5f76ddf899de696a324762af5.png" alt="class Database {
+    - __base_directory: str
+    - __pds_dir: str
+    - __stac_dir: str
+    - __hdf5_name: str
+    - __stac_storage: StacStorage
+    - __pds_storage: PdsStorage
+    - __hdf5_storage: Hdf5Storage
+
+    + base_directory: str
+    + pds_dir: str
+    + stac_dir: str
+    + hdf5_name: str
+    + stac_storage: StacStorage
+    + pds_storage: PdsStorage
+    + hdf5_storage: Hdf5Storage
+
+    + __init__(base_directory: str) -&gt; None
+    + init_storage() -&gt; None
+    + reset_storage() -&gt; None
+    + __repr__() -&gt; str
+}
+
+class PdsCollectionStorage {
+    - __directory: str
+    +__init__(self, directory: str) -&gt; None
+    + directory: str
+    + list_files() : List[str]
+    + get_volume_description() : VolumeModel
+    + list_catalogs() : Dict[str, Any]
+    + get_catalog(file: str, catalogue_type: PdsParserFactory.FileGrammary) : Any
+    + download(urls: List[str], nb_workers: int = 3, timeout: int = 180, time_sleep: int = 1) -&gt; None
+    + __repr__() : str
+}
+
+class PdsStorage{
+    + __init__(base_directory: str) -&gt; None
+    -__directory: str
+    +init_storage_directory()
+    +reset_storage()
+    +get_pds_storage_for(pds_collection: PdsRegistryModel) -&gt; PdsCollectionStorage
+    +directory: str
+    +__repr__() -&gt; str
+}
+
+class Hdf5Storage{
+    - HDF_SEP: str = &quot;/&quot;
+    - DS_URLS: str = &quot;urls&quot;
+    - __name
+    + name
+    + init_storage(name:str)
+    + reset_storage()
+    - _has_changed(store_db:Any, pds_collection:PdsRegistryModel):bool
+    - _has_attribute_in_group(node:Any):bool
+    - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool
+    - _read_and_convert_attributes(node:Any):Dict[str,Any]
+    + save_collection(pds_collection:PdsRegistryModel): bool
+    + save_collections(collections_pds:List[PdsRegistryModel]): bool
+    + load_collections(planet:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
+}
+
+class StacStorage {
+    -__directory: str
+    -__root_catalog: pystac.Catalog
+    -__layout: LargeDataVolumeStrategy
+    +directory: str
+    +root_catalog: pystac.Catalog
+    +__init__(directory: str)
+    -_load_root_catalog()
+    +init_storage_directory()
+    +reset_storage()
+    +refresh()
+    +item_exists(record: PdsRecordModel) -&gt; bool
+    +catalog_normalize_and_save()
+    +root_normalize_and_save(catalog: pystac.Catalog)
+    +normalize_and_save(cat_or_coll: Union[pystac.Collection, pystac.Catalog])
+    +__repr__() -&gt; str
+}
+
+Database *-- PdsStorage
+Database *-- Hdf5Storage
+Database *-- StacStorage
+PdsStorage *-- PdsCollectionStorage"/>
+</p>
 <dl class="simple">
 <dt>Author:</dt><dd><p>Jean-Christophe Malapert</p>
 </dd>
@@ -2045,6 +2207,54 @@ and stores the information in the DataSetModel class.</p>
 </dl>
 </dd>
 </dl>
+<p class="plantuml">
+<img src="_images/plantuml-51ae5ed62290edea6d2cdefa2d7ebeea21e6f945.png" alt="class PdsTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : Any
+}
+class ProjectionDescriptionTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : DataSetMapProjectionModel
+    -__result : DataSetMapProjectionModel
+}
+class MissionCatalogTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : MissionModel
+    -__result : MissionModel
+}
+class ReferenceCatalogTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : ReferencesModel
+    -__result : ReferencesModel
+}
+class PersonCatalogTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : PersonnelsModel
+    -__result : PersonnelsModel
+}
+class VolumeDescriptionTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : VolumeModel
+    -__result : VolumeModel
+}
+class InstrumentCatalogTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : InstrumentModel
+    -__result : InstrumentModel
+}
+class DataSetCatalogTransformer{
+    +__init__(visit_tokens: bool = True)
+    +result() : DataSetModel
+    -__result : DataSetModel
+}
+PdsTransformer &lt;|-- ProjectionDescriptionTransformer
+PdsTransformer &lt;|-- MissionCatalogTransformer
+PdsTransformer &lt;|-- ReferenceCatalogTransformer
+PdsTransformer &lt;|-- PersonCatalogTransformer
+PdsTransformer &lt;|-- VolumeDescriptionTransformer
+PdsTransformer &lt;|-- InstrumentCatalogTransformer
+PdsTransformer &lt;|-- DataSetCatalogTransformer"/>
+</p>
 <dl class="simple">
 <dt>Author:</dt><dd><p>Jean-Christophe Malapert</p>
 </dd>
@@ -2259,6 +2469,21 @@ a large number of items in one single directory.</p>
 </dl>
 </dd>
 </dl>
+<p class="plantuml">
+<img src="_images/plantuml-f03edf000c3e769374dfcbfa927d6d5d62702021.png" alt="class LargeDataVolumeStrategy {
+    - _remove_filename_if_needed(parent_dir: str, filename: str) -&gt; str
+    - _fix_parent_directory(parent_dir: str) -&gt; str
+    - _hash_storage(key, base_path) -&gt; str
+    + get_strategy() -&gt; CustomLayoutStrategy
+}
+class CustomLayoutStrategy {
+    + catalog_func
+    + collection_func
+    + item_func
+    + __init__(catalog_func, collection_func, item_func)
+}
+LargeDataVolumeStrategy --&gt; CustomLayoutStrategy"/>
+</p>
 <dl class="simple">
 <dt>Author:</dt><dd><p>Jean-Christophe Malapert</p>
 </dd>
@@ -2313,6 +2538,81 @@ in a collection.</p>
 <section id="module-describing-the-models-of-ode-webservice">
 <h3>Module describing the models of ODE webservice<a class="headerlink" href="#module-describing-the-models-of-ode-webservice" title="Permalink to this headline">¶</a></h3>
 <p>ODE services models</p>
+<p class="plantuml">
+<img src="_images/plantuml-ccfc059538d80eb2e8e77f17e87704c8326ba78a.png" alt="class PdsRegistryModel {
+    +ODEMetaDB: str
+    +IHID: str
+    +IHName: str
+    +IID: str
+    +IName: str
+    +PT: str
+    +PTName: str
+    +DataSetId: str
+    +NumberProducts: int
+    +ValidTargets: Dict[str, List[str]]
+    +MinOrbit: Optional[int]
+    +MaxOrbit: Optional[int]
+    +MinObservationTime: Optional[str]
+    +MaxObservationTime: Optional[str]
+    +NumberObservations: Optional[int]
+    +SpecialValue1: Optional[str]
+    +MinSpecialValue1: Optional[float]
+    +MaxSpecialValue1: Optional[float]
+    +SpecialValue2: Optional[str]
+    +MinSpecialValue2: Optional[float]
+    +MaxSpecialValue2: Optional[float]
+}
+
+class PdsRecordModel {
+    +ode_id: str
+    +pdsid: str
+    +ihid: str
+    +iid: str
+    +pt: str
+    +LabelFileName: str
+    +Product_creation_time: str
+    +Target_name: str
+    +Data_Set_Id: str
+    +Easternmost_longitude: float
+    +Maximum_latitude: float
+    +Minimum_latitude: float
+    +Westernmost_longitude: float
+    +Product_version_id: Optional[str]
+    +RelativePathtoVol: Optional[str]
+    +label: Optional[str]
+    +PDS4LabelURL: Optional[str]
+    +PDSVolume_Id: Optional[str]
+    +Label_product_type: Optional[str]
+    +Observation_id: Optional[str]
+    +Observation_number: Optional[int]
+    +Observation_type: Optional[str]
+    +Producer_id: Optional[str]
+    +Product_name: Optional[str]
+    +Product_release_date: Optional[str]
+    +Activity_id: Optional[str]
+    +Predicted_dust_opacity: Optional[float]
+    +Predicted_dust_opacity_text: Optional[str]
+    +Observation_time: Optional[str]
+    +SpaceCraft_clock_start_count: Optional[str]
+    +SpaceCraft_clock_stop_count: Optional[str]
+    +Start_orbit_number: Optional[int]
+    +Stop_orbit_number: Optional[int]
+    +UTC_start_time: Optional[str]
+    +UTC_stop_time: Optional[str]
+    +Emission_angle: Optional[float]
+}
+
+class ProductFile {
+    +FileName: str
+    +Type: Optional[str]
+    +KBytes: Optional[float]
+    +URL: Optional[str]
+    +Description: Optional[str]
+    +Creation_date: Optional[str]
+}
+
+PdsRecordModel --&gt; ProductFile"/>
+</p>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pds_crawler.models.ode_ws_models.</span></span><span class="sig-name descname"><span class="pre">ProductFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">KBytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">URL</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Creation_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/models/ode_ws_models.html#ProductFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -3045,6 +3345,293 @@ include a Label_Product_Type value as well</p>
 <section id="module-describing-the-models-of-pds3-objects">
 <h3>Module describing the models of PDS3 objects<a class="headerlink" href="#module-describing-the-models-of-pds3-objects" title="Permalink to this headline">¶</a></h3>
 <p>PDS models for catalogs</p>
+<p class="plantuml">
+<img src="_images/plantuml-6f664ad98dc63b54a9c45b97ad85d02cfcb66011.png" alt="class ReferenceModel {
+    REFERENCE_KEY_ID: str
+    REFERENCE_DESC: str
+}
+
+class ReferencesModel {
+    REFERENCES: List[ReferenceModel]
+}
+
+ReferencesModel --&gt; ReferenceModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-a0ea3f365e355152dfcd6b0bb4582bb75f1e2759.png" alt="class DataSetInformationModel {
+    CONFIDENCE_LEVEL_NOTE: str
+    DATA_SET_COLLECTION_MEMBER_FLG: str
+    DATA_SET_DESC: str
+    DATA_SET_NAME: str
+    DATA_SET_RELEASE_DATE: str
+    DETAILED_CATALOG_FLAG: str
+    PRODUCER_FULL_NAME: Union[str, List[str]]
+    START_TIME: str
+    STOP_TIME: str
+    DATA_OBJECT_TYPE: Optional[str]
+    ABSTRACT_DESC: Optional[str]
+    CITATION_DESC: Optional[str]
+    DATA_SET_TERSE_DESC: Optional[str]
+}
+
+class DataSetTargetModel {
+    TARGET_NAME: str
+}
+
+class DataSetHostModel {
+    INSTRUMENT_HOST_ID: str
+    INSTRUMENT_ID: str
+}
+
+class DataSetMissionModel {
+    MISSION_NAME: str
+}
+
+class DataSetReferenceInformationModel {
+    REFERENCE_KEY_ID: str
+}
+
+class DataSetModel {
+    DATA_SET_ID: str
+    DATA_SET_INFORMATION: DataSetInformationModel
+    DATA_SET_TARGET: List[DataSetTargetModel]
+    DATA_SET_HOST: DataSetHostModel
+    DATA_SET_REFERENCE_INFORMATION: List[DataSetReferenceInformationModel]
+    DATA_SET_MISSION: Optional[DataSetMissionModel]
+}
+
+DataSetModel --&gt; DataSetInformationModel
+DataSetModel --&gt; DataSetTargetModel
+DataSetModel --&gt; DataSetHostModel
+DataSetModel --&gt; DataSetReferenceInformationModel
+DataSetModel --&gt; DataSetMissionModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-30c991be6c32f213d5d34447d06ac2a7da61aa03.png" alt="class InstrumentReferenceInfoModel {
+    REFERENCE_KEY_ID: str
+}
+
+class InstrumentInformationModel {
+    INSTRUMENT_DESC: str
+    INSTRUMENT_NAME: str
+    INSTRUMENT_TYPE: str
+}
+
+class InstrumentModel {
+    INSTRUMENT_HOST_ID: str
+    INSTRUMENT_ID: str
+    INSTRUMENT_INFORMATION: InstrumentInformationModel
+    INSTRUMENT_REFERENCE_INFO: List[InstrumentReferenceInfoModel]
+}
+
+class InstrumentHostInformationModel {
+    INSTRUMENT_HOST_DESC: str
+    INSTRUMENT_HOST_NAME: str
+    INSTRUMENT_HOST_TYPE: str
+}
+
+class InstrumentHostReferenceInfoModel {
+    REFERENCE_KEY_ID: str
+}
+
+class InstrumentHostModel {
+    INSTRUMENT_HOST_ID: str
+    INSTRUMENT_HOST_INFORMATION: InstrumentHostInformationModel
+    INSTRUMENT_HOST_REFERENCE_INFO: List[InstrumentHostReferenceInfoModel]
+}
+
+InstrumentHostModel --&gt; InstrumentHostInformationModel
+InstrumentHostModel --&gt; InstrumentHostReferenceInfoModel
+InstrumentModel --&gt; InstrumentInformationModel
+InstrumentModel --&gt; InstrumentReferenceInfoModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-e2f86a5006c1ba08f6b5e43b6b8a8234b5533bd7.png" alt="class MissionInformationModel {
+    MISSION_ALIAS_NAME: str
+    MISSION_DESC: str
+    MISSION_OBJECTIVES_SUMMARY: str
+    MISSION_START_DATE: str
+    MISSION_STOP_DATE: str
+}
+
+class MissionTargetModel {
+    TARGET_NAME: str
+}
+
+class MissionHostModel {
+    INSTRUMENT_HOST_ID: str
+    MISSION_TARGET: List[MissionTargetModel]
+}
+
+class MissionReferenceInformationModel {
+    REFERENCE_KEY_ID: str
+}
+
+class MissionModel {
+    MISSION_NAME: str
+    MISSION_HOST: MissionHostModel
+    MISSION_INFORMATION: MissionInformationModel
+    MISSION_REFERENCE_INFORMATION: List[MissionReferenceInformationModel]
+}
+
+MissionModel --&gt; MissionHostModel
+MissionModel --&gt; MissionInformationModel
+MissionModel --&gt; MissionReferenceInformationModel
+MissionHostModel --&gt; MissionTargetModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-7acc8ff4de44903777e8e56a43e393f832a6db92.png" alt="class DataSetMapProjectionRefInfoModel {
+    REFERENCE_KEY_ID: str
+}
+
+class DataSetMapProjectionInfoModel {
+    MAP_PROJECTION_DESC: str
+    MAP_PROJECTION_TYPE: str
+    ROTATIONAL_ELEMENT_DESC: str
+    DS_MAP_PROJECTION_REF_INFO: List[DataSetMapProjectionRefInfoModel]
+}
+
+class DataSetMapProjectionModel {
+    DATA_SET_ID: str
+    DATA_SET_MAP_PROJECTION_INFO: DataSetMapProjectionInfoModel
+}
+
+DataSetMapProjectionModel --&gt; DataSetMapProjectionInfoModel
+DataSetMapProjectionInfoModel --&gt; DataSetMapProjectionRefInfoModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-c9dc43f4aaed59255738424f7ed6de3e808aad55.png" alt="class PersonnelInformationModel {
+    ADDRESS_TEXT: str
+    ALTERNATE_TELEPHONE_NUMBER: str
+    FAX_NUMBER: str
+    FULL_NAME: str
+    INSTITUTION_NAME: str
+    LAST_NAME: str
+    NODE_ID: str
+    PDS_AFFILIATION: str
+    REGISTRATION_DATE: str
+    TELEPHONE_NUMBER: str
+    PDS_ADDRESS_BOOK_FLAG: Optional[str]
+}
+
+class PersonnelElectronicMailModel {
+    ELECTRONIC_MAIL_ID: str
+    ELECTRONIC_MAIL_TYPE: str
+    PREFERENCE_ID: Optional[str]
+}
+
+class PersonnelModel {
+    PDS_USER_ID: str
+    PERSONNEL_ELECTRONIC_MAIL: PersonnelElectronicMailModel
+    PERSONNEL_INFORMATION: PersonnelInformationModel
+}
+
+class PersonnelsModel {
+    PERSONNELS: List[PersonnelModel]
+}
+
+PersonnelsModel --&gt; PersonnelElectronicMailModel
+PersonnelsModel --&gt; PersonnelInformationModel
+PersonnelsModel --&gt; PersonnelModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-55a7fd38a7846d6b660df5ce82b5b0d804ba699d.png" alt="class CatalogModel {
+    DATA_SET_CATALOG: Optional[Union[str, List[str]]]
+    INSTRUMENT_CATALOG: Optional[str]
+    INSTRUMENT_HOST_CATALOG: Optional[str]
+    MISSION_CATALOG: Optional[str]
+    LOGICAL_VOLUME_PATHNAME: Optional[str]
+    LOGICAL_VOLUMES: Optional[str]
+    DATA_SET_ID: Optional[str]
+    DATA_SET_COLLECTION_CATALOG: Optional[str]
+    PERSONNEL_CATALOG: Optional[str]
+    REFERENCE_CATALOG: Optional[str]
+    TARGET_CATALOG: Optional[str]
+}
+
+class DataProducerModel {
+    INSTITUTION_NAME: str
+    FACILITY_NAME: str
+    FULL_NAME: str
+    ADDRESS_TEXT: str
+    DISCIPLINE_NAME: Optional[str]
+    NODE_NAME: Optional[str] = field(default=None, repr=False, compare=False)
+    TELEPHONE_NUMBER: Optional[str]
+    ELECTRONIC_MAIL_TYPE: Optional[str]
+    ELECTRONIC_MAIL_ID: Optional[str]
+}
+
+class FileModel {
+    RECORD_TYPE: str
+    DESCRIPTION: Optional[str]
+    ENCODING_TYPE: Optional[str]
+    FILE_NAME: Optional[str]
+    FILE_RECORDS: Optional[str]
+    INTERCHANGE_FORMAT: Optional[str]
+    LABEL_RECORDS: Optional[str]
+    RECORD_BYTES: Optional[str]
+    REQUIRED_STORAGE_BYTES: Optional[str]
+    SEQUENCE_NUMBER: Optional[str]
+    UNCOMPRESSED_FILE_NAME: Optional[str]
+}
+
+class DirectoryModel {
+    NAME: str
+    FILE: List[FileModel]
+    RECORD_TYPE: Optional[str]
+    SEQUENCE_NUMBER: Optional[str]
+}
+
+class DataSupplierModel {
+    INSTITUTION_NAME: str
+    FACILITY_NAME: str
+    FULL_NAME: str
+    ADDRESS_TEXT: str
+    TELEPHONE_NUMBER: str
+    ELECTRONIC_MAIL_TYPE: str
+    ELECTRONIC_MAIL_ID: str
+    DISCIPLINE_NAME: Optional[str]
+    NODE_NAME: Optional[str]
+}
+
+class VolumeModel {
+    DATA_SET_ID: str
+    DESCRIPTION: str
+    MEDIUM_TYPE: str
+    PUBLICATION_DATE: str
+    VOLUME_FORMAT: str
+    VOLUME_ID: str
+    VOLUME_NAME: str
+    VOLUME_SERIES_NAME: str
+    VOLUME_SET_NAME: str
+    VOLUME_SET_ID: str
+    VOLUME_VERSION_ID: str
+    VOLUMES: str
+    CATALOG: CatalogModel
+    DATA_PRODUCER: DataProducerModel
+    DIRECTORY: Optional[DirectoryModel]
+    FILE: Optional[FileModel]
+    DATA_SUPPLIER: Optional[DataSupplierModel]
+    BLOCK_BYTES: Optional[str]
+    DATA_SET_COLLECTION_ID: Optional[str]
+    FILES: Optional[str]
+    HARDWARE_MODEL_ID: Optional[str]
+    LOGICAL_VOLUMES: Optional[str]
+    LOGICAL_VOLUME_PATH_NAME: Optional[str]
+    MEDIUM_FORMAT: Optional[str]
+    NOTE: Optional[str]
+    OPERATING_SYSTEM_ID
+    PRODUCT_TYPE: Optional[str]
+    TRANSFER_COMMAND_TEXT: Optional[str]
+    VOLUME_INSERT_TEXT: Optional[str]
+}
+
+VolumeModel --&gt; CatalogModel
+VolumeModel --&gt; DataProducerModel
+VolumeModel --&gt; DirectoryModel
+VolumeModel --&gt; FileModel
+VolumeModel --&gt; DataSupplierModel"/>
+</p>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pds_crawler.models.pds_models.</span></span><span class="sig-name descname"><span class="pre">ReferenceModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">REFERENCE_KEY_ID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">REFERENCE_DESC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/models/pds_models.html#ReferenceModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
