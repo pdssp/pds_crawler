@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+g1246389 documentation</title>
+    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+gb8d7a51 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g1246389</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gb8d7a51</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -287,7 +287,10 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="StacRecordsTransformer._create_items_stac"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer._create_items_stac">[docs]</a>    <span class="k">def</span> <span class="nf">_create_items_stac</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_records</span><span class="p">:</span> <span class="n">PdsRecordsWs</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_records</span><span class="p">:</span> <span class="n">PdsRecordsWs</span><span class="p">,</span>
+        <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">ItemCollection</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates a collection of STAC items of records from a PDS collection.</span>
 
@@ -296,19 +299,23 @@
 <span class="sd">        Args:</span>
 <span class="sd">            pds_records (PdsRecordsWs): Object that handle Records</span>
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collection data</span>
+<span class="sd">            progress_bar (bool, optional) : Set progress bar. Defaults to True</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            pystac.ItemCollection: Collection of items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">create_items</span><span class="p">(</span>
-            <span class="n">pages</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">PdsRecordsModel</span><span class="p">],</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span>
+            <span class="n">pages</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">PdsRecordsModel</span><span class="p">],</span>
+            <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">]:</span>
             <span class="sd">&quot;&quot;&quot;Creates items</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                pages (Iterator[PdsRecordsModel]): the different pages of the web service response</span>
 <span class="sd">                pds_collection (PdsRegistryModel): information about the collection</span>
+<span class="sd">                progress_bar (bool, optional) : Set progress bar. Defaults to True</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                Iterable[pystac.Item]: Items</span>
@@ -323,6 +330,7 @@
                     <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">pds_records_model</span><span class="p">),</span>
                     <span class="n">position</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                     <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
                 <span class="p">):</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">item_exists</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
                         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
@@ -337,7 +345,9 @@
         <span class="n">pages</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span>
             <span class="n">PdsRecordsModel</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">pds_records</span><span class="o">.</span><span class="n">parse_pds_collection_from_cache</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">pystac</span><span class="o">.</span><span class="n">ItemCollection</span><span class="p">(</span><span class="n">create_items</span><span class="p">(</span><span class="n">pages</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">pystac</span><span class="o">.</span><span class="n">ItemCollection</span><span class="p">(</span>
+            <span class="n">create_items</span><span class="p">(</span><span class="n">pages</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="StacRecordsTransformer._is_exist"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer._is_exist">[docs]</a>    <span class="k">def</span> <span class="nf">_is_exist</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">catlog_or_collection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">]</span>
@@ -356,23 +366,28 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pds_records</span><span class="p">:</span> <span class="n">PdsRecordsWs</span><span class="p">,</span>
         <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create STAC catalogs with its children for all collections.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_records (PdsRecordsWs): Web service that handles the query to get the responses for a given collection</span>
 <span class="sd">            pds_collections (List[PdsRegistryModel]): All PDS collections data</span>
+<span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">pds_collections</span><span class="p">,</span>
             <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing collection&quot;</span><span class="p">,</span>
             <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">),</span>
             <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="n">tqdm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing the collection </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># Create items</span>
-            <span class="n">items_stac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_items_stac</span><span class="p">(</span><span class="n">pds_records</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">)</span>
+            <span class="n">items_stac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_items_stac</span><span class="p">(</span>
+                <span class="n">pds_records</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">tqdm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;No new item, skip the STAC catalogs creation&quot;</span><span class="p">)</span>
                 <span class="k">continue</span>

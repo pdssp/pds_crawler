@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.extractor.pds_ode_ws &#8212; pds-crawler 0.1.dev1+g1246389 documentation</title>
+    <title>pds_crawler.extractor.pds_ode_ws &#8212; pds-crawler 0.1.dev1+gb8d7a51 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g1246389</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gb8d7a51</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -489,8 +489,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__database</span> <span class="o">=</span> <span class="n">database</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__report</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__report</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__nb_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__report</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Database</span><span class="p">:</span>
@@ -500,19 +499,6 @@
 <span class="sd">            Database: database</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__database</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nb_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the number of workers</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: number of workers</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nb_workers</span>
-
-    <span class="nd">@nb_workers</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">nb_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__nb_workers</span> <span class="o">=</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="PdsRecordsWs._build_request_params"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs._build_request_params">[docs]</a>    <span class="k">def</span> <span class="nf">_build_request_params</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -655,14 +641,22 @@
             <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsRecordsWs.download_pds_records_for_one_collection"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.download_pds_records_for_one_collection">[docs]</a>    <span class="k">def</span> <span class="nf">download_pds_records_for_one_collection</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">nb_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">time_sleep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Download records for a given PDS collection based on the set of</span>
 <span class="sd">        URLs loaded from the database.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
-<span class="sd">            limit (Optional[int], optional): _description_. Defaults to None.</span>
+<span class="sd">            limit (int, optional): _description_. Defaults to None.</span>
+<span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
+<span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
+<span class="sd">            progress_bar (False, optional): Set progress_bar. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">load_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -680,26 +674,46 @@
         <span class="p">)</span>
 
         <span class="c1"># Download files in the storage</span>
-        <span class="n">file_storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="n">time_sleep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nb_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_workers</span><span class="p">)</span></div>
+        <span class="n">file_storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span>
+            <span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">,</span>
+            <span class="n">time_sleep</span><span class="o">=</span><span class="n">time_sleep</span><span class="p">,</span>
+            <span class="n">nb_workers</span><span class="o">=</span><span class="n">nb_workers</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsRecordsWs.download_pds_records_for_all_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.download_pds_records_for_all_collections">[docs]</a>    <span class="k">def</span> <span class="nf">download_pds_records_for_all_collections</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span>
         <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">nb_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">time_sleep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Download PDS records for all collections</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collections (List[PdsRegistryModel]): _description_</span>
 <span class="sd">            limit (Optional[int], optional): _description_. Defaults to None.</span>
+<span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
+<span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
+<span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
-            <span class="n">pds_collections</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Getting collections&quot;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">pds_collections</span><span class="p">,</span>
+            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Getting collections&quot;</span><span class="p">,</span>
+            <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
         <span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">download_pds_records_for_one_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">download_pds_records_for_one_collection</span><span class="p">(</span>
+                <span class="n">pds_collection</span><span class="p">,</span>
+                <span class="n">limit</span><span class="p">,</span>
+                <span class="n">nb_workers</span><span class="o">=</span><span class="n">nb_workers</span><span class="p">,</span>
+                <span class="n">time_sleep</span><span class="o">=</span><span class="n">time_sleep</span><span class="p">,</span>
+                <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsRecordsWs.parse_pds_collection_from_cache"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.parse_pds_collection_from_cache">[docs]</a>    <span class="k">def</span> <span class="nf">parse_pds_collection_from_cache</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">disable_tqdm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">PdsRecordsModel</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Parses the PDS records from cache.</span>
 
@@ -715,7 +729,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collection of the registry</span>
-<span class="sd">            disable_tqdm (bool, optional): use tqdm. Defaults to False.</span>
+<span class="sd">            progress_bar (bool, optional): use progress bar. Defaults to True.</span>
 
 <span class="sd">        Yields:</span>
 <span class="sd">            Iterator[PdsRecordsModel]: Iterator on the list of records_</span>
@@ -737,7 +751,7 @@
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">collection_storage</span><span class="o">.</span><span class="n">list_records_files</span><span class="p">(),</span>
             <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Downloaded responses from the collection&quot;</span><span class="p">,</span>
-            <span class="n">disable</span><span class="o">=</span><span class="n">disable_tqdm</span><span class="p">,</span>
+            <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
             <span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
