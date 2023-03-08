@@ -40,7 +40,9 @@ class Crawler:
             level (str): level name
         """
         pds_crawler_logger = logging.getLogger("pds_crawler")
-        if level == "INFO":
+        if level == "NOTSET":
+            pds_crawler_logger.setLevel(logging.NOTSET)
+        elif level == "INFO":
             pds_crawler_logger.setLevel(logging.INFO)
         elif level == "DEBUG":
             pds_crawler_logger.setLevel(logging.DEBUG)
@@ -52,7 +54,7 @@ class Crawler:
             pds_crawler_logger.setLevel(logging.CRITICAL)
         else:
             pds_crawler_logger.warning(
-                "Unknown level name : %s - setting level to INFO", level
+                f"Unknown level name : {level} - setting level to INFO"
             )
             logger.setLevel(logging.INFO)
 
@@ -60,6 +62,7 @@ class Crawler:
         database_name = self.options_cli.database
         logger.info(f"Using {database_name} as database")
         etl = StacETL(database_name)
+        etl.progress_bar = self.options_cli.progress_bar
 
         if hasattr(self.options_cli, "type_stac"):
             enum = PdsDataEnum.find_enum(self.options_cli.type_stac)
@@ -73,7 +76,7 @@ class Crawler:
                 etl.dataset_id = self.options_cli.dataset_id
 
             if self.options_cli.nb_workers:
-                etl.pds_records.nb_workers = int(self.options_cli.nb_workers)
+                etl.nb_workers = int(self.options_cli.nb_workers)
 
             enum = PdsSourceEnum.find_enum(self.options_cli.type_extract)
             etl.extract(source=enum)

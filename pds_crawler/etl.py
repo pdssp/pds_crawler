@@ -185,6 +185,9 @@ class StacETL(ETL):
         self.__planet: Optional[str] = None
 
         self.__dataset_id: Optional[str] = None
+        self.__nb_workers: int = 3
+        self.__time_sleep: int = 1
+        self.__progress_bar: bool = True
 
     @property
     def report(self) -> CrawlerReport:
@@ -229,6 +232,30 @@ class StacETL(ETL):
     @dataset_id.setter
     def dataset_id(self, value: str):
         self.__dataset_id = value
+
+    @property
+    def nb_workers(self) -> int:
+        return self.__nb_workers
+
+    @nb_workers.setter
+    def nb_workers(self, value: int):
+        self.__nb_workers = value
+
+    @property
+    def time_sleep(self) -> int:
+        return self.__time_sleep
+
+    @time_sleep.setter
+    def time_sleep(self, value: int):
+        self.__time_sleep = value
+
+    @property
+    def progress_bar(self) -> bool:
+        return self.__progress_bar
+
+    @progress_bar.setter
+    def progress_bar(self, value: bool):
+        self.__progress_bar = value
 
     @UtilsMonitoring.timeit
     def extract(self, source: PdsSourceEnum, *args, **kwargs):
@@ -275,7 +302,8 @@ class StacETL(ETL):
                     pds_collections
                 )
                 self.pds_records.download_pds_records_for_all_collections(
-                    pds_collections
+                    pds_collections=pds_collections,
+                    progress_bar=self.progress_bar,
                 )
             case PdsSourceEnum.PDS_CATALOGS:
                 pds_collections: List[
@@ -283,7 +311,12 @@ class StacETL(ETL):
                 ] = self.pds_registry.load_pds_collections_from_cache(
                     self.planet, self.dataset_id
                 )
-                self.pds_ode_catalogs.download(pds_collections)
+                self.pds_ode_catalogs.download(
+                    pds_collections=pds_collections,
+                    nb_workers=self.nb_workers,
+                    time_sleep=self.time_sleep,
+                    progress_bar=self.progress_bar,
+                )
             case _:
                 raise NotImplementedError(
                     f"Extraction is not implemented for {source}"

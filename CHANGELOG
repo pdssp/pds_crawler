@@ -1,4 +1,14 @@
-### Fix bug in packaging (HEAD -> main)
+### Add progress_bar as option (HEAD -> main)
+>Wed, 8 Mar 2023 01:46:05 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Fix bug in packaging (origin/main)
 >Tue, 28 Feb 2023 13:30:23 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Change make to make user to install the package in the local directory (origin/main)
+### Change make to make user to install the package in the local directory
 >Tue, 28 Feb 2023 12:27:17 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

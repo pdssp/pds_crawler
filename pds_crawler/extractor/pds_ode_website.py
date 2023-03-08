@@ -33,6 +33,7 @@ from typing import cast
 from typing import Dict
 from typing import Iterator
 from typing import List
+from typing import Optional
 from typing import Union
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
@@ -647,7 +648,7 @@ class PDSCatalogDescription(Observable):
             PdsRecordsModel
         ] = self.pds_records.parse_pds_collection_from_cache(
             pds_collection,
-            disable_tqdm=True,
+            progress_bar=True,
         )
         try:
             records: PdsRecordsModel = next(records_iter)
@@ -801,7 +802,13 @@ class PDSCatalogsDescription(Observable):
             urls_list.append(self.pds_object_cats.volume_desc_url)
         return urls_list
 
-    def download(self, pds_collections: List[PdsRegistryModel]):
+    def download(
+        self,
+        pds_collections: List[PdsRegistryModel],
+        nb_workers: int = 3,
+        time_sleep: int = 1,
+        progress_bar: bool = True,
+    ):
         """Downloads the PDS objects for the collections of space missions.
 
         This method is responsible for downloading the PDS objects for the given
@@ -814,6 +821,9 @@ class PDSCatalogsDescription(Observable):
 
         Args:
             pds_collections (List[PdsRegistryModel]): the collections of space missions
+            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.
+            time_sleep (int, optional): Time to way between two download series. Defaults to 1.
+            progress_bar (int, True): Set progress_bar. Defaults to True.
         """
         for pds_collection in pds_collections:
             urls_list: List[str] = self._build_all_urls(pds_collection)
@@ -823,7 +833,13 @@ class PDSCatalogsDescription(Observable):
                         pds_collection
                     )
                 )
-                file_storage.download(urls_list, timeout=5)
+                file_storage.download(
+                    urls=urls_list,
+                    nb_workers=nb_workers,
+                    timeout=5,
+                    time_sleep=time_sleep,
+                    progress_bar=progress_bar,
+                )
             except UnexpectedCharacters as err:
                 logger.exception(f"[ParserError]: {err}")
             except ConnectionError as err:

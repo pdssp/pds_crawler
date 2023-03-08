@@ -166,6 +166,7 @@ def parallel_requests(
     nb_workers: int = 3,
     timeout=180,
     time_sleep=2,
+    progress_bar=False,
 ):
     def scrape(url):
         start = time.time()
@@ -189,7 +190,12 @@ def parallel_requests(
     if not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
-    pbar = tqdm(total=len(urls), desc="Downloading data", position=1)
+    pbar = tqdm(
+        total=len(urls),
+        desc="Downloading data",
+        position=1,
+        disable=not progress_bar,
+    )
 
     with concurrent.futures.ThreadPoolExecutor(
         max_workers=nb_workers

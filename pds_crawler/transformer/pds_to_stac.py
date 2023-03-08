@@ -114,7 +114,10 @@ class StacRecordsTransformer(StacTransformer):
         )
 
     def _create_items_stac(
-        self, pds_records: PdsRecordsWs, pds_collection: PdsRegistryModel
+        self,
+        pds_records: PdsRecordsWs,
+        pds_collection: PdsRegistryModel,
+        progress_bar: bool = True,
     ) -> pystac.ItemCollection:
         """Creates a collection of STAC items of records from a PDS collection.
 
@@ -123,19 +126,23 @@ class StacRecordsTransformer(StacTransformer):
         Args:
             pds_records (PdsRecordsWs): Object that handle Records
             pds_collection (PdsRegistryModel): PDS collection data
+            progress_bar (bool, optional) : Set progress bar. Defaults to True
 
         Returns:
             pystac.ItemCollection: Collection of items
         """
 
         def create_items(
-            pages: Iterator[PdsRecordsModel], pds_collection: PdsRegistryModel
+            pages: Iterator[PdsRecordsModel],
+            pds_collection: PdsRegistryModel,
+            progress_bar: bool = True,
         ) -> Iterable[pystac.Item]:
             """Creates items
 
             Args:
                 pages (Iterator[PdsRecordsModel]): the different pages of the web service response
                 pds_collection (PdsRegistryModel): information about the collection
+                progress_bar (bool, optional) : Set progress bar. Defaults to True
 
             Returns:
                 Iterable[pystac.Item]: Items
@@ -150,6 +157,7 @@ class StacRecordsTransformer(StacTransformer):
                     total=len(page.pds_records_model),
                     position=2,
                     leave=False,
+                    disable=not progress_bar,
                 ):
                     if self.database.stac_storage.item_exists(record):
                         logger.warning(
@@ -164,7 +172,9 @@ class StacRecordsTransformer(StacTransformer):
         pages: Iterator[
             PdsRecordsModel
         ] = pds_records.parse_pds_collection_from_cache(pds_collection)
-        return pystac.ItemCollection(create_items(pages, pds_collection))
+        return pystac.ItemCollection(
+            create_items(pages, pds_collection, progress_bar=progress_bar)
+        )
 
     def _is_exist(
         self, catlog_or_collection: Union[pystac.Catalog, pystac.Collection]
@@ -183,23 +193,28 @@ class StacRecordsTransformer(StacTransformer):
         self,
         pds_records: PdsRecordsWs,
         pds_collections: List[PdsRegistryModel],
+        progress_bar: bool = True,
     ):
         """Create STAC catalogs with its children for all collections.
 
         Args:
             pds_records (PdsRecordsWs): Web service that handles the query to get the responses for a given collection
             pds_collections (List[PdsRegistryModel]): All PDS collections data
+            progress_bar (bool, optional): Set progress bar. Defaults to True
         """
         for pds_collection in tqdm(
             pds_collections,
             desc="Processing collection",
             total=len(pds_collections),
             position=0,
+            disable=not progress_bar,
         ):
             tqdm.write(f"Processing the collection {pds_collection}")
 
             # Create items
-            items_stac = self._create_items_stac(pds_records, pds_collection)
+            items_stac = self._create_items_stac(
+                pds_records, pds_collection, progress_bar=progress_bar
+            )
             if len(items_stac.items) == 0:
                 tqdm.write("No new item, skip the STAC catalogs creation")
                 continue

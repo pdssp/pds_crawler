@@ -317,7 +317,6 @@ class PdsRecordsWs(Observable):
         if kwargs.get("report"):
             self.__report = kwargs.get("report")
             self.subscribe(self.__report)
-        self.__nb_workers: int = 3
 
     @property
     def database(self) -> Database:
@@ -327,19 +326,6 @@ class PdsRecordsWs(Observable):
             Database: database
         """
         return self.__database
-
-    @property
-    def nb_workers(self) -> int:
-        """Returns the number of workers
-
-        Returns:
-            int: number of workers
-        """
-        return self.__nb_workers
-
-    @nb_workers.setter
-    def nb_workers(self, value: int):
-        self.__nb_workers = value
 
     def _build_request_params(
         self,
@@ -482,14 +468,22 @@ class PdsRecordsWs(Observable):
             )
 
     def download_pds_records_for_one_collection(
-        self, pds_collection: PdsRegistryModel, limit: Optional[int] = None
+        self,
+        pds_collection: PdsRegistryModel,
+        limit: Optional[int] = None,
+        nb_workers: int = 3,
+        time_sleep: int = 1,
+        progress_bar: bool = True,
     ):
         """Download records for a given PDS collection based on the set of
         URLs loaded from the database.
 
         Args:
             pds_collection (PdsRegistryModel): PDS collection
-            limit (Optional[int], optional): _description_. Defaults to None.
+            limit (int, optional): _description_. Defaults to None.
+            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.
+            time_sleep (int, optional): Time to way between two download series. Defaults to 1.
+            progress_bar (False, optional): Set progress_bar. Defaults to True.
         """
         urls: List[str] = self.database.hdf5_storage.load_urls(pds_collection)
         if len(urls) == 0:
@@ -507,26 +501,46 @@ class PdsRecordsWs(Observable):
         )
 
         # Download files in the storage
-        file_storage.download(urls, time_sleep=1, nb_workers=self.nb_workers)
+        file_storage.download(
+            urls=urls,
+            time_sleep=time_sleep,
+            nb_workers=nb_workers,
+            progress_bar=progress_bar,
+        )
 
     def download_pds_records_for_all_collections(
         self,
         pds_collections: List[PdsRegistryModel],
         limit: Optional[int] = None,
+        nb_workers: int = 3,
+        time_sleep: int = 1,
+        progress_bar: bool = True,
     ):
         """Download PDS records for all collections
 
         Args:
             pds_collections (List[PdsRegistryModel]): _description_
             limit (Optional[int], optional): _description_. Defaults to None.
+            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.
+            time_sleep (int, optional): Time to way between two download series. Defaults to 1.
+            progress_bar (bool, optional): Set progress bar. Defaults to True.
         """
         for pds_collection in tqdm(
-            pds_collections, desc="Getting collections", position=0
+            pds_collections,
+            desc="Getting collections",
+            position=0,
+            disable=not progress_bar,
         ):
-            self.download_pds_records_for_one_collection(pds_collection, limit)
+            self.download_pds_records_for_one_collection(
+                pds_collection,
+                limit,
+                nb_workers=nb_workers,
+                time_sleep=time_sleep,
+                progress_bar=progress_bar,
+            )
 
     def parse_pds_collection_from_cache(
-        self, pds_collection: PdsRegistryModel, disable_tqdm: bool = False
+        self, pds_collection: PdsRegistryModel, progress_bar: bool = True
     ) -> Iterator[PdsRecordsModel]:
         """Parses the PDS records from cache.
 
@@ -542,7 +556,7 @@ class PdsRecordsWs(Observable):
 
         Args:
             pds_collection (PdsRegistryModel): PDS collection of the registry
-            disable_tqdm (bool, optional): use tqdm. Defaults to False.
+            progress_bar (bool, optional): use progress bar. Defaults to True.
 
         Yields:
             Iterator[PdsRecordsModel]: Iterator on the list of records_
@@ -564,7 +578,7 @@ class PdsRecordsWs(Observable):
         for file in tqdm(
             collection_storage.list_records_files(),
             desc="Downloaded responses from the collection",
-            disable=disable_tqdm,
+            disable=not progress_bar,
             position=1,
             leave=False,
         ):

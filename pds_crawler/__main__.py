@@ -182,6 +182,7 @@ def parse_cli() -> argparse.Namespace:
     parser.add_argument(
         "--level",
         choices=[
+            "NOTSET",
             "INFO",
             "DEBUG",
             "WARNING",
@@ -190,6 +191,13 @@ def parse_cli() -> argparse.Namespace:
         ],
         default="INFO",
         help="set Level log (default: %(default)s)",
+    )
+
+    parser.add_argument(
+        "--progress_bar",
+        type=str2bool,
+        default=True,
+        help="set progress_bar (default: %(default)s)",
     )
 
     parser.add_argument(

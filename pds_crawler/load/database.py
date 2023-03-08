@@ -385,6 +385,7 @@ class PdsCollectionStorage:
         nb_workers: int = 3,
         timeout: int = 180,
         time_sleep: int = 1,
+        progress_bar: bool = True,
     ):
         """Download URLs in parallel in the collection storage.
 
@@ -393,6 +394,7 @@ class PdsCollectionStorage:
             nb_workers (int, optional): nb workers. Defaults to 3.
             timeout (int, optional): timeout in seconds. Defaults to 180
             time_sleep (int, optional): sleep. Defaults to 1.
+            progress_bar (bool, optional): Set progress_bar. Defaults to True.
         """
         parallel_requests(
             self.directory,
@@ -400,6 +402,7 @@ class PdsCollectionStorage:
             nb_workers=nb_workers,
             timeout=timeout,
             time_sleep=time_sleep,
+            progress_bar=progress_bar,
         )
 
     def __repr__(self) -> str:

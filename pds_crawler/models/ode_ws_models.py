@@ -1264,7 +1264,7 @@ class PdsRecordsModel(AbstractModel):
         return result
 
     def to_stac_item_iter(
-        self, pds_registry: PdsRegistryModel
+        self, pds_registry: PdsRegistryModel, progress_bar: bool = True
     ) -> Iterator[pystac.Item]:
         for pds_record_model in tqdm(
             self.pds_records_model,
@@ -1272,6 +1272,7 @@ class PdsRecordsModel(AbstractModel):
             total=len(self.pds_records_model),
             position=2,
             leave=False,
+            disable=not progress_bar,
         ):
             yield pds_record_model.to_stac_item(pds_registry)
 
