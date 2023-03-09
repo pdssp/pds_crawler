@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+gb8d7a51 documentation</title>
+    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+gf390c02 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gb8d7a51</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gf390c02</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -258,7 +258,7 @@
 <span class="sd">        - _read_and_convert_attributes(node:Any):Dict[str,Any]</span>
 <span class="sd">        + save_collection(pds_collection:PdsRegistryModel): bool</span>
 <span class="sd">        + save_collections(collections_pds:List[PdsRegistryModel]): bool</span>
-<span class="sd">        + load_collections(planet:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]</span>
+<span class="sd">        + load_collections(body:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]</span>
 <span class="sd">    }</span>
 
 <span class="sd">    class StacStorage {</span>
@@ -399,7 +399,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
-            <span class="n">record</span><span class="o">.</span><span class="n">get_planet_id</span><span class="p">(),</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_body_id</span><span class="p">(),</span>
             <span class="n">record</span><span class="o">.</span><span class="n">get_mission_id</span><span class="p">(),</span>
             <span class="n">record</span><span class="o">.</span><span class="n">get_plateform_id</span><span class="p">(),</span>
             <span class="n">record</span><span class="o">.</span><span class="n">get_instrument_id</span><span class="p">(),</span>
@@ -759,12 +759,12 @@
 
 <div class="viewcode-block" id="Hdf5Storage.load_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.load_collections">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">load_collections</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">planet</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Load all collections metadata from the database.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            planet (Optional[str]): name of the planet to get. Defaults to None</span>
+<span class="sd">            body (Optional[str]): name of the body to get. Defaults to None</span>
 <span class="sd">            dataset_id (Optional[str]): Dataset ID , used to filtr the collection. Defaults to None</span>
 
 <span class="sd">        Returns:</span>
@@ -780,12 +780,12 @@
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">visititems</span><span class="p">(</span><span class="n">extract_attributes</span><span class="p">)</span>
 
-        <span class="c1"># filter pds_collection by planet name</span>
+        <span class="c1"># filter pds_collection by body name</span>
         <span class="n">pds_registry_models</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">pds_registry_model</span>
             <span class="k">for</span> <span class="n">pds_registry_model</span> <span class="ow">in</span> <span class="n">pds_collections</span>
-            <span class="k">if</span> <span class="n">planet</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="ow">or</span> <span class="n">pds_registry_model</span><span class="o">.</span><span class="n">get_planet</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">planet</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">body</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">pds_registry_model</span><span class="o">.</span><span class="n">get_body</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">body</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
         <span class="p">]</span>
 
         <span class="c1"># filter pds_collections by dataset ID</span>

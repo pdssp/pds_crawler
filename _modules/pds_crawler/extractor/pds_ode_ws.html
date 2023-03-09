@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.extractor.pds_ode_ws &#8212; pds-crawler 0.1.dev1+gb8d7a51 documentation</title>
+    <title>pds_crawler.extractor.pds_ode_ws &#8212; pds-crawler 0.1.dev1+gf390c02 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gb8d7a51</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gf390c02</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -234,7 +234,7 @@
 <span class="sd">            - build_params(target: str = None) Dict[str, str]</span>
 <span class="sd">            - get_response(params: Dict[str, str]) str</span>
 <span class="sd">            - parse_response_collection(response: str) Tuple[Dict[str, int], List[PdsRegistryModel]]</span>
-<span class="sd">            + get_pds_collections(planet: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]</span>
+<span class="sd">            + get_pds_collections(body: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]</span>
 <span class="sd">            + cache_pds_collections(pds_collections: List[PdsRegistryModel])</span>
 <span class="sd">            + load_pds_collections_from_cache() List[PdsRegistryModel]</span>
 <span class="sd">            + query_cache(dataset_id: str) Optional[PdsRegistryModel]</span>
@@ -362,22 +362,22 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">pds_collections</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsRegistry.get_pds_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.get_pds_collections">[docs]</a>    <span class="k">def</span> <span class="nf">get_pds_collections</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">planet</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Retrieve a list of Planetary Data System (PDS) data collections</span>
 <span class="sd">        from the PDS ODE (Outer Planets Data Exploration) web service.</span>
 
-<span class="sd">        The method takes an optional planet argument that specifies the name</span>
-<span class="sd">        of the planet for which to retrieve collections. If no argument is</span>
-<span class="sd">        provided, the method retrieves collections for all planets.</span>
+<span class="sd">        The method takes an optional body argument that specifies the name</span>
+<span class="sd">        of the body for which to retrieve collections. If no argument is</span>
+<span class="sd">        provided, the method retrieves collections for all bodys.</span>
 <span class="sd">        The method sends an HTTP request to the PDS ODE web service with the</span>
-<span class="sd">        appropriate parameters constructed from the planet argument and</span>
+<span class="sd">        appropriate parameters constructed from the body argument and</span>
 <span class="sd">        parses the JSON response to extract the data collections.</span>
 <span class="sd">        It then returns a tuple containing a dictionary of statistics and</span>
 <span class="sd">        a list of PdsRegistryModel objects representing the data collections.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            planet (str, optional): planet. Defaults to None.</span>
+<span class="sd">            body (str, optional): body. Defaults to None.</span>
 <span class="sd">            dataset_id (str, optional): dataset ID. Defaults to None.</span>
 
 <span class="sd">        Returns:</span>
@@ -385,7 +385,7 @@
 <span class="sd">            tatistics and a list of PdsRegistryModel objects representing the</span>
 <span class="sd">            data collections</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">request_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_request_params</span><span class="p">(</span><span class="n">planet</span><span class="p">)</span>
+        <span class="n">request_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_request_params</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
         <span class="n">response</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_response</span><span class="p">(</span><span class="n">request_params</span><span class="p">)</span>
         <span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_collection_response</span><span class="p">(</span>
             <span class="n">response</span><span class="p">,</span> <span class="n">dataset_id</span>
@@ -412,19 +412,19 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[PdsRegistry] No new collection to process&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsRegistry.load_pds_collections_from_cache"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.load_pds_collections_from_cache">[docs]</a>    <span class="k">def</span> <span class="nf">load_pds_collections_from_cache</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">planet</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Loads the PDS collections information from the cache by loading</span>
 <span class="sd">        the information from the database.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            planet (Optional[str], optional): name of the planet to get. Defaults to None.</span>
+<span class="sd">            body (Optional[str], optional): name of the body to get. Defaults to None.</span>
 <span class="sd">            dataset_id (Optional[str], optional): Dataset ID parameter, used to filter the collection. Defaults to None.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[PdsRegistryModel]: the PDS collections information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">load_collections</span><span class="p">(</span><span class="n">planet</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">load_collections</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsRegistry.query_cache"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.query_cache">[docs]</a>    <span class="k">def</span> <span class="nf">query_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Query a local cache of PDS data collections for a specific</span>
@@ -512,7 +512,7 @@
         <span class="sd">&quot;&quot;&quot;Builds the query parameters.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            target (str): planet</span>
+<span class="sd">            target (str): body</span>
 <span class="sd">            ihid (str): plateforme</span>
 <span class="sd">            iid (str): instrument</span>
 <span class="sd">            pt (str): product type</span>
@@ -548,7 +548,7 @@
         <span class="sd">&quot;&quot;&quot;Generates all pagination parameters</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            target (str): planet</span>
+<span class="sd">            target (str): body</span>
 <span class="sd">            ihid (str): plateform</span>
 <span class="sd">            iid (str): instrument</span>
 <span class="sd">            pt (str): product type</span>
@@ -653,7 +653,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
-<span class="sd">            limit (int, optional): _description_. Defaults to None.</span>
+<span class="sd">            limit (int, optional): Number of pages. Defaults to None.</span>
 <span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
 <span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
 <span class="sd">            progress_bar (False, optional): Set progress_bar. Defaults to True.</span>
@@ -693,7 +693,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collections (List[PdsRegistryModel]): _description_</span>
-<span class="sd">            limit (Optional[int], optional): _description_. Defaults to None.</span>
+<span class="sd">            limit (Optional[int], optional): Number of pages. Defaults to None.</span>
 <span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
 <span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
 <span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True.</span>

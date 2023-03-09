@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.models.ode_ws_models &#8212; pds-crawler 0.1.dev1+gb8d7a51 documentation</title>
+    <title>pds_crawler.models.ode_ws_models &#8212; pds-crawler 0.1.dev1+gf390c02 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gb8d7a51</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gf390c02</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -420,12 +420,12 @@
     <span class="k">def</span> <span class="nf">get_mission</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">IHName</span>
 
-    <span class="k">def</span> <span class="nf">get_planet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">planet</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">planet</span>
+    <span class="k">def</span> <span class="nf">get_body</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">body</span>
 
-    <span class="k">def</span> <span class="nf">get_planet_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;urn:pdssp:pds:planet:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_planet</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">def</span> <span class="nf">get_body_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;urn:pdssp:pds:body:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_body</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">get_range_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">RangeSummary</span><span class="p">]:</span>
         <span class="nb">range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">RangeSummary</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -566,7 +566,7 @@
             <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_mission_id</span><span class="p">(),</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_mission</span><span class="p">(),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">create_stac_planet_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">create_stac_body_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">:</span>
         <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
             <span class="k">case</span> <span class="s2">&quot;VENUS&quot;</span><span class="p">:</span>
@@ -579,16 +579,16 @@
                 <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/opo9914d.jpg&quot;</span>
             <span class="k">case</span> <span class="k">_</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">PlanetNotFound</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unexpected planet to parse : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unexpected body to parse : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
         <span class="n">catalog</span> <span class="o">=</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_planet_id</span><span class="p">(),</span>
-            <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_planet</span><span class="p">(),</span>
+            <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_body_id</span><span class="p">(),</span>
+            <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_body</span><span class="p">(),</span>
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">stac_extensions</span><span class="o">=</span><span class="p">[</span>
                 <span class="s2">&quot;https://raw.githubusercontent.com/thareUSGS/ssys/main/json-schema/schema.json&quot;</span>
             <span class="p">],</span>
-            <span class="n">extra_fields</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ssys:targets&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_planet</span><span class="p">()]},</span>
+            <span class="n">extra_fields</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ssys:targets&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_body</span><span class="p">()]},</span>
         <span class="p">)</span>
         <span class="n">catalog</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
             <span class="n">pystac</span><span class="o">.</span><span class="n">Link</span><span class="p">(</span>
@@ -986,14 +986,12 @@
     <span class="k">def</span> <span class="nf">get_mission</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ihid</span>
 
-    <span class="k">def</span> <span class="nf">get_planet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">planet</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Target_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Target_name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">planet</span>
+    <span class="k">def</span> <span class="nf">get_body</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Target_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Target_name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">body</span>
 
-    <span class="k">def</span> <span class="nf">get_planet_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;urn:pdssp:pds:planet:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_planet</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">def</span> <span class="nf">get_body_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;urn:pdssp:pds:body:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_body</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">get_start_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">start_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1070,7 +1068,7 @@
 <span class="sd">            Dict[str, Any]: _description_</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mars</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_planet</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;Mars&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_body</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;Mars&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">mars</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Center_latitude</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No latitude for Mars : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ode_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
