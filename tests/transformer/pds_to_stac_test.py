@@ -41,7 +41,7 @@ def test_catalog_transformation():
     # Get the list of collections
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
+        body="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
     )
 
     # Download records from the collections
@@ -68,7 +68,7 @@ def test_collection_transformation():
     # Get the list of collections
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
+        body="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
     )
 
     # Download records from the collections

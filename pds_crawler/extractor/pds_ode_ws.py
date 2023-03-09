@@ -61,7 +61,7 @@ class PdsRegistry(Observable):
             - build_params(target: str = None) Dict[str, str]
             - get_response(params: Dict[str, str]) str
             - parse_response_collection(response: str) Tuple[Dict[str, int], List[PdsRegistryModel]]
-            + get_pds_collections(planet: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]
+            + get_pds_collections(body: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]
             + cache_pds_collections(pds_collections: List[PdsRegistryModel])
             + load_pds_collections_from_cache() List[PdsRegistryModel]
             + query_cache(dataset_id: str) Optional[PdsRegistryModel]
@@ -189,22 +189,22 @@ class PdsRegistry(Observable):
         return (stats, pds_collections)
 
     def get_pds_collections(
-        self, planet: Optional[str] = None, dataset_id: Optional[str] = None
+        self, body: Optional[str] = None, dataset_id: Optional[str] = None
     ) -> Tuple[Dict[str, int], List[PdsRegistryModel]]:
         """Retrieve a list of Planetary Data System (PDS) data collections
         from the PDS ODE (Outer Planets Data Exploration) web service.
 
-        The method takes an optional planet argument that specifies the name
-        of the planet for which to retrieve collections. If no argument is
-        provided, the method retrieves collections for all planets.
+        The method takes an optional body argument that specifies the name
+        of the body for which to retrieve collections. If no argument is
+        provided, the method retrieves collections for all bodys.
         The method sends an HTTP request to the PDS ODE web service with the
-        appropriate parameters constructed from the planet argument and
+        appropriate parameters constructed from the body argument and
         parses the JSON response to extract the data collections.
         It then returns a tuple containing a dictionary of statistics and
         a list of PdsRegistryModel objects representing the data collections.
 
         Args:
-            planet (str, optional): planet. Defaults to None.
+            body (str, optional): body. Defaults to None.
             dataset_id (str, optional): dataset ID. Defaults to None.
 
         Returns:
@@ -212,7 +212,7 @@ class PdsRegistry(Observable):
             tatistics and a list of PdsRegistryModel objects representing the
             data collections
         """
-        request_params: Dict[str, str] = self._build_request_params(planet)
+        request_params: Dict[str, str] = self._build_request_params(body)
         response: str = self._get_response(request_params)
         (stats, pds_collection) = self._parse_collection_response(
             response, dataset_id
@@ -239,19 +239,19 @@ class PdsRegistry(Observable):
             logger.info("[PdsRegistry] No new collection to process")
 
     def load_pds_collections_from_cache(
-        self, planet: Optional[str] = None, dataset_id: Optional[str] = None
+        self, body: Optional[str] = None, dataset_id: Optional[str] = None
     ) -> List[PdsRegistryModel]:
         """Loads the PDS collections information from the cache by loading
         the information from the database.
 
         Args:
-            planet (Optional[str], optional): name of the planet to get. Defaults to None.
+            body (Optional[str], optional): name of the body to get. Defaults to None.
             dataset_id (Optional[str], optional): Dataset ID parameter, used to filter the collection. Defaults to None.
 
         Returns:
             List[PdsRegistryModel]: the PDS collections information
         """
-        return self.database.hdf5_storage.load_collections(planet, dataset_id)
+        return self.database.hdf5_storage.load_collections(body, dataset_id)
 
     def query_cache(self, dataset_id: str) -> Optional[PdsRegistryModel]:
         """Query a local cache of PDS data collections for a specific
@@ -339,7 +339,7 @@ class PdsRecordsWs(Observable):
         """Builds the query parameters.
 
         Args:
-            target (str): planet
+            target (str): body
             ihid (str): plateforme
             iid (str): instrument
             pt (str): product type
@@ -375,7 +375,7 @@ class PdsRecordsWs(Observable):
         """Generates all pagination parameters
 
         Args:
-            target (str): planet
+            target (str): body
             ihid (str): plateform
             iid (str): instrument
             pt (str): product type
@@ -480,7 +480,7 @@ class PdsRecordsWs(Observable):
 
         Args:
             pds_collection (PdsRegistryModel): PDS collection
-            limit (int, optional): _description_. Defaults to None.
+            limit (int, optional): Number of pages. Defaults to None.
             nb_workers (int, optional): Number of workers in parallel. Defaults to 3.
             time_sleep (int, optional): Time to way between two download series. Defaults to 1.
             progress_bar (False, optional): Set progress_bar. Defaults to True.
@@ -520,7 +520,7 @@ class PdsRecordsWs(Observable):
 
         Args:
             pds_collections (List[PdsRegistryModel]): _description_
-            limit (Optional[int], optional): _description_. Defaults to None.
+            limit (Optional[int], optional): Number of pages. Defaults to None.
             nb_workers (int, optional): Number of workers in parallel. Defaults to 3.
             time_sleep (int, optional): Time to way between two download series. Defaults to 1.
             progress_bar (bool, optional): Set progress bar. Defaults to True.

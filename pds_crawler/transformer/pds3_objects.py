@@ -110,18 +110,18 @@ class MissionHandler(AbstractHandler):
     def __init__(
         self,
         catalog: pystac.Catalog,
-        planet_id: str,
+        body_id: str,
         mission_id,
         citations: Optional[ReferencesModel],
     ):
         self.__catalog: pystac.Catalog = catalog
-        self.__planet_id: str = planet_id
+        self.__body_id: str = body_id
         self.__mission_id: str = mission_id
         self.__citations: Optional[ReferencesModel] = citations
 
     @property
-    def planet_id(self) -> str:
-        return self.__planet_id
+    def body_id(self) -> str:
+        return self.__body_id
 
     @property
     def mission_id(self) -> str:
@@ -163,11 +163,11 @@ class MissionHandler(AbstractHandler):
                 stac_mission.id = (
                     self.mission_id
                 )  # use mission_id of PDS collection to avoid interop problem
-                planet_cat = cast(
-                    pystac.Catalog, self.catalog.get_child(self.planet_id)
+                body_cat = cast(
+                    pystac.Catalog, self.catalog.get_child(self.body_id)
                 )
-                planet_cat.add_child(stac_mission)
-                logger.debug(f"{stac_mission.id} added to {planet_cat.id}")
+                body_cat.add_child(stac_mission)
+                logger.debug(f"{stac_mission.id} added to {body_cat.id}")
             elif self._is_must_be_updated(mission_stac, mission):
                 logger.info(f"{mission} has been updated")
                 self._update(mission_stac, mission)
@@ -471,14 +471,14 @@ class StacPdsCollection:
         volume_desc: VolumeModel = cast(
             VolumeModel, self.catalogs.get(vol_catalog_name)
         )
-        planet_id: str = pds_collection.get_planet_id()
+        body_id: str = pds_collection.get_body_id()
         mission_id: str = pds_collection.get_mission_id()
-        if not self._is_already_exists(planet_id):
-            pystac_planet_cat = pds_collection.create_stac_planet_catalog()
-            self.root_stac.add_child(pystac_planet_cat)
+        if not self._is_already_exists(body_id):
+            pystac_body_cat = pds_collection.create_stac_body_catalog()
+            self.root_stac.add_child(pystac_body_cat)
 
         mission = MissionHandler(
-            self.root_stac, planet_id, mission_id, citations
+            self.root_stac, body_id, mission_id, citations
         )
         plateform = PlateformHandler(self.root_stac, mission_id, citations)
         instrument = InstrumentHandler(self.root_stac, citations)

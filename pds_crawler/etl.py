@@ -182,12 +182,13 @@ class StacETL(ETL):
         self.__stac_records_transformer = StacRecordsTransformer(
             db, report=self.__report
         )
-        self.__planet: Optional[str] = None
+        self.__body: Optional[str] = None
 
         self.__dataset_id: Optional[str] = None
         self.__nb_workers: int = 3
         self.__time_sleep: int = 1
         self.__progress_bar: bool = True
+        self.__is_sample: bool = False
 
     @property
     def report(self) -> CrawlerReport:
@@ -218,12 +219,12 @@ class StacETL(ETL):
         return self.__stac_records_transformer
 
     @property
-    def planet(self) -> Optional[str]:
-        return self.__planet
+    def body(self) -> Optional[str]:
+        return self.__body
 
-    @planet.setter
-    def planet(self, name: str):
-        self.__planet = name
+    @body.setter
+    def body(self, name: str):
+        self.__body = name
 
     @property
     def dataset_id(self) -> Optional[str]:
@@ -257,6 +258,14 @@ class StacETL(ETL):
     def progress_bar(self, value: bool):
         self.__progress_bar = value
 
+    @property
+    def is_sample(self) -> bool:
+        return self.__is_sample
+
+    @is_sample.setter
+    def is_sample(self, value: bool):
+        self.__is_sample = value
+
     @UtilsMonitoring.timeit
     def extract(self, source: PdsSourceEnum, *args, **kwargs):
         """Extract the PDS information.
@@ -280,7 +289,7 @@ class StacETL(ETL):
                     stats,
                     collections_pds,
                 ) = self.pds_registry.get_pds_collections(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 for collection in collections_pds:
                     print(collection)
@@ -289,27 +298,29 @@ class StacETL(ETL):
                     stats,
                     collections_pds,
                 ) = self.pds_registry.get_pds_collections(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 self.pds_registry.cache_pds_collections(collections_pds)
             case PdsSourceEnum.PDS_RECORDS:
                 pds_collections: List[
                     PdsRegistryModel
                 ] = self.pds_registry.load_pds_collections_from_cache(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 self.pds_records.generate_urls_for_all_collections(
                     pds_collections
                 )
+                limit: Optional[int] = 1 if self.is_sample else None
                 self.pds_records.download_pds_records_for_all_collections(
                     pds_collections=pds_collections,
                     progress_bar=self.progress_bar,
+                    limit=limit,
                 )
             case PdsSourceEnum.PDS_CATALOGS:
                 pds_collections: List[
                     PdsRegistryModel
                 ] = self.pds_registry.load_pds_collections_from_cache(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 self.pds_ode_catalogs.download(
                     pds_collections=pds_collections,
@@ -379,7 +390,7 @@ class StacETL(ETL):
                 pds_collections: List[
                     PdsRegistryModel
                 ] = self.pds_registry.load_pds_collections_from_cache(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 nb_to_ingest: int = self._check_collections_to_ingest(
                     pds_collections
@@ -393,10 +404,10 @@ class StacETL(ETL):
                 pds_collections_cache: List[
                     PdsRegistryModel
                 ] = self.pds_registry.load_pds_collections_from_cache(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 _, pds_collections = self.pds_registry.get_pds_collections(
-                    self.planet, self.dataset_id
+                    self.body, self.dataset_id
                 )
                 nb_to_update: int = self._check_updates_from_PDS(
                     pds_collections, pds_collections_cache
@@ -436,7 +447,7 @@ class StacETL(ETL):
         pds_collections: List[
             PdsRegistryModel
         ] = self.pds_registry.load_pds_collections_from_cache(
-            self.planet, self.dataset_id
+            self.body, self.dataset_id
         )
         match data:
             case PdsDataEnum.PDS_CATALOGS:

@@ -38,7 +38,7 @@ def test_pds_collections():
     database = Database(result_dir)
     pds_registry = PdsRegistry(database)
     stats, collections = pds_registry.get_pds_collections(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     collection = collections[0]
     assert collection.ODEMetaDB == "Mercury"
@@ -50,7 +50,7 @@ def test_pds_download():
     database = Database(result_dir)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     pds_records = PdsRecordsWs(database)
     pds_records.download_pds_records_for_all_collections(collections)
@@ -64,11 +64,11 @@ def test_cache_collections():
     database = Database(result_dir)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     pds_registry.cache_pds_collections(collections)
     loaded_collections = pds_registry.load_pds_collections_from_cache(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     assert loaded_collections == collections
 
@@ -77,13 +77,13 @@ def test_pds_load():
     database = Database(result_dir)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     pds_registry.cache_pds_collections(collections)
 
     pds_records: PdsRecordsWs = PdsRecordsWs(database)
     collections = pds_registry.load_pds_collections_from_cache(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
 
     pds_records.download_pds_records_for_all_collections(collections)
@@ -102,7 +102,7 @@ def test_query_cache():
     database = Database(result_dir)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     pds_registry.cache_pds_collections(collections)
     loaded_collection = pds_registry.query_cache(
@@ -116,7 +116,7 @@ def test_distinct_values():
     database = Database(result_dir)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
+        body="mercury", dataset_id="izenberg_pdart14_meap-data_tnmap"
     )
     pds_registry.cache_pds_collections(collections)
     dataset_ids = list(pds_registry.distinct_dataset_values())

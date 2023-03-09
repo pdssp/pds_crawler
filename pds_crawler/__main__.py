@@ -87,10 +87,10 @@ def extraction_parser(subparser):
         """,
     )
     extraction.add_argument(
-        "--planet",
+        "--body",
         required=False,
         type=str,
-        help="Extract a planet",
+        help="Extract a body",
     )
     extraction.add_argument(
         "--dataset_id",
@@ -104,6 +104,13 @@ def extraction_parser(subparser):
         type=int,
         default=3,
         help="Number of workers to download data (default: %(default)s)",
+    )
+    extraction.add_argument(
+        "--sample",
+        required=False,
+        type=str2bool,
+        default=False,
+        help="Extract only a sample (default: %(default)s)",
     )
 
 
@@ -128,10 +135,10 @@ def check_update(subparser):
     )
 
     check_extraction.add_argument(
-        "--planet",
+        "--body",
         required=False,
         type=str,
-        help="Extract a planet",
+        help="Extract a body",
     )
     check_extraction.add_argument(
         "--dataset_id",

@@ -253,23 +253,23 @@ class StacRecordsTransformer(StacTransformer):
                 ),
             )
 
-            # load STAC planet if it exists
-            stac_planet: pystac.Catalog = cast(
+            # load STAC body if it exists
+            stac_body: pystac.Catalog = cast(
                 pystac.Catalog,
-                self.catalog.get_child(pds_collection.get_planet_id()),
+                self.catalog.get_child(pds_collection.get_body_id()),
             )
 
             new_catalog: Optional[
                 Union[pystac.Catalog, pystac.Collection]
             ] = None
 
-            if not self._is_exist(stac_planet):
-                stac_planet: pystac.Catalog = (
-                    pds_collection.create_stac_planet_catalog()
+            if not self._is_exist(stac_body):
+                stac_body: pystac.Catalog = (
+                    pds_collection.create_stac_body_catalog()
                 )
                 if new_catalog is None:
-                    new_catalog = stac_planet
-                self.catalog.add_child(stac_planet)
+                    new_catalog = stac_body
+                self.catalog.add_child(stac_body)
 
             if not self._is_exist(stac_mission):
                 stac_mission: pystac.Catalog = (
@@ -277,7 +277,7 @@ class StacRecordsTransformer(StacTransformer):
                 )
                 if new_catalog is None:
                     new_catalog = stac_mission
-                stac_planet.add_child(stac_mission)
+                stac_body.add_child(stac_mission)
 
             if not self._is_exist(stac_host):
                 stac_host: pystac.Catalog = (

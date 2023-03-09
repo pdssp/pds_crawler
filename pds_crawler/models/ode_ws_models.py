@@ -247,12 +247,12 @@ class PdsRegistryModel(AbstractModel):
     def get_mission(self) -> str:
         return self.IHName
 
-    def get_planet(self) -> str:
-        planet: str = self.ODEMetaDB[0].upper() + self.ODEMetaDB[1:].lower()
-        return planet
+    def get_body(self) -> str:
+        body: str = self.ODEMetaDB[0].upper() + self.ODEMetaDB[1:].lower()
+        return body
 
-    def get_planet_id(self) -> str:
-        return f"urn:pdssp:pds:planet:{self.get_planet()}"
+    def get_body_id(self) -> str:
+        return f"urn:pdssp:pds:body:{self.get_body()}"
 
     def get_range_orbit(self) -> Optional[pystac.RangeSummary]:
         range: Optional[pystac.RangeSummary] = None
@@ -393,7 +393,7 @@ class PdsRegistryModel(AbstractModel):
             id=self.get_mission_id(), title=self.get_mission(), description=""
         )
 
-    def create_stac_planet_catalog(self) -> pystac.Catalog:
+    def create_stac_body_catalog(self) -> pystac.Catalog:
         url: Optional[str] = None
         match self.ODEMetaDB.upper():
             case "VENUS":
@@ -406,16 +406,16 @@ class PdsRegistryModel(AbstractModel):
                 url = "https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/opo9914d.jpg"
             case _:
                 raise PlanetNotFound(
-                    f"Unexpected planet to parse : {self.ODEMetaDB.upper()}"
+                    f"Unexpected body to parse : {self.ODEMetaDB.upper()}"
                 )
         catalog = pystac.Catalog(
-            id=self.get_planet_id(),
-            title=self.get_planet(),
+            id=self.get_body_id(),
+            title=self.get_body(),
             description="",
             stac_extensions=[
                 "https://raw.githubusercontent.com/thareUSGS/ssys/main/json-schema/schema.json"
             ],
-            extra_fields={"ssys:targets": [self.get_planet()]},
+            extra_fields={"ssys:targets": [self.get_body()]},
         )
         catalog.add_link(
             pystac.Link(
@@ -813,14 +813,12 @@ class PdsRecordModel(AbstractModel):
     def get_mission(self) -> str:
         return self.ihid
 
-    def get_planet(self) -> str:
-        planet: str = (
-            self.Target_name[0].upper() + self.Target_name[1:].lower()
-        )
-        return planet
+    def get_body(self) -> str:
+        body: str = self.Target_name[0].upper() + self.Target_name[1:].lower()
+        return body
 
-    def get_planet_id(self) -> str:
-        return f"urn:pdssp:pds:planet:{self.get_planet()}"
+    def get_body_id(self) -> str:
+        return f"urn:pdssp:pds:body:{self.get_body()}"
 
     def get_start_date(self):
         start_date: Optional[datetime] = None
@@ -897,7 +895,7 @@ class PdsRecordModel(AbstractModel):
             Dict[str, Any]: _description_
         """
         mars: Dict[str, Any] = dict()
-        if self.get_planet() != "Mars":
+        if self.get_body() != "Mars":
             return mars
         if self.Center_latitude is None:
             logger.warning(f"No latitude for Mars : {self.ode_id}")

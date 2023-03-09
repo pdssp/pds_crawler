@@ -40,7 +40,7 @@ def test_load_catalogs_urls():
     pds_records = PdsRecordsWs(database)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
+        body="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
     )
     pds_records.download_pds_records_for_all_collections(collections, limit=1)
     catalog = PDSCatalogDescription(database)
@@ -53,7 +53,7 @@ def test_catalogs():
     pds_records = PdsRecordsWs(database)
     pds_registry = PdsRegistry(database)
     _, collections = pds_registry.get_pds_collections(
-        planet="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
+        body="mars", dataset_id="mro-m-ctx-2-edr-l0-v1.0"
     )
     pds_records.download_pds_records_for_all_collections(collections, limit=1)
     catalog = PDSCatalogDescription(database)

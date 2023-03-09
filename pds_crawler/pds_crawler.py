@@ -69,8 +69,8 @@ class Crawler:
             etl.transform(data=enum)
 
         if hasattr(self.options_cli, "type_extract"):
-            if self.options_cli.planet:
-                etl.planet = self.options_cli.planet
+            if self.options_cli.body:
+                etl.body = self.options_cli.body
 
             if self.options_cli.dataset_id:
                 etl.dataset_id = self.options_cli.dataset_id
@@ -82,8 +82,8 @@ class Crawler:
             etl.extract(source=enum)
 
         if hasattr(self.options_cli, "check"):
-            if self.options_cli.planet:
-                etl.planet = self.options_cli.planet
+            if self.options_cli.body:
+                etl.body = self.options_cli.body
 
             if self.options_cli.dataset_id:
                 etl.dataset_id = self.options_cli.dataset_id

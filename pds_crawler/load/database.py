@@ -85,7 +85,7 @@ Classes:
         - _read_and_convert_attributes(node:Any):Dict[str,Any]
         + save_collection(pds_collection:PdsRegistryModel): bool
         + save_collections(collections_pds:List[PdsRegistryModel]): bool
-        + load_collections(planet:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
+        + load_collections(body:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
     }
 
     class StacStorage {
@@ -226,7 +226,7 @@ class StacStorage:
         """
         directory: str = os.path.join(
             self.directory,
-            record.get_planet_id(),
+            record.get_body_id(),
             record.get_mission_id(),
             record.get_plateform_id(),
             record.get_instrument_id(),
@@ -586,12 +586,12 @@ class Hdf5Storage:
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
     def load_collections(
-        self, planet: Optional[str] = None, dataset_id: Optional[str] = None
+        self, body: Optional[str] = None, dataset_id: Optional[str] = None
     ) -> List[PdsRegistryModel]:
         """Load all collections metadata from the database.
 
         Args:
-            planet (Optional[str]): name of the planet to get. Defaults to None
+            body (Optional[str]): name of the body to get. Defaults to None
             dataset_id (Optional[str]): Dataset ID , used to filtr the collection. Defaults to None
 
         Returns:
@@ -607,12 +607,12 @@ class Hdf5Storage:
         with h5py.File(self.name, "r") as f:
             f.visititems(extract_attributes)
 
-        # filter pds_collection by planet name
+        # filter pds_collection by body name
         pds_registry_models = [
             pds_registry_model
             for pds_registry_model in pds_collections
-            if planet is None
-            or pds_registry_model.get_planet().upper() == planet.upper()
+            if body is None
+            or pds_registry_model.get_body().upper() == body.upper()
         ]
 
         # filter pds_collections by dataset ID
