@@ -471,6 +471,8 @@ class StacPdsCollection:
         volume_desc: VolumeModel = cast(
             VolumeModel, self.catalogs.get(vol_catalog_name)
         )
+        if volume_desc is None:
+            return
         body_id: str = pds_collection.get_body_id()
         mission_id: str = pds_collection.get_mission_id()
         if not self._is_already_exists(body_id):

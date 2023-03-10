@@ -157,7 +157,10 @@ def simple_download(url: str, filepath: str, timeout):
         url, allow_redirects=True, verify=False, timeout=timeout
     )
     if response.status_code == 200:
-        if "text/html" in response.headers["content-type"]:
+        if (
+            "content-type" in response.headers
+            and "text/html" in response.headers["content-type"]
+        ):
             soup = BeautifulSoup(response.content, "html.parser")
             redirect_tag = soup.find(
                 "meta", attrs={"http-equiv": "refresh", "content": True}
