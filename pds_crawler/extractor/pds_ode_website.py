@@ -799,8 +799,6 @@ class PDSCatalogsDescription(Observable):
         self.pds_object_cats.load_catalogs_urls(pds_collection)
         urls: List[str] = self.pds_object_cats.catalogs_urls
         if len(urls) != 0:
-            print("***********")
-            print(urls)
             urls_list.extend(urls)
             urls_list.append(self.pds_object_cats.volume_desc_url)
         return urls_list
