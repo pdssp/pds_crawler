@@ -20,6 +20,7 @@ from urllib.parse import parse_qs
 from urllib.parse import urlparse
 
 import requests
+from bs4 import BeautifulSoup
 from fastnumbers import float as ffloat
 from fastnumbers import int as iint
 from fastnumbers import isfloat
@@ -155,8 +156,28 @@ def simple_download(url: str, filepath: str, timeout):
     response = requests.get(
         url, allow_redirects=True, verify=False, timeout=timeout
     )
-    outfile: Path = Path(filepath)
-    outfile.write_bytes(response.content)
+    if response.status_code == 200:
+        if "text/html" in response.headers["content-type"]:
+            soup = BeautifulSoup(response.content, "html.parser")
+            redirect_tag = soup.find(
+                "meta", attrs={"http-equiv": "refresh", "content": True}
+            )
+            if redirect_tag is not None:
+                redirect_url = (
+                    redirect_tag["content"].split(";")[1].strip().split("=")[1]
+                )
+                response = requests.get(
+                    redirect_url,
+                    allow_redirects=True,
+                    verify=False,
+                    timeout=timeout,
+                )
+        outfile: Path = Path(filepath)
+        outfile.write_bytes(response.content)
+    else:
+        logger.error(
+            f"The request {url} has failed with the error code: {response.status_code}"
+        )
 
 
 @cache_download
