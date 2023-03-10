@@ -794,6 +794,7 @@ class PDSCatalogsDescription(Observable):
         Returns:
             List[str]: List of URLs
         """
+        logger.info(f"Fetching Catalogs URLs from {pds_collection}")
         urls_list: List[str] = list()
         self.pds_object_cats.load_catalogs_urls(pds_collection)
         urls: List[str] = self.pds_object_cats.catalogs_urls

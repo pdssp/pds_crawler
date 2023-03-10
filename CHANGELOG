@@ -1,4 +1,14 @@
-### Change planet parameter to body since we manage the Moon Use a mean to extract a sample of records (HEAD -> main)
+### Add some logs Fix possible bugs (HEAD -> main)
+>Fri, 10 Mar 2023 10:58:38 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Change planet parameter to body since we manage the Moon Use a mean to extract a sample of records (origin/main)
 >Thu, 9 Mar 2023 03:57:31 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

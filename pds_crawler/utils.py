@@ -155,7 +155,7 @@ def simple_download(url: str, filepath: str, timeout):
     response = requests.get(
         url, allow_redirects=True, verify=False, timeout=timeout
     )
-    outfile = Path(filepath)
+    outfile: Path = Path(filepath)
     outfile.write_bytes(response.content)
 
 
