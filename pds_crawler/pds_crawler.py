@@ -75,8 +75,8 @@ class Crawler:
             if self.options_cli.dataset_id:
                 etl.dataset_id = self.options_cli.dataset_id
 
-            if self.options_cli.nb_workers:
-                etl.nb_workers = int(self.options_cli.nb_workers)
+            etl.nb_workers = int(self.options_cli.nb_workers)
+            etl.nb_records_pages = int(self.options_cli.nb_records_per_page)
 
             enum = PdsSourceEnum.find_enum(self.options_cli.type_extract)
             etl.extract(source=enum)

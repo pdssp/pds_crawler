@@ -113,6 +113,14 @@ def extraction_parser(subparser):
         help="Extract only a sample (default: %(default)s)",
     )
 
+    extraction.add_argument(
+        "--nb_records_per_page",
+        required=False,
+        type=int,
+        default=5000,
+        help="Number of records per page for ODE webservices (default: %(default)s)",
+    )
+
 
 def check_update(subparser):
     check_extraction = subparser.add_parser(

@@ -189,6 +189,15 @@ class StacETL(ETL):
         self.__time_sleep: int = 1
         self.__progress_bar: bool = True
         self.__is_sample: bool = False
+        self.__nb_records_per_page: int = 5000
+
+    @property
+    def nb_records_per_page(self) -> int:
+        return self.__nb_records_per_page
+
+    @nb_records_per_page.setter
+    def nb_records_per_page(self, value: int):
+        self.__nb_records_per_page = value
 
     @property
     def report(self) -> CrawlerReport:
@@ -308,7 +317,8 @@ class StacETL(ETL):
                     self.body, self.dataset_id
                 )
                 self.pds_records.generate_urls_for_all_collections(
-                    pds_collections
+                    pds_collections=pds_collections,
+                    limit=self.nb_records_per_page,
                 )
                 limit: Optional[int] = 1 if self.is_sample else None
                 self.pds_records.download_pds_records_for_all_collections(

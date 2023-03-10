@@ -1,4 +1,14 @@
-### Add code to follow the redirection of a request (HEAD -> main)
+### Add parameter to specify the number of records per page (HEAD -> main)
+>Fri, 10 Mar 2023 14:51:44 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add code to follow the redirection of a request (origin/main)
 >Fri, 10 Mar 2023 14:37:35 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Remove some useless print (origin/main)
+### Remove some useless print
 >Fri, 10 Mar 2023 11:32:01 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
