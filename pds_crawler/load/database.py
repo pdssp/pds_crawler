@@ -683,7 +683,8 @@ class Hdf5Storage:
             dset: h5py.Dataset = cast(h5py.Dataset, f[dset_name])
 
             # Update the Urls
-            dset[...] = urls
+            dset.resize(len(urls), axis=0)
+            dset[:] = urls
 
             # Write the changes on the disk
             dset.write_direct(urls, source_sel=np.s_[:])
