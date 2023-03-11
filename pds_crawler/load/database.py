@@ -706,6 +706,13 @@ class Hdf5Storage:
                 f"These urls {urls} are already stored for {pds_collection}, skip to save the URLs dataset"
             )
         else:
+            logger.info(
+                f"""
+            Updates the Urls in dataset for {pds_collection}:
+                old_urls: {sorted(old_urls)}
+                new_urls: {sorted(urls)}
+            """
+            )
             self._save_urls_in_existing_dataset(pds_collection, urls)
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
