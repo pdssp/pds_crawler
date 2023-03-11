@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g63e858d documentation</title>
+    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g3b8da3d documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g63e858d</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g3b8da3d</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1652,7 +1652,7 @@ The stored information comes from the models:
 </dd>
 </dl>
 <p class="plantuml">
-<img src="_images/plantuml-6671ac43e85bb643e7a37a01d500885456a51235.png" alt="class Database {
+<img src="_images/plantuml-8128540c937498536a3f5eac8205cd4d5c79568e.png" alt="class Database {
     - __base_directory: str
     - __pds_dir: str
     - __stac_dir: str
@@ -1708,9 +1708,14 @@ class Hdf5Storage{
     - _has_attribute_in_group(node:Any):bool
     - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool
     - _read_and_convert_attributes(node:Any):Dict[str,Any]
+    - _save_urls_in_new_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])
+    - _save_urls_in_existing_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])
     + save_collection(pds_collection:PdsRegistryModel): bool
     + save_collections(collections_pds:List[PdsRegistryModel]): bool
     + load_collections(body:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
+    + save_urls(pds_collection: PdsRegistryModel, urls: List[str])
+    + load_urls(pds_collection: PdsRegistryModel) -&gt; List[str]
+    + static define_group_from(words: List[str]) -&gt; str
 }
 
 class StacStorage {
@@ -2053,6 +2058,34 @@ the number of products and the existing keywords <cite>NumberProducts</cite> in 
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pds_crawler.load.database.Hdf5Storage._save_urls_in_existing_dataset">
+<span class="sig-name descname"><span class="pre">_save_urls_in_existing_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">urls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/load/database.html#Hdf5Storage._save_urls_in_existing_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.Hdf5Storage._save_urls_in_existing_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save URLs in existing dataset, which is represented by pds_collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pds_collection</strong> (<em>PdsRegistryModel</em>) – PDS collections used to define the name of the dataset to load</p></li>
+<li><p><strong>urls</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – urls to save</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pds_crawler.load.database.Hdf5Storage._save_urls_in_new_dataset">
+<span class="sig-name descname"><span class="pre">_save_urls_in_new_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">urls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/load/database.html#Hdf5Storage._save_urls_in_new_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.Hdf5Storage._save_urls_in_new_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save URLS in a new dataset, which is represented by pds_collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pds_collection</strong> (<em>PdsRegistryModel</em>) – PDS collection, used to define the name of the dataset</p></li>
+<li><p><strong>urls</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – URLs to save</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.load.database.Hdf5Storage.define_group_from">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">define_group_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pds_crawler/load/database.html#Hdf5Storage.define_group_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.Hdf5Storage.define_group_from" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a valid name for HDF5 node based on words.</p>
@@ -2143,7 +2176,8 @@ the number of products and the existing keywords <cite>NumberProducts</cite> in 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.load.database.Hdf5Storage.save_urls">
 <span class="sig-name descname"><span class="pre">save_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">urls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/load/database.html#Hdf5Storage.save_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.Hdf5Storage.save_urls" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save URLs in the “urls” dataset in a given group where the group name is built from pds_collection</p>
+<dd><p>Save URLs in the “urls” dataset in a given group where the group name is built from pds_collection.
+The dataset can be an existing dataset or a new one</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

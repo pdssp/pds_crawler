@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g63e858d documentation</title>
+    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g3b8da3d documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g63e858d</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g3b8da3d</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -256,9 +256,14 @@
 <span class="sd">        - _has_attribute_in_group(node:Any):bool</span>
 <span class="sd">        - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool</span>
 <span class="sd">        - _read_and_convert_attributes(node:Any):Dict[str,Any]</span>
+<span class="sd">        - _save_urls_in_new_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])</span>
+<span class="sd">        - _save_urls_in_existing_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])</span>
 <span class="sd">        + save_collection(pds_collection:PdsRegistryModel): bool</span>
 <span class="sd">        + save_collections(collections_pds:List[PdsRegistryModel]): bool</span>
 <span class="sd">        + load_collections(body:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]</span>
+<span class="sd">        + save_urls(pds_collection: PdsRegistryModel, urls: List[str])</span>
+<span class="sd">        + load_urls(pds_collection: PdsRegistryModel) -&gt; List[str]</span>
+<span class="sd">        + static define_group_from(words: List[str]) -&gt; str</span>
 <span class="sd">    }</span>
 
 <span class="sd">    class StacStorage {</span>
@@ -292,6 +297,7 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
@@ -798,13 +804,14 @@
 
         <span class="k">return</span> <span class="n">pds_registry_model</span></div>
 
-<div class="viewcode-block" id="Hdf5Storage.save_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_urls">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">save_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;Save URLs in the &quot;urls&quot; dataset in a given group where the group name is built from pds_collection</span>
+<div class="viewcode-block" id="Hdf5Storage._save_urls_in_new_dataset"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._save_urls_in_new_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">_save_urls_in_new_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save URLS in a new dataset, which is represented by pds_collection</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
-<span class="sd">            urls (List[str]): all pregenerated url to download the data</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection, used to define the name of the dataset</span>
+<span class="sd">            urls (List[str]): URLs to save</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
@@ -816,22 +823,63 @@
                     <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
                 <span class="p">]</span>
             <span class="p">)</span>
-            <span class="n">old_urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
-            <span class="n">is_same</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">old_urls</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_same</span><span class="p">:</span>
-                <span class="n">dset</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
-                    <span class="n">group_path</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">DS_URLS</span><span class="p">,</span>
-                    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">),),</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">special_dtype</span><span class="p">(</span><span class="n">vlen</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
-                <span class="p">)</span>
-                <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;These urls </span><span class="si">{</span><span class="n">urls</span><span class="si">}</span><span class="s2"> are already stored for </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">, skip to save the URLs dataset&quot;</span>
-                <span class="p">)</span></div>
+            <span class="n">dset</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+                <span class="n">group_path</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">DS_URLS</span><span class="p">,</span>
+                <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">),),</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">special_dtype</span><span class="p">(</span><span class="n">vlen</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage._save_urls_in_existing_dataset"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._save_urls_in_existing_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">_save_urls_in_existing_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save URLs in existing dataset, which is represented by pds_collection</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collections used to define the name of the dataset to load</span>
+<span class="sd">            urls (List[str]): urls to save</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">dset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">group_path</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">DS_URLS</span>
+            <span class="p">)</span>
+            <span class="n">dset</span><span class="p">:</span> <span class="n">h5py</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">h5py</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">dset_name</span><span class="p">])</span>
+
+            <span class="c1"># Update the Urls</span>
+            <span class="n">dset</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">urls</span>
+
+            <span class="c1"># Write the changes on the disk</span>
+            <span class="n">dset</span><span class="o">.</span><span class="n">write_direct</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.save_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_urls">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">save_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Save URLs in the &quot;urls&quot; dataset in a given group where the group name is built from pds_collection.</span>
+<span class="sd">        The dataset can be an existing dataset or a new one</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
+<span class="sd">            urls (List[str]): all pregenerated url to download the data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_urls</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_urls_in_new_dataset</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">old_urls</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;These urls </span><span class="si">{</span><span class="n">urls</span><span class="si">}</span><span class="s2"> are already stored for </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">, skip to save the URLs dataset&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_urls_in_existing_dataset</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Hdf5Storage.load_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.load_urls">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">load_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
