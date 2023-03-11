@@ -686,7 +686,7 @@ class Hdf5Storage:
             dset[...] = urls
 
             # Write the changes on the disk
-            dset.write_direct(urls)
+            dset.write_direct(urls, source_sel=np.s_[:])
             logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
