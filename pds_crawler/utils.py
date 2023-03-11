@@ -14,6 +14,7 @@ from functools import partial
 from functools import wraps
 from pathlib import Path
 from typing import Any
+from typing import cast
 from typing import Dict
 from typing import List
 from urllib.parse import parse_qs
@@ -21,6 +22,7 @@ from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from bs4 import Tag
 from fastnumbers import float as ffloat
 from fastnumbers import int as iint
 from fastnumbers import isfloat
@@ -157,17 +159,16 @@ def simple_download(url: str, filepath: str, timeout):
         url, allow_redirects=True, verify=False, timeout=timeout
     )
     if response.status_code == 200:
-        if (
-            "content-type" in response.headers
-            and "text/html" in response.headers["content-type"]
-        ):
+        if "text/html" in response.headers.get("content-type", ""):
             soup = BeautifulSoup(response.content, "html.parser")
-            redirect_tag = soup.find(
+            redirect_elt = soup.find(
                 "meta", attrs={"http-equiv": "refresh", "content": True}
             )
-            if redirect_tag is not None:
+            if redirect_elt is not None:
+                redirect_tag = cast(Tag, redirect_elt)
+                redirect_tag_value: str = cast(str, redirect_tag["content"])
                 redirect_url = (
-                    redirect_tag["content"].split(";")[1].strip().split("=")[1]
+                    redirect_tag_value.split(";")[1].strip().split("=")[1]
                 )
                 response = requests.get(
                     redirect_url,

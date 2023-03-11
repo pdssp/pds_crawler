@@ -83,9 +83,14 @@ Classes:
         - _has_attribute_in_group(node:Any):bool
         - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool
         - _read_and_convert_attributes(node:Any):Dict[str,Any]
+        - _save_urls_in_new_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])
+        - _save_urls_in_existing_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])
         + save_collection(pds_collection:PdsRegistryModel): bool
         + save_collections(collections_pds:List[PdsRegistryModel]): bool
         + load_collections(body:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]
+        + save_urls(pds_collection: PdsRegistryModel, urls: List[str])
+        + load_urls(pds_collection: PdsRegistryModel) -> List[str]
+        + static define_group_from(words: List[str]) -> str
     }
 
     class StacStorage {
@@ -119,6 +124,7 @@ import os
 import re
 import shutil
 from typing import Any
+from typing import cast
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -625,13 +631,14 @@ class Hdf5Storage:
 
         return pds_registry_model
 
-    @UtilsMonitoring.io_display(level=logging.DEBUG)
-    def save_urls(self, pds_collection: PdsRegistryModel, urls: List[str]):
-        """Save URLs in the "urls" dataset in a given group where the group name is built from pds_collection
+    def _save_urls_in_new_dataset(
+        self, pds_collection: PdsRegistryModel, urls: List[str]
+    ):
+        """Save URLS in a new dataset, which is represented by pds_collection
 
         Args:
-            pds_collection (PdsRegistryModel): PDS collection
-            urls (List[str]): all pregenerated url to download the data
+            pds_collection (PdsRegistryModel): PDS collection, used to define the name of the dataset
+            urls (List[str]): URLs to save
         """
         with h5py.File(self.name, mode="a") as f:
             group_path: str = Hdf5Storage.define_group_from(
@@ -643,22 +650,63 @@ class Hdf5Storage:
                     pds_collection.DataSetId,
                 ]
             )
-            old_urls: List[str] = self.load_urls(pds_collection)
-            is_same = sorted(urls) == sorted(old_urls)
-            if not is_same:
-                dset = f.create_dataset(
-                    group_path + Hdf5Storage.HDF_SEP + Hdf5Storage.DS_URLS,
-                    (len(urls),),
-                    dtype=h5py.special_dtype(vlen=str),
-                )
-                dset[:] = urls
-                logger.info(
-                    f"Writing {len(urls)} URLs in hdf5:{group_path}/urls"
-                )
-            else:
-                logger.debug(
-                    f"These urls {urls} are already stored for {pds_collection}, skip to save the URLs dataset"
-                )
+            dset = f.create_dataset(
+                group_path + Hdf5Storage.HDF_SEP + Hdf5Storage.DS_URLS,
+                (len(urls),),
+                dtype=h5py.special_dtype(vlen=str),
+            )
+            dset[:] = urls
+            logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
+
+    def _save_urls_in_existing_dataset(
+        self, pds_collection: PdsRegistryModel, urls: List[str]
+    ):
+        """Save URLs in existing dataset, which is represented by pds_collection
+
+        Args:
+            pds_collection (PdsRegistryModel): PDS collections used to define the name of the dataset to load
+            urls (List[str]): urls to save
+        """
+        with h5py.File(self.name, mode="r+") as f:
+            group_path: str = Hdf5Storage.define_group_from(
+                [
+                    pds_collection.ODEMetaDB.lower(),
+                    pds_collection.IHID,
+                    pds_collection.IID,
+                    pds_collection.PT,
+                    pds_collection.DataSetId,
+                ]
+            )
+            dset_name: str = (
+                group_path + Hdf5Storage.HDF_SEP + Hdf5Storage.DS_URLS
+            )
+            dset: h5py.Dataset = cast(h5py.Dataset, f[dset_name])
+
+            # Update the Urls
+            dset[...] = urls
+
+            # Write the changes on the disk
+            dset.write_direct(urls)
+            logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
+
+    @UtilsMonitoring.io_display(level=logging.DEBUG)
+    def save_urls(self, pds_collection: PdsRegistryModel, urls: List[str]):
+        """Save URLs in the "urls" dataset in a given group where the group name is built from pds_collection.
+        The dataset can be an existing dataset or a new one
+
+        Args:
+            pds_collection (PdsRegistryModel): PDS collection
+            urls (List[str]): all pregenerated url to download the data
+        """
+        old_urls: List[str] = self.load_urls(pds_collection)
+        if len(old_urls) == 0:
+            self._save_urls_in_new_dataset(pds_collection, urls)
+        elif sorted(urls) == sorted(old_urls):
+            logger.debug(
+                f"These urls {urls} are already stored for {pds_collection}, skip to save the URLs dataset"
+            )
+        else:
+            self._save_urls_in_existing_dataset(pds_collection, urls)
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
     def load_urls(self, pds_collection: PdsRegistryModel) -> List[str]:
