@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g01b0cd7 documentation</title>
+    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g1f3b624 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g01b0cd7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g1f3b624</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -856,7 +856,8 @@
             <span class="n">dset</span><span class="p">:</span> <span class="n">h5py</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">h5py</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">dset_name</span><span class="p">])</span>
 
             <span class="c1"># Update the Urls</span>
-            <span class="n">dset</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">urls</span>
+            <span class="n">dset</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
 
             <span class="c1"># Write the changes on the disk</span>
             <span class="n">dset</span><span class="o">.</span><span class="n">write_direct</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="n">source_sel</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">s_</span><span class="p">[:])</span>
