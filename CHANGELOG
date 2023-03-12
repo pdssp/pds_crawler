@@ -1,4 +1,14 @@
-### Fix update of the dataset (HEAD -> main)
+### Fix a bug when writting in HDF5 (HEAD -> main)
+>Sun, 12 Mar 2023 04:41:05 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Fix update of the dataset (origin/main)
 >Sat, 11 Mar 2023 05:48:52 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Fix method to write in dataset (origin/main)
+### Fix method to write in dataset
 >Sat, 11 Mar 2023 05:08:18 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

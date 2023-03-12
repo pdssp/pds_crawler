@@ -435,7 +435,7 @@ class PdsStorage:
     ) -> PdsCollectionStorage:
         relative_dir: str = Hdf5Storage.define_group_from(
             [
-                pds_collection.ODEMetaDB,
+                pds_collection.ODEMetaDB.lower(),
                 pds_collection.IHID,
                 pds_collection.IID,
                 pds_collection.PT,
@@ -514,7 +514,7 @@ class Hdf5Storage:
         is_saved: bool
         group_path: str = Hdf5Storage.define_group_from(
             [
-                pds_collection.ODEMetaDB,
+                pds_collection.ODEMetaDB.lower(),
                 pds_collection.IHID,
                 pds_collection.IID,
                 pds_collection.PT,
@@ -650,10 +650,15 @@ class Hdf5Storage:
                     pds_collection.DataSetId,
                 ]
             )
+
+            max_shape = (None,)
+            shape = (len(urls),)
             dset = f.create_dataset(
-                group_path + Hdf5Storage.HDF_SEP + Hdf5Storage.DS_URLS,
-                (len(urls),),
+                name=group_path + Hdf5Storage.HDF_SEP + Hdf5Storage.DS_URLS,
+                shape=shape,
+                maxshape=max_shape,
                 dtype=h5py.special_dtype(vlen=str),
+                chunks=True,
             )
             dset[:] = urls
             logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
@@ -683,11 +688,8 @@ class Hdf5Storage:
             dset: h5py.Dataset = cast(h5py.Dataset, f[dset_name])
 
             # Update the Urls
-            dset.resize(len(urls), axis=0)
+            dset.resize((len(urls),))
             dset[:] = urls
-
-            # Write the changes on the disk
-            dset.write_direct(urls, source_sel=np.s_[:])
             logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
