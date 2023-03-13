@@ -6,6 +6,7 @@
 from .extractor import CrawlerError
 from .extractor import DateConversionError
 from .extractor import NoFileExistInFolder
+from .extractor import ParserTimeOutError
 from .extractor import PdsCatalogDescriptionError
 from .extractor import PdsCollectionAttributeError
 from .extractor import PdsRecordAttributeError
@@ -19,4 +20,5 @@ __all__ = [
     "PlanetNotFound",
     "DateConversionError",
     "CrawlerError",
+    "ParserTimeOutError",
 ]

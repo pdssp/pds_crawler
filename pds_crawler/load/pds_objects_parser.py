@@ -96,6 +96,7 @@ Author:
 import importlib
 import logging
 import os
+import signal
 from abc import ABC
 from abc import abstractproperty
 from contextlib import closing
@@ -108,6 +109,7 @@ from lark import Transformer
 from lark import Tree
 from lark import v_args
 
+from ..exception import ParserTimeOutError
 from ..models import DataSetMapProjectionModel
 from ..models import DataSetModel
 from ..models import InstrumentHostModel
@@ -849,6 +851,10 @@ class DataSetCatalogTransformer(PdsTransformer):
 class PdsParserFactory(ABC):
     """Factory to select the right parser and the related Lark grammar."""
 
+    DEFAULT_PARSER_TIMEOUT: int = (
+        30  # default timeout in seconds to parse a resource
+    )
+
     class FileGrammary(GrammarEnum):
         """Mapping between enum, Lark grammar and implementation class."""
 
@@ -927,6 +933,9 @@ class PdsParserFactory(ABC):
         """
         parser: Lark
         content: str
+        timeout: int = args.get(
+            "timeout", PdsParserFactory.DEFAULT_PARSER_TIMEOUT
+        )
         logger.debug(f"[PdsParserFactory] {uri}")
         if Path(uri).is_file and "PDS_VERSION_ID" not in uri:
             # Path(uri).is_file is not enough for the test
@@ -956,7 +965,14 @@ class PdsParserFactory(ABC):
             "grammar",
             type_file.grammar,
         )
+
+        def timeout_handler(signum, frame):
+            raise TimeoutError("Parsing took too long!")
+
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(timeout)
         parser = Lark.open(grammary_file, rel_to=__file__)
+
         try:
             module = importlib.import_module(__name__)
             transformer: PdsTransformer = getattr(
@@ -971,3 +987,9 @@ class PdsParserFactory(ABC):
                 + "."
                 + type_file.class_name
             )
+        except TimeoutError:
+            err_msg = f"Parsing {uri} took too long!"
+            logger.critical(err_msg)
+            raise ParserTimeOutError(err_msg)
+        finally:
+            signal.alarm(0)

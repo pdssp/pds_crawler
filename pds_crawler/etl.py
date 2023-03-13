@@ -190,6 +190,7 @@ class StacETL(ETL):
         self.__progress_bar: bool = True
         self.__is_sample: bool = False
         self.__nb_records_per_page: int = 5000
+        self.__parser_timeout: int = 60
 
     @property
     def nb_records_per_page(self) -> int:
@@ -274,6 +275,14 @@ class StacETL(ETL):
     @is_sample.setter
     def is_sample(self, value: bool):
         self.__is_sample = value
+
+    @property
+    def parser_timeout(self) -> int:
+        return self.__parser_timeout
+
+    @parser_timeout.setter
+    def parser_timeout(self, value: int):
+        self.__parser_timeout = value
 
     @UtilsMonitoring.timeit
     def extract(self, source: PdsSourceEnum, *args, **kwargs):
@@ -465,7 +474,9 @@ class StacETL(ETL):
                 self.report.start_report()
                 self.stac_catalog_transformer.init()
                 self.stac_catalog_transformer.to_stac(
-                    self.pds_ode_catalogs, pds_collections
+                    self.pds_ode_catalogs,
+                    pds_collections,
+                    timeout=self.parser_timeout,
                 )
                 self.stac_catalog_transformer.save()
                 self.report.close_report()

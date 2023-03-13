@@ -341,15 +341,20 @@ class PdsCollectionStorage:
         ]
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
-    def get_volume_description(self) -> VolumeModel:
+    def get_volume_description(self, timeout: int = 30) -> VolumeModel:
         """Returns a VolumeModel object containing the parsed contents of the "voldesc.cat" file in the directory
+
+        Args:
+            timeout (int, optional): parser timeout in seconds. Defaults to 30
 
         Returns:
             VolumeModel: Voldesc.cat object
         """
         voldesc: str = os.path.join(self.directory, "voldesc.cat")
         return PdsParserFactory.parse(
-            voldesc, PdsParserFactory.FileGrammary.VOL_DESC
+            uri=voldesc,
+            type_file=PdsParserFactory.FileGrammary.VOL_DESC,
+            timeout=timeout,
         )
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
@@ -369,7 +374,10 @@ class PdsCollectionStorage:
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
     def get_catalog(
-        self, file: str, catalogue_type: PdsParserFactory.FileGrammary
+        self,
+        file: str,
+        catalogue_type: PdsParserFactory.FileGrammary,
+        timeout: int = 30,
     ) -> Any:
         """Returns the parsed contents of a PDS catalogue file specified by
         the file argument, using the catalogue_type argument to specify the
@@ -378,12 +386,15 @@ class PdsCollectionStorage:
         Args:
             file (str): PDS catalog
             catalogue_type (PdsParserFactory.FileGrammary): Information about the catalog
+            timeout (int, optional): parser timeout. Defaults to 30
 
         Returns:
             Any: the parsed contents of a PDS catalogue file
         """
         filename: str = os.path.join(self.directory, file.lower())
-        return PdsParserFactory.parse(filename, catalogue_type)
+        return PdsParserFactory.parse(
+            uri=filename, type_file=catalogue_type, timeout=timeout
+        )
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
     def download(

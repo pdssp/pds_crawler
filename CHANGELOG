@@ -1,4 +1,14 @@
-### Change conf.py for doc generation Add logs for STAC transformation (HEAD -> main)
+### Add a timeout when parsing catalogs with Lark (HEAD -> main)
+>Mon, 13 Mar 2023 14:34:28 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Change conf.py for doc generation Add logs for STAC transformation (origin/main)
 >Mon, 13 Mar 2023 10:39:42 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Change the way to lock the file (origin/main)
+### Change the way to lock the file
 >Mon, 13 Mar 2023 09:36:13 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

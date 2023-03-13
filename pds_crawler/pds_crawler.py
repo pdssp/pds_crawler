@@ -65,6 +65,12 @@ class Crawler:
         etl.progress_bar = self.options_cli.progress_bar
 
         if hasattr(self.options_cli, "type_stac"):
+            if self.options_cli.body:
+                etl.body = self.options_cli.body
+
+            if self.options_cli.parser_timeout:
+                etl.parser_timeout = self.options_cli.parser_timeout
+
             enum = PdsDataEnum.find_enum(self.options_cli.type_stac)
             etl.transform(data=enum)
 
@@ -76,7 +82,7 @@ class Crawler:
                 etl.dataset_id = self.options_cli.dataset_id
 
             etl.nb_workers = int(self.options_cli.nb_workers)
-            etl.nb_records_pages = int(self.options_cli.nb_records_per_page)
+            etl.nb_records_per_page = int(self.options_cli.nb_records_per_page)
 
             enum = PdsSourceEnum.find_enum(self.options_cli.type_extract)
             etl.extract(source=enum)

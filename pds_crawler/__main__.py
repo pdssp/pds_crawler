@@ -175,6 +175,25 @@ def transform_parser(subparser):
     * {PdsDataEnum.PDS_RECORDS.value} : {PdsDataEnum.PDS_RECORDS.__doc__}
         """,
     )
+    transform.add_argument(
+        "--body",
+        required=False,
+        type=str,
+        help="Transform a body",
+    )
+    transform.add_argument(
+        "--dataset_id",
+        required=False,
+        type=str,
+        help="Transform a dataset",
+    )
+    transform.add_argument(
+        "--parser_timeout",
+        required=False,
+        type=int,
+        default=30,
+        help="Parser timeout for pds_objects",
+    )
 
 
 def parse_cli() -> argparse.Namespace:

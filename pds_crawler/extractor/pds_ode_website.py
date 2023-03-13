@@ -458,7 +458,8 @@ class PDSCatalogDescription(Observable):
             if request.ok:
                 content = request.text
                 vol_desc_cat = PdsParserFactory.parse(
-                    content, PdsParserFactory.FileGrammary.VOL_DESC
+                    uri=content,
+                    type_file=PdsParserFactory.FileGrammary.VOL_DESC,
                 )
                 return vol_desc_cat
             else:
@@ -619,6 +620,7 @@ class PDSCatalogDescription(Observable):
         catalog_name: str,
         cat_type: str,
         result: Dict[str, Union[str, List[str]]],
+        timeout: int = 30,
     ):
         """Parses the PDS object (`catalog_name`), represented by a catalog type and stored
         on the file storage with a specific implementation associated to the catalog_type.
@@ -635,11 +637,13 @@ class PDSCatalogDescription(Observable):
             catalog_name (str): catalog name that must be parsed
             cat_type (str): Type of catalog where an implementation is associated
             result (Dict[str, Union[str, List[str]]]): the catalogs in the Volume description
+            timeout (int, optional): parser timeout in seconds. Defaults to 30
         """
         try:
             cat_obj = file_storage.get_catalog(
-                catalog_name,
-                PdsParserFactory.FileGrammary.get_enum_from(cat_type),  # type: ignore
+                file=catalog_name,
+                catalogue_type=PdsParserFactory.FileGrammary.get_enum_from(cat_type),  # type: ignore
+                timeout=timeout,
             )
             if cat_type in result:
                 cast(List, result[cat_type]).append(cat_obj)
@@ -726,7 +730,7 @@ class PDSCatalogDescription(Observable):
             )
 
     def get_ode_catalogs(
-        self, pds_collection: PdsRegistryModel
+        self, pds_collection: PdsRegistryModel, timeout: int = 30
     ) -> Dict[str, Any]:
         """Returns the PDS objects for a given space mission collection.
 
@@ -739,6 +743,7 @@ class PDSCatalogDescription(Observable):
 
         Args:
             pds_collection (PdsRegistryModel): the space mission collection
+            timeout (int): parser timeout in seconds. Default to 30
 
         Raises:
             TypeError: Illegal datatype for catalog
@@ -754,7 +759,7 @@ class PDSCatalogDescription(Observable):
             )
             result[
                 PdsParserFactory.FileGrammary.VOL_DESC.name
-            ] = file_storage.get_volume_description()
+            ] = file_storage.get_volume_description(timeout)
             catalogs = file_storage.list_catalogs()
             for cat_type in catalogs.keys():
                 catalog_value: Union[str, List[str]] = catalogs[cat_type]
@@ -763,13 +768,17 @@ class PDSCatalogDescription(Observable):
                 elif isinstance(catalog_value, str):
                     catalog_name: str = catalog_value
                     self._parse_catalog(
-                        file_storage, catalog_name, cat_type, result
+                        file_storage, catalog_name, cat_type, result, timeout
                     )
                 elif isinstance(catalog_value, list):
                     result[cat_type] = list()
                     for catalog_name in catalog_value:
                         self._parse_catalog(
-                            file_storage, catalog_name, cat_type, result
+                            file_storage,
+                            catalog_name,
+                            cat_type,
+                            result,
+                            timeout,
                         )
                 else:
                     raise TypeError(
@@ -893,7 +902,7 @@ class PDSCatalogsDescription(Observable):
                 logger.exception(f"[ConnectionError]: {err}")
 
     def get_ode_catalogs(
-        self, pds_collections: List[PdsRegistryModel]
+        self, pds_collections: List[PdsRegistryModel], timeout: int = 30
     ) -> Iterator[Dict[str, Any]]:
         """Get all the PDS objects for the `pds_collections`.
 
@@ -914,9 +923,12 @@ class PDSCatalogsDescription(Observable):
 
         Args:
             pds_collections (List[PdsRegistryModel]): the collections of the space mission.
+            timeout (int, optional): parser timeout in seconds. Defaults to 30
 
         Yields:
             Iterator[Dict[str, Any]]: PDS object name and its object
         """
         for pds_collection in pds_collections:
-            yield self.pds_object_cats.get_ode_catalogs(pds_collection)
+            yield self.pds_object_cats.get_ode_catalogs(
+                pds_collection, timeout
+            )

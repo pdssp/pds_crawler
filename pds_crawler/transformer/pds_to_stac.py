@@ -390,6 +390,7 @@ class StacCatalogTransformer(StacTransformer):
         self,
         pds_ode_catalogs: PDSCatalogsDescription,
         pds_collections: List[PdsRegistryModel],
+        **kwargs,
     ):
         """Creates the STAC catalog and its children.
 
@@ -398,7 +399,7 @@ class StacCatalogTransformer(StacTransformer):
             pds_collections (List[PdsRegistryModel]): PDS Collection data
         """
         catalogs: Iterator[Dict[str, Any]] = pds_ode_catalogs.get_ode_catalogs(
-            pds_collections
+            pds_collections, kwargs.get("timeout", 30)
         )
         self._build_stac_cats_and_colls_for_all_pds_catalogs(catalogs)
 

@@ -29,3 +29,7 @@ class PlanetNotFound(CrawlerError):
 
 class DateConversionError(CrawlerError):
     """Problem when converting a date"""
+
+
+class ParserTimeOutError(CrawlerError):
+    """Timeout when parsing with Lark"""

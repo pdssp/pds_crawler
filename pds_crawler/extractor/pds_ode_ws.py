@@ -583,9 +583,10 @@ class PdsRecordsWs(Observable):
             total=len(records_files),
             iterable=records_files,
             logger=logger,
-            description="Downloaded responses from the collection",
+            description=f"Downloaded responses from {pds_collection.DataSetId}",
             position=1,
             leave=False,
+            disable_tqdm=not progress_bar,
         ) as progress_logger:
             for file_in_records in progress_logger:
                 file = os.path.join(
