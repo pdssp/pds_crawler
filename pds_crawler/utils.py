@@ -4,6 +4,8 @@
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 import concurrent.futures
+import errno
+import fcntl
 import logging
 import os
 import time
@@ -16,7 +18,9 @@ from pathlib import Path
 from typing import Any
 from typing import cast
 from typing import Dict
+from typing import Iterable
 from typing import List
+from typing import Union
 from urllib.parse import parse_qs
 from urllib.parse import urlparse
 
@@ -204,8 +208,9 @@ def parallel_requests(
         minutes, seconds = divmod(rem, 60)
         file_size_bytes = os.path.getsize(filepath)
         file_size_mb = file_size_bytes / 1024**2
-        tqdm.write(
-            f"{url} downloaded ({file_size_mb:0.03f} MB) in {int(hours):0>2}:{int(minutes):0>2}:{seconds:05.2f}"
+        ProgressLogger.write(
+            f"{url} downloaded ({file_size_mb:0.03f} MB) in {int(hours):0>2}:{int(minutes):0>2}:{seconds:05.2f}",
+            logger,
         )
         return url
 
@@ -215,11 +220,14 @@ def parallel_requests(
     if not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
-    pbar = tqdm(
+    progress_logger = ProgressLogger(
         total=len(urls),
-        desc="Downloading data",
+        iterable=None,
+        logger=logger,
+        description="Downloading data",
         position=1,
-        disable=not progress_bar,
+        leave=False,
+        disable_tqdm=not progress_bar,
     )
 
     with concurrent.futures.ThreadPoolExecutor(
@@ -231,9 +239,9 @@ def parallel_requests(
                 future.result()
             except requests.exceptions.ConnectionError as err:
                 logger.exception(f"[parallel_requests]: {err}")
-            pbar.update(n=1)
+            progress_logger.update(n=1)
 
-    pbar.close()
+    progress_logger.close()
 
 
 def compute_downloaded_filepath(directory: str, url: str) -> str:
@@ -436,3 +444,108 @@ class UtilsMonitoring:  # noqa: R0205
             return result
 
         return newfunc
+
+
+class ProgressLogger:
+    def __init__(
+        self,
+        total: int,
+        logger: logging.Logger,
+        iterable: Union[Iterable, None] = None,
+        description: str = "processing",
+        disable_tqdm=False,
+        *args,
+        **kwargs,
+    ):
+        self.total = total
+        self.disable_tqdm = disable_tqdm
+        self.description = description
+        self.logger = logger
+        self.iterable: Union[Iterable[str], None] = iterable
+        self.nb: int = 0
+        self.kwargs = kwargs
+        if self.iterable is None:
+            self.pbar = tqdm(
+                total=total,
+                desc=description,
+                disable=self.disable_tqdm,
+                **self.kwargs,
+            )
+            self._send_message()
+
+    def _send_message(self):
+        if self.disable_tqdm and self.nb % 10 == 0:
+            msg = f"{self.description} : {int(self.nb/self.total)}%"
+            self.logger.info(msg)
+
+    def __enter__(self):
+        self.pbar = tqdm(
+            total=self.total,
+            desc=self.description,
+            disable=self.disable_tqdm,
+            **self.kwargs,
+        )
+        self._send_message()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        if self.pbar:
+            self.pbar.close()
+
+    def __iter__(self):
+        if self.iterable and not self.disable_tqdm:
+            for i in self.iterable:
+                self.pbar.update(1)
+                yield i
+        elif self.iterable:
+            for i in self.iterable:
+                self.nb += 1
+                self._send_message()
+                yield i
+        else:
+            yield None
+
+    def update(self, n: int):
+        if self.disable_tqdm:
+            self.nb += 1
+            self._send_message()
+        else:
+            self.pbar.update(n=n)
+
+    def write_msg(self, msg: str):
+        if self.disable_tqdm:
+            logger.info(msg)
+        else:
+            tqdm.write(msg)
+
+    @staticmethod
+    def write(msg: str, logger: logging.Logger):
+        if tqdm.disable:
+            logger.info(msg)
+        else:
+            tqdm.write(msg)
+
+    def close(self):
+        if self.pbar:
+            self.pbar.close()
+
+
+class Locking:
+    @staticmethod
+    def lock_file(file):
+        locking = False
+        while not locking:
+            try:
+                # lock the file in exclusif mode
+                fcntl.flock(
+                    file.id.get_vfd_handle(), fcntl.LOCK_EX | fcntl.LOCK_NB
+                )
+                locking = True
+            except IOError as e:
+                if e.errno != errno.EAGAIN:
+                    raise
+                time.sleep(0.1)
+
+    @staticmethod
+    def unlock_file(file):
+        fcntl.flock(file.id.get_vfd_handle(), fcntl.LOCK_UN)

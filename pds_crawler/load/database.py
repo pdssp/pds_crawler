@@ -137,6 +137,7 @@ import pystac
 from ..models import PdsRecordModel
 from ..models import PdsRegistryModel
 from ..models import VolumeModel
+from ..utils import Locking
 from ..utils import parallel_requests
 from ..utils import UtilsMonitoring
 from .pds_objects_parser import PdsParserFactory
@@ -467,9 +468,11 @@ class Hdf5Storage:
 
     def init_storage(self, name: str):
         with h5py.File(name, "a") as f:
-            if "metadata" not in f:
-                metadata = f.create_group("metadata")
+            Locking.lock_file(f)
+            metadata = f.require_group("metadata")
+            if "author" not in metadata.attrs.keys():
                 metadata.attrs["author"] = "Jean-Christophe Malapert"
+            Locking.unlock_file(f)
 
     def reset_storage(self):
         os.remove(self.name)
@@ -569,7 +572,9 @@ class Hdf5Storage:
         """
         is_saved: bool
         with h5py.File(self.name, "a") as f:
+            Locking.lock_file(f)
             is_saved = self._save_collection(pds_collection, f)
+            Locking.unlock_file(f)
         return is_saved
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
@@ -586,8 +591,10 @@ class Hdf5Storage:
         """
         is_saved = True
         with h5py.File(self.name, "a") as f:
+            Locking.lock_file(f)
             for pds_collection in collections_pds:
                 is_saved = is_saved & self._save_collection(pds_collection, f)
+            Locking.unlock_file(f)
         return is_saved
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
@@ -611,7 +618,9 @@ class Hdf5Storage:
                 pds_collections.append(PdsRegistryModel.from_dict(dico))
 
         with h5py.File(self.name, "r") as f:
+            Locking.lock_file(f)
             f.visititems(extract_attributes)
+            Locking.unlock_file(f)
 
         # filter pds_collection by body name
         pds_registry_models = [
@@ -641,6 +650,7 @@ class Hdf5Storage:
             urls (List[str]): URLs to save
         """
         with h5py.File(self.name, mode="a") as f:
+            Locking.lock_file(f)
             group_path: str = Hdf5Storage.define_group_from(
                 [
                     pds_collection.ODEMetaDB.lower(),
@@ -662,6 +672,7 @@ class Hdf5Storage:
             )
             dset[:] = urls
             logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
+            Locking.unlock_file(f)
 
     def _save_urls_in_existing_dataset(
         self, pds_collection: PdsRegistryModel, urls: List[str]
@@ -673,6 +684,7 @@ class Hdf5Storage:
             urls (List[str]): urls to save
         """
         with h5py.File(self.name, mode="r+") as f:
+            Locking.lock_file(f)
             group_path: str = Hdf5Storage.define_group_from(
                 [
                     pds_collection.ODEMetaDB.lower(),
@@ -691,6 +703,7 @@ class Hdf5Storage:
             dset.resize((len(urls),))
             dset[:] = urls
             logger.info(f"Writing {len(urls)} URLs in hdf5:{group_path}/urls")
+            Locking.unlock_file(f)
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
     def save_urls(self, pds_collection: PdsRegistryModel, urls: List[str]):
@@ -730,6 +743,7 @@ class Hdf5Storage:
         """
         urls: List[str] = list()
         with h5py.File(self.name, "r") as f:
+            Locking.lock_file(f)
             group_path: str = Hdf5Storage.define_group_from(
                 [
                     pds_collection.ODEMetaDB.lower(),
@@ -744,6 +758,7 @@ class Hdf5Storage:
             )
             if dset is not None:
                 urls = [item.decode("utf-8") for item in list(dset)]  # type: ignore
+            Locking.unlock_file(f)
         return urls
 
     @staticmethod
