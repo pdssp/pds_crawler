@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.extractor.pds_ode_website &#8212; pds-crawler 0.1.dev1+g3ec46e0 documentation</title>
+    <title>pds_crawler.extractor.pds_ode_website &#8212; pds-crawler 0.1.dev1+ge37e5f7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g3ec46e0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ge37e5f7</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -208,6 +208,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">parse_qs</span>
 <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">ParseResult</span>
 <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
 
@@ -460,7 +461,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">DATASET_EXPLORER</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
-        <span class="s2">&quot;https://ode.rsl.wustl.edu/$ODEMetaDB/DataSetExplorer.aspx?target=$ODEMetaDB&amp;instrumenthost=$ihid&amp;instrumentid=$iid&amp;datasetid=$Data_Set_Id&amp;volumeid=$PDSVolume_Id&quot;</span>
+        <span class="s2">&quot;https://ode.rsl.wustl.edu/$ODEMetaDB/DataSetExplorer.aspx?target=$ODEMetaDB&amp;instrumenthost=$ihid&amp;instrumentid=$iid&amp;datasetid=$Data_Set_Id&quot;</span>
     <span class="p">)</span>
 
 <div class="viewcode-block" id="PDSCatalogDescription.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -543,18 +544,26 @@
     <span class="k">def</span> <span class="nf">catalogs_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__catalogs_urls</span>
 
-<div class="viewcode-block" id="PDSCatalogDescription._build_url_ode_collection"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._build_url_ode_collection">[docs]</a>    <span class="k">def</span> <span class="nf">_build_url_ode_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PDSCatalogDescription._build_url_ode_collection"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._build_url_ode_collection">[docs]</a>    <span class="k">def</span> <span class="nf">_build_url_ode_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the ODE URL.</span>
 
 <span class="sd">        This ODE URL is used to parse the web page to get the PDS objects.</span>
+<span class="sd">        Sometimes the volume_id value is renamed. In this case, the web page</span>
+<span class="sd">        must be parsed by getting the volume_id label to find the correct volume_id</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            with_volume_id (str, optional): volume_id to set. Defaults to None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__url</span> <span class="o">=</span> <span class="n">PDSCatalogDescription</span><span class="o">.</span><span class="n">DATASET_EXPLORER</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+        <span class="n">url_build</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PDSCatalogDescription</span><span class="o">.</span><span class="n">DATASET_EXPLORER</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
             <span class="n">ODEMetaDB</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
             <span class="n">ihid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ihid</span><span class="p">,</span>
             <span class="n">iid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">iid</span><span class="p">,</span>
             <span class="n">Data_Set_Id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">Data_Set_Id</span><span class="p">,</span>
-            <span class="n">PDSVolume_Id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">PDSVolume_Id</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">volume_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__url</span> <span class="o">=</span> <span class="n">url_build</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;&amp;volumeid=</span><span class="si">{</span><span class="n">volume_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__url</span> <span class="o">=</span> <span class="n">url_build</span></div>
 
 <div class="viewcode-block" id="PDSCatalogDescription._find_volume_desc_url"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._find_volume_desc_url">[docs]</a>    <span class="k">def</span> <span class="nf">_find_volume_desc_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Find the URL volume description by parsing the ODE URL.</span>
@@ -580,6 +589,30 @@
             <span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;voldesc.cat found in </span><span class="si">{</span><span class="n">vol_desc_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vol_desc_url</span></div>
+
+<div class="viewcode-block" id="PDSCatalogDescription._find_volume_id"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._find_volume_id">[docs]</a>    <span class="k">def</span> <span class="nf">_find_volume_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Find volume_id in web page</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NoFileExistInFolder: Volume_id not found</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: volume_id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_url_ode_collection</span><span class="p">()</span>
+        <span class="n">crawler</span> <span class="o">=</span> <span class="n">Crawler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="n">crawler</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+        <span class="n">volume_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">PDSVolume_Id</span><span class="p">:</span>
+                <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+                <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="n">volume_id</span> <span class="o">=</span> <span class="n">parse_qs</span><span class="p">(</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">query</span><span class="p">)[</span><span class="s2">&quot;volumeid&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">volume_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoFileExistInFolder</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;volumeid not found in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;volume_id found : </span><span class="si">{</span><span class="n">volume_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">volume_id</span></div>
 
 <div class="viewcode-block" id="PDSCatalogDescription._parse_volume_desc_cat"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._parse_volume_desc_cat">[docs]</a>    <span class="k">def</span> <span class="nf">_parse_volume_desc_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VolumeModel</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Set the volume description file by parsing the ODE URL.</span>
@@ -608,7 +641,12 @@
 
 <div class="viewcode-block" id="PDSCatalogDescription._load_volume_description"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._load_volume_description">[docs]</a>    <span class="k">def</span> <span class="nf">_load_volume_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the volume description.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__volume_desc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_volume_desc_url</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__volume_desc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_volume_desc_url</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">NoFileExistInFolder</span><span class="p">:</span>
+            <span class="n">volume_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_volume_id</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_url_ode_collection</span><span class="p">(</span><span class="n">volume_id</span><span class="o">=</span><span class="n">volume_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__volume_desc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_volume_desc_url</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__vol_desc_cat</span><span class="p">:</span> <span class="n">VolumeModel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_volume_desc_cat</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="PDSCatalogDescription._find_catalogs_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._find_catalogs_urls">[docs]</a>    <span class="k">def</span> <span class="nf">_find_catalogs_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
@@ -721,7 +759,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            List[str]: List of URLs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_build_url_ode_collection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_url_ode_collection</span><span class="p">(</span><span class="n">volume_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">PDSVolume_Id</span><span class="p">)</span>
 
         <span class="c1"># Extract the Volume description catalog</span>
         <span class="c1"># that contains an index of all catalogs</span>
@@ -808,12 +846,15 @@
                 <span class="n">MessageModel</span><span class="p">(</span><span class="n">catalog_name</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="PDSCatalogDescription.load_catalogs_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.load_catalogs_urls">[docs]</a>    <span class="k">def</span> <span class="nf">load_catalogs_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">):</span>
+<div class="viewcode-block" id="PDSCatalogDescription.load_catalogs_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.load_catalogs_urls">[docs]</a>    <span class="k">def</span> <span class="nf">load_catalogs_urls</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Loads the catalogs URLs from cache for a given</span>
 <span class="sd">        `pds_collection` collection.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
+<span class="sd">            progress_bar (bool, True): Set progress_bar. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_values</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pds_collection</span> <span class="o">=</span> <span class="n">pds_collection</span>
@@ -821,7 +862,7 @@
             <span class="n">PdsRecordsModel</span>
         <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pds_records</span><span class="o">.</span><span class="n">parse_pds_collection_from_cache</span><span class="p">(</span>
             <span class="n">pds_collection</span><span class="p">,</span>
-            <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">records</span><span class="p">:</span> <span class="n">PdsRecordsModel</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">records_iter</span><span class="p">)</span>
@@ -956,20 +997,23 @@
     <span class="k">def</span> <span class="nf">database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Database</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__database</span>
 
-<div class="viewcode-block" id="PDSCatalogsDescription._build_all_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription._build_all_urls">[docs]</a>    <span class="k">def</span> <span class="nf">_build_all_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PDSCatalogsDescription._build_all_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription._build_all_urls">[docs]</a>    <span class="k">def</span> <span class="nf">_build_all_urls</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Builds all the PDS objects URLs for collections of space missions.</span>
 
 <span class="sd">        These URLs are used to retrieve all PDS objects.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            pds_collection (PdsRegistryModel): the collections of space missions</span>
+<span class="sd">            progress_bar (bool, True): Set progress_bar. Defaults to True.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[str]: List of URLs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fetching Catalogs URLs from </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">urls_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pds_object_cats</span><span class="o">.</span><span class="n">load_catalogs_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pds_object_cats</span><span class="o">.</span><span class="n">load_catalogs_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">)</span>
         <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pds_object_cats</span><span class="o">.</span><span class="n">catalogs_urls</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">urls_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
@@ -997,10 +1041,12 @@
 <span class="sd">            pds_collections (List[PdsRegistryModel]): the collections of space missions</span>
 <span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
 <span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
-<span class="sd">            progress_bar (int, True): Set progress_bar. Defaults to True.</span>
+<span class="sd">            progress_bar (bool, True): Set progress_bar. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">pds_collections</span><span class="p">:</span>
-            <span class="n">urls_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_all_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+            <span class="n">urls_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_all_urls</span><span class="p">(</span>
+                <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span>
+            <span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">file_storage</span><span class="p">:</span> <span class="n">PdsCollectionStorage</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pds_storage</span><span class="o">.</span><span class="n">get_pds_storage_for</span><span class="p">(</span>

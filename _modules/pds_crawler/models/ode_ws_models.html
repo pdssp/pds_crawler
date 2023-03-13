@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.models.ode_ws_models &#8212; pds-crawler 0.1.dev1+g3ec46e0 documentation</title>
+    <title>pds_crawler.models.ode_ws_models &#8212; pds-crawler 0.1.dev1+ge37e5f7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g3ec46e0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ge37e5f7</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -261,6 +261,7 @@
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
@@ -275,13 +276,13 @@
 <span class="kn">from</span> <span class="nn">pymarsseason</span> <span class="kn">import</span> <span class="n">Season</span>
 <span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geometry</span>
 <span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">wkt</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">CrawlerError</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">DateConversionError</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">PdsCollectionAttributeError</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">PdsRecordAttributeError</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">PlanetNotFound</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">ProgressLogger</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">utc_to_iso</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">UtilsMath</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">AbstractModel</span>
@@ -1437,15 +1438,20 @@
     <span class="k">def</span> <span class="nf">to_stac_item_iter</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">pds_registry</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">pds_record_model</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pds_records_model</span><span class="p">,</span>
-            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;pystac.Item processing&quot;</span><span class="p">,</span>
-            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pds_records_model</span><span class="p">),</span>
-            <span class="n">position</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">pds_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pds_records_model</span>
+        <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_records</span><span class="p">),</span>
+            <span class="n">iterable</span><span class="o">=</span><span class="n">pds_records</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Downloaded responses from the collection&quot;</span><span class="p">,</span>
+            <span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
-        <span class="p">):</span>
-            <span class="k">yield</span> <span class="n">pds_record_model</span><span class="o">.</span><span class="n">to_stac_item</span><span class="p">(</span><span class="n">pds_registry</span><span class="p">)</span>
+            <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">progress_logger</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pds_record_model</span> <span class="ow">in</span> <span class="n">progress_logger</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">cast</span><span class="p">(</span><span class="n">PdsRecordModel</span><span class="p">,</span> <span class="n">pds_record_model</span><span class="p">)</span><span class="o">.</span><span class="n">to_stac_item</span><span class="p">(</span>
+                    <span class="n">pds_registry</span>
+                <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;PdsRecordsModel(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">target_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">plateform_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">instrument_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_id</span><span class="si">}</span><span class="s2">, nb_records=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pds_records_model</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span></div>

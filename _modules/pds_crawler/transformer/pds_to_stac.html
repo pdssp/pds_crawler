@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+g3ec46e0 documentation</title>
+    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+ge37e5f7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g3ec46e0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ge37e5f7</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -207,16 +207,17 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pystac</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">CrawlerError</span>
 <span class="kn">from</span> <span class="nn">..extractor</span> <span class="kn">import</span> <span class="n">PDSCatalogsDescription</span>
 <span class="kn">from</span> <span class="nn">..extractor</span> <span class="kn">import</span> <span class="n">PdsRecordsWs</span>
 <span class="kn">from</span> <span class="nn">..load</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRecordModel</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRecordsModel</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRegistryModel</span>
 <span class="kn">from</span> <span class="nn">..report</span> <span class="kn">import</span> <span class="n">MessageModel</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">Observable</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">ProgressLogger</span>
 <span class="kn">from</span> <span class="nn">.pds3_objects</span> <span class="kn">import</span> <span class="n">StacPdsCollection</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -324,23 +325,30 @@
 <span class="sd">                Iterator[Iterable[pystac.Item]]: Items</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">pages</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
-                    <span class="n">page</span><span class="o">.</span><span class="n">pds_records_model</span><span class="p">,</span>
-                    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;STAC Item objects creation&quot;</span><span class="p">,</span>
-                    <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">pds_records_model</span><span class="p">),</span>
+                <span class="n">pds_records_model</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">pds_records_model</span>
+                <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
+                    <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_records_model</span><span class="p">),</span>
+                    <span class="n">iterable</span><span class="o">=</span><span class="n">pds_records_model</span><span class="p">,</span>
+                    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;STAC Item objects creation&quot;</span><span class="p">,</span>
                     <span class="n">position</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                     <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
-                <span class="p">):</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">item_exists</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;this </span><span class="si">{</span><span class="n">record</span><span class="si">}</span><span class="s2"> exists in STAC directory, skip it&quot;</span>
-                        <span class="p">)</span>
-                        <span class="k">continue</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="k">yield</span> <span class="n">record</span><span class="o">.</span><span class="n">to_stac_item</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
-                    <span class="k">except</span> <span class="n">CrawlerError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">notify_observers</span><span class="p">(</span><span class="n">MessageModel</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ode_id</span><span class="p">,</span> <span class="n">err</span><span class="p">))</span>
+                    <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">pds_records_model_pbar</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">cast</span><span class="p">(</span>
+                        <span class="n">List</span><span class="p">[</span><span class="n">PdsRecordModel</span><span class="p">],</span> <span class="n">pds_records_model_pbar</span>
+                    <span class="p">):</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">item_exists</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;this </span><span class="si">{</span><span class="n">record</span><span class="si">}</span><span class="s2"> exists in STAC directory, skip it&quot;</span>
+                            <span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">record</span><span class="o">.</span><span class="n">to_stac_item</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="n">CrawlerError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">notify_observers</span><span class="p">(</span>
+                                <span class="n">MessageModel</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ode_id</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                            <span class="p">)</span>
 
         <span class="n">pages</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span>
             <span class="n">PdsRecordsModel</span>
@@ -375,117 +383,131 @@
 <span class="sd">            pds_collections (List[PdsRegistryModel]): All PDS collections data</span>
 <span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
-            <span class="n">pds_collections</span><span class="p">,</span>
-            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing collection&quot;</span><span class="p">,</span>
+        <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
             <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">),</span>
+            <span class="n">iterable</span><span class="o">=</span><span class="n">pds_collections</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Processing collection&quot;</span><span class="p">,</span>
             <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
-        <span class="p">):</span>
-            <span class="n">tqdm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing the collection </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="c1"># Create items</span>
-            <span class="n">items_stac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_items_stac</span><span class="p">(</span>
-                <span class="n">pds_records</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">tqdm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;No new item, skip the STAC catalogs creation&quot;</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">tqdm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items to add&quot;</span><span class="p">)</span>
-
-            <span class="c1"># load STAC collection if it exists</span>
-            <span class="n">stac_collection</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
-                <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_collection_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-
-            <span class="c1"># load STAC instrument if it exists</span>
-            <span class="n">stac_instru</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
-                <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_instrument_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-
-            <span class="c1"># load STAC plateform if it exists</span>
-            <span class="n">stac_host</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
-                <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_plateform_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-
-            <span class="c1"># load STAC mission if it exists</span>
-            <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
-                <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_mission_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-
-            <span class="c1"># load STAC body if it exists</span>
-            <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
-                <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">pds_collection</span><span class="o">.</span><span class="n">get_body_id</span><span class="p">()),</span>
-            <span class="p">)</span>
-
-            <span class="n">new_catalog</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
-                <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">]</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_body</span><span class="p">):</span>
-                <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_body_catalog</span><span class="p">()</span>
+            <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">progress_logger</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">cast</span><span class="p">(</span>
+                <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span> <span class="n">progress_logger</span>
+            <span class="p">):</span>
+                <span class="n">progress_logger</span><span class="o">.</span><span class="n">write_msg</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Processing the collection </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_body</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_body</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">):</span>
-                <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_mission_catalog</span><span class="p">()</span>
+                <span class="c1"># Create items</span>
+                <span class="n">items_stac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_items_stac</span><span class="p">(</span>
+                    <span class="n">pds_records</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_mission</span>
-                <span class="n">stac_body</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">progress_logger</span><span class="o">.</span><span class="n">write_msg</span><span class="p">(</span>
+                        <span class="s2">&quot;No new item, skip the STAC catalogs creation&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">progress_logger</span><span class="o">.</span><span class="n">write_msg</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items to add&quot;</span>
+                    <span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_host</span><span class="p">):</span>
-                <span class="n">stac_host</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_platform_catalog</span><span class="p">()</span>
+                <span class="c1"># load STAC collection if it exists</span>
+                <span class="n">stac_collection</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_collection_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_host</span>
-                <span class="n">stac_mission</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_host</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_instru</span><span class="p">):</span>
-                <span class="n">stac_instru</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_instru_catalog</span><span class="p">()</span>
+                <span class="c1"># load STAC instrument if it exists</span>
+                <span class="n">stac_instru</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_instrument_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_instru</span>
-                <span class="n">stac_host</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_instru</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">):</span>
-                <span class="n">stac_collection</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_collection</span><span class="p">()</span>
+                <span class="c1"># load STAC plateform if it exists</span>
+                <span class="n">stac_host</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_plateform_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
+
+                <span class="c1"># load STAC mission if it exists</span>
+                <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_mission_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># load STAC body if it exists</span>
+                <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">pds_collection</span><span class="o">.</span><span class="n">get_body_id</span><span class="p">()),</span>
+                <span class="p">)</span>
+
+                <span class="n">new_catalog</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+                    <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">]</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_body</span><span class="p">):</span>
+                    <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_body_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_body</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_body</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">):</span>
+                    <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_mission_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_mission</span>
+                    <span class="n">stac_body</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_host</span><span class="p">):</span>
+                    <span class="n">stac_host</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_platform_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_host</span>
+                    <span class="n">stac_mission</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_host</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_instru</span><span class="p">):</span>
+                    <span class="n">stac_instru</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_instru_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_instru</span>
+                    <span class="n">stac_host</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_instru</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">):</span>
+                    <span class="n">stac_collection</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_collection</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_collection</span>
+                    <span class="n">stac_instru</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">)</span>
+
+                <span class="n">stac_collection</span><span class="o">.</span><span class="n">add_items</span><span class="p">(</span><span class="n">items_stac</span><span class="p">)</span>
+
                 <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_collection</span>
-                <span class="n">stac_instru</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">)</span>
-
-            <span class="n">stac_collection</span><span class="o">.</span><span class="n">add_items</span><span class="p">(</span><span class="n">items_stac</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">)</span>
-                <span class="n">parent</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">stac_collection</span><span class="o">.</span><span class="n">get_parent</span><span class="p">())</span>
-                <span class="n">parent</span><span class="o">.</span><span class="n">save_object</span><span class="p">(</span><span class="n">include_self_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span><span class="n">new_catalog</span><span class="p">)</span>
-                <span class="n">parent</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">new_catalog</span><span class="o">.</span><span class="n">get_parent</span><span class="p">())</span>
-                <span class="n">parent</span><span class="o">.</span><span class="n">save_object</span><span class="p">(</span><span class="n">include_self_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span>
+                        <span class="n">stac_collection</span>
+                    <span class="p">)</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                        <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">stac_collection</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="n">parent</span><span class="o">.</span><span class="n">save_object</span><span class="p">(</span><span class="n">include_self_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span><span class="n">new_catalog</span><span class="p">)</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">new_catalog</span><span class="o">.</span><span class="n">get_parent</span><span class="p">())</span>
+                    <span class="n">parent</span><span class="o">.</span><span class="n">save_object</span><span class="p">(</span><span class="n">include_self_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="StacRecordsTransformer.describe"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Describes the STAC catalog and its children as a tree&quot;&quot;&quot;</span>
