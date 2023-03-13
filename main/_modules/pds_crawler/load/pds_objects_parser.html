@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.load.pds_objects_parser &#8212; pds-crawler 0.1.dev1+g65f6b94 documentation</title>
+    <title>pds_crawler.load.pds_objects_parser &#8212; pds-crawler 0.1.dev1+g4deafe6 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g65f6b94</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g4deafe6</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -282,6 +282,7 @@
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractproperty</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
@@ -294,6 +295,7 @@
 <span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">Tree</span>
 <span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">v_args</span>
 
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">ParserTimeOutError</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">DataSetMapProjectionModel</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">DataSetModel</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">InstrumentHostModel</span>
@@ -1035,6 +1037,10 @@
 <div class="viewcode-block" id="PdsParserFactory"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsParserFactory">[docs]</a><span class="k">class</span> <span class="nc">PdsParserFactory</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Factory to select the right parser and the related Lark grammar.&quot;&quot;&quot;</span>
 
+    <span class="n">DEFAULT_PARSER_TIMEOUT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">30</span>  <span class="c1"># default timeout in seconds to parse a resource</span>
+    <span class="p">)</span>
+
 <div class="viewcode-block" id="PdsParserFactory.FileGrammary"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary">[docs]</a>    <span class="k">class</span> <span class="nc">FileGrammary</span><span class="p">(</span><span class="n">GrammarEnum</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Mapping between enum, Lark grammar and implementation class.&quot;&quot;&quot;</span>
 
@@ -1113,6 +1119,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parser</span><span class="p">:</span> <span class="n">Lark</span>
         <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">DEFAULT_PARSER_TIMEOUT</span>
+        <span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[PdsParserFactory] </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span> <span class="ow">and</span> <span class="s2">&quot;PDS_VERSION_ID&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">uri</span><span class="p">:</span>
             <span class="c1"># Path(uri).is_file is not enough for the test</span>
@@ -1142,7 +1151,14 @@
             <span class="s2">&quot;grammar&quot;</span><span class="p">,</span>
             <span class="n">type_file</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
         <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">timeout_handler</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Parsing took too long!&quot;</span><span class="p">)</span>
+
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">timeout_handler</span><span class="p">)</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
         <span class="n">parser</span> <span class="o">=</span> <span class="n">Lark</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">grammary_file</span><span class="p">,</span> <span class="n">rel_to</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="n">transformer</span><span class="p">:</span> <span class="n">PdsTransformer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
@@ -1156,7 +1172,13 @@
                 <span class="o">+</span> <span class="vm">__name__</span>
                 <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
                 <span class="o">+</span> <span class="n">type_file</span><span class="o">.</span><span class="n">class_name</span>
-            <span class="p">)</span></div></div>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+            <span class="n">err_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Parsing </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2"> took too long!&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ParserTimeOutError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
 </pre></div>
 
     </div>

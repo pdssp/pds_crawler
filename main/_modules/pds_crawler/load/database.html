@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g65f6b94 documentation</title>
+    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g4deafe6 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g65f6b94</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g4deafe6</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -527,15 +527,20 @@
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="PdsCollectionStorage.get_volume_description"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.get_volume_description">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">get_volume_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VolumeModel</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_volume_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VolumeModel</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a VolumeModel object containing the parsed contents of the &quot;voldesc.cat&quot; file in the directory</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            timeout (int, optional): parser timeout in seconds. Defaults to 30</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            VolumeModel: Voldesc.cat object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">voldesc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;voldesc.cat&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
-            <span class="n">voldesc</span><span class="p">,</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span><span class="o">.</span><span class="n">VOL_DESC</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">voldesc</span><span class="p">,</span>
+            <span class="n">type_file</span><span class="o">=</span><span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span><span class="o">.</span><span class="n">VOL_DESC</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsCollectionStorage.list_catalogs"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.list_catalogs">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -555,7 +560,10 @@
 
 <div class="viewcode-block" id="PdsCollectionStorage.get_catalog"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.get_catalog">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">get_catalog</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">catalogue_type</span><span class="p">:</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">catalogue_type</span><span class="p">:</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the parsed contents of a PDS catalogue file specified by</span>
 <span class="sd">        the file argument, using the catalogue_type argument to specify the</span>
@@ -564,12 +572,15 @@
 <span class="sd">        Args:</span>
 <span class="sd">            file (str): PDS catalog</span>
 <span class="sd">            catalogue_type (PdsParserFactory.FileGrammary): Information about the catalog</span>
+<span class="sd">            timeout (int, optional): parser timeout. Defaults to 30</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Any: the parsed contents of a PDS catalogue file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">catalogue_type</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">type_file</span><span class="o">=</span><span class="n">catalogue_type</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PdsCollectionStorage.download"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.download">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">download</span><span class="p">(</span>

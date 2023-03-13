@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g65f6b94 documentation</title>
+    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g4deafe6 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g65f6b94</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g4deafe6</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -1157,7 +1157,7 @@ The list of catalogs (URL included) is provided by catalogs_from_desc_cat</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._parse_catalog">
-<span class="sig-name descname"><span class="pre">_parse_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.PdsCollectionStorage" title="pds_crawler.load.database.PdsCollectionStorage"><span class="pre">pds_crawler.load.database.PdsCollectionStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogDescription._parse_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._parse_catalog" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_parse_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_storage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.database.PdsCollectionStorage" title="pds_crawler.load.database.PdsCollectionStorage"><span class="pre">pds_crawler.load.database.PdsCollectionStorage</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogDescription._parse_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription._parse_catalog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses the PDS object (<cite>catalog_name</cite>), represented by a catalog type and stored
 on the file storage with a specific implementation associated to the catalog_type.</p>
 <p>The catalog is parsed by using the <cite>get_catalog`method from the PdsStorage
@@ -1172,6 +1172,7 @@ object.</p>
 <li><p><strong>catalog_name</strong> (<em>str</em>) – catalog name that must be parsed</p></li>
 <li><p><strong>cat_type</strong> (<em>str</em>) – Type of catalog where an implementation is associated</p></li>
 <li><p><strong>result</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em>) – the catalogs in the Volume description</p></li>
+<li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – parser timeout in seconds. Defaults to 30</p></li>
 </ul>
 </dd>
 </dl>
@@ -1196,7 +1197,7 @@ object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.get_ode_catalogs">
-<span class="sig-name descname"><span class="pre">get_ode_catalogs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogDescription.get_ode_catalogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.get_ode_catalogs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_ode_catalogs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogDescription.get_ode_catalogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogDescription.get_ode_catalogs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the PDS objects for a given space mission collection.</p>
 <p>The function retrieves the PdsStorage object associated
 with the PdsRegistryModel using get_pds_storage_for(), and then
@@ -1206,7 +1207,10 @@ in the directory using list_catalogs(), and for each catalog, it uses
 _parse_catalog() to retrieve information on each catalog.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pds_collection</strong> (<em>PdsRegistryModel</em>) – the space mission collection</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pds_collection</strong> (<em>PdsRegistryModel</em>) – the space mission collection</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – parser timeout in seconds. Default to 30</p></li>
+</ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>TypeError</strong> – Illegal datatype for catalog</p>
@@ -1379,7 +1383,7 @@ download process.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription.get_ode_catalogs">
-<span class="sig-name descname"><span class="pre">get_ode_catalogs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogsDescription.get_ode_catalogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription.get_ode_catalogs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_ode_catalogs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_collections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pds_crawler/extractor/pds_ode_website.html#PDSCatalogsDescription.get_ode_catalogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription.get_ode_catalogs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all the PDS objects for the <cite>pds_collections</cite>.</p>
 <p>This class PDSCatalogsDescription provides the means to download the
 PDS catalogs for the PDS collections. It has three main
@@ -1397,7 +1401,10 @@ The method internally calls the get_ode_catalogs() method of the PDSCatalogDescr
 class, which retrieves the PDS objects for a given collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pds_collections</strong> (<em>List</em><em>[</em><em>PdsRegistryModel</em><em>]</em>) – the collections of the space mission.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pds_collections</strong> (<em>List</em><em>[</em><em>PdsRegistryModel</em><em>]</em>) – the collections of the space mission.</p></li>
+<li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – parser timeout in seconds. Defaults to 30</p></li>
+</ul>
 </dd>
 <dt class="field-even">Yields</dt>
 <dd class="field-even"><p><em>Iterator[Dict[str, Any]]</em> – PDS object name and its object</p>
@@ -1641,7 +1648,7 @@ Averything is saved in to_stac method</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.to_stac">
-<span class="sig-name descname"><span class="pre">to_stac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_ode_catalogs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription" title="pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription"><span class="pre">pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pds_collections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/transformer/pds_to_stac.html#StacCatalogTransformer.to_stac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.to_stac" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">to_stac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pds_ode_catalogs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription" title="pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription"><span class="pre">pds_crawler.extractor.pds_ode_website.PDSCatalogsDescription</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pds_collections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pds_crawler.models.ode_ws_models.PdsRegistryModel</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pds_crawler/transformer/pds_to_stac.html#StacCatalogTransformer.to_stac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.to_stac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates the STAC catalog and its children.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1945,7 +1952,7 @@ directory as the output directory.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.load.database.PdsCollectionStorage.get_catalog">
-<span class="sig-name descname"><span class="pre">get_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalogue_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary" title="pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary"><span class="pre">pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/pds_crawler/load/database.html#PdsCollectionStorage.get_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.PdsCollectionStorage.get_catalog" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalogue_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary" title="pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary"><span class="pre">pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/pds_crawler/load/database.html#PdsCollectionStorage.get_catalog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.PdsCollectionStorage.get_catalog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the parsed contents of a PDS catalogue file specified by
 the file argument, using the catalogue_type argument to specify the
 type of catalogue parser to use.</p>
@@ -1954,6 +1961,7 @@ type of catalogue parser to use.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file</strong> (<em>str</em>) – PDS catalog</p></li>
 <li><p><strong>catalogue_type</strong> (<a class="reference internal" href="#pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary" title="pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary"><em>PdsParserFactory.FileGrammary</em></a>) – Information about the catalog</p></li>
+<li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – parser timeout. Defaults to 30</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1967,14 +1975,17 @@ type of catalogue parser to use.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pds_crawler.load.database.PdsCollectionStorage.get_volume_description">
-<span class="sig-name descname"><span class="pre">get_volume_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pds_crawler.models.pds_models.VolumeModel</span></span></span><a class="reference internal" href="_modules/pds_crawler/load/database.html#PdsCollectionStorage.get_volume_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.PdsCollectionStorage.get_volume_description" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_volume_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pds_crawler.models.pds_models.VolumeModel</span></span></span><a class="reference internal" href="_modules/pds_crawler/load/database.html#PdsCollectionStorage.get_volume_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pds_crawler.load.database.PdsCollectionStorage.get_volume_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a VolumeModel object containing the parsed contents of the “voldesc.cat” file in the directory</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Voldesc.cat object</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – parser timeout in seconds. Defaults to 30</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>VolumeModel</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Voldesc.cat object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>VolumeModel</p>
 </dd>
 </dl>
 </dd></dl>
