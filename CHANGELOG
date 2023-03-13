@@ -1,4 +1,14 @@
-### Change the way to lock the file (HEAD -> main)
+### Change conf.py for doc generation Add logs for STAC transformation (HEAD -> main)
+>Mon, 13 Mar 2023 10:39:42 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Change the way to lock the file (origin/main)
 >Mon, 13 Mar 2023 09:36:13 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Add multiversion doc (tag: latest, tag: 1.0.0rc1, origin/main)
+### Add multiversion doc (tag: latest, tag: 1.0.0rc1)
 >Mon, 13 Mar 2023 04:59:14 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

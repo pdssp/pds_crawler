@@ -68,7 +68,7 @@ smv_tag_whitelist = (
 # Whitelist pattern for branches (set to '' to ignore all branches)
 smv_branch_whitelist = ""
 smv_released_pattern = r"v.*"
-smv_latest_version = "v1.0.0-rc0"
+smv_latest_version = "latest"
 smv_remote_whitelist = None
 
 # Add any paths that contain templates here, relative to this directory.

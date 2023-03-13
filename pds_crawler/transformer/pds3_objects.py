@@ -452,6 +452,7 @@ class StacPdsCollection:
         return self.__root_stac
 
     def to_stac(self):
+        logger.info(f"STAC transformation of {self.catalogs}")
         # Get the PDS3 reference catalog
         ref_catalog_name: str = (
             PdsParserFactory.FileGrammary.REFERENCE_CATALOG.name
@@ -490,6 +491,6 @@ class StacPdsCollection:
         catalogs = list(self.catalogs.keys())
         catalogs.sort(key=lambda val: StacPdsCollection.SORT_ORDER[val])
         for catalog_name in catalogs:
-            logger.debug(f"\nProcessing {catalog_name}")
+            logger.info(f"\tSTAC transformation of {catalog_name}")
             catalog = self.catalogs[catalog_name]
             mission.handle(catalog)

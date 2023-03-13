@@ -4,7 +4,6 @@ body {
   /* do not increase min-width as some may use split screens */
   min-width: 800px;
   color: #999;
-  max-width: 100%;
 }
 
 h1 {
