@@ -53,7 +53,7 @@ class CrawlerReport(Observer):
     def name(self, value: str):
         self.__name = value
 
-    def start_report(self, mode: str = "w"):
+    def start_report(self, mode: str = "a"):
         self.__file = open(
             os.path.join(self.__db.base_directory, self.name), mode=mode
         )
@@ -61,8 +61,8 @@ class CrawlerReport(Observer):
 
     def _write_header(self):
         header = """
-        Resource        |       Explanation
-        ----------------|-------------------
+        | Resource        |       Explanation |
+        | ----------------|-------------------|
         """
         if self.__file is None:
             logger.error(header)
@@ -83,6 +83,8 @@ class CrawlerReport(Observer):
         """
         message: MessageModel = args[0]
         if self.__file is None:
-            logger.error(f"{message.resource}  | {message.explanation}")
+            logger.error(f"| {message.resource}  | {message.explanation} |")
         else:
-            self.__file.write(f"{message.resource}  | {message.explanation}\n")
+            self.__file.write(
+                f"| {message.resource}  | {message.explanation} |\n"
+            )
