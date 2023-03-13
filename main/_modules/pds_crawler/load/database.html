@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+g8812bf6 documentation</title>
+    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+gb2c044f documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g8812bf6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+gb2c044f</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -653,12 +653,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
 
     <span class="k">def</span> <span class="nf">init_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;author&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">metadata</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Jean-Christophe Malapert&quot;</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">reset_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -757,10 +757,10 @@
 <span class="sd">            bool: True is the collection is saved otherwise False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">is_saved</span><span class="p">:</span> <span class="nb">bool</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">is_saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">is_saved</span></div>
 
 <div class="viewcode-block" id="Hdf5Storage.save_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_collections">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -776,11 +776,11 @@
 <span class="sd">            bool: True is the collection is saved otherwise False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">is_saved</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">collections_pds</span><span class="p">:</span>
                 <span class="n">is_saved</span> <span class="o">=</span> <span class="n">is_saved</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">is_saved</span></div>
 
 <div class="viewcode-block" id="Hdf5Storage.load_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.load_collections">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -803,10 +803,10 @@
                 <span class="n">dico</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_and_convert_attributes</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
                 <span class="n">pds_collections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PdsRegistryModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dico</span><span class="p">))</span>
 
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">visititems</span><span class="p">(</span><span class="n">extract_attributes</span><span class="p">)</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># filter pds_collection by body name</span>
         <span class="n">pds_registry_models</span> <span class="o">=</span> <span class="p">[</span>
@@ -835,8 +835,8 @@
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collection, used to define the name of the dataset</span>
 <span class="sd">            urls (List[str]): URLs to save</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
@@ -858,7 +858,7 @@
             <span class="p">)</span>
             <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span><span class="p">)</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Hdf5Storage._save_urls_in_existing_dataset"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._save_urls_in_existing_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">_save_urls_in_existing_dataset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
@@ -869,8 +869,8 @@
 <span class="sd">            pds_collection (PdsRegistryModel): PDS collections used to define the name of the dataset to load</span>
 <span class="sd">            urls (List[str]): urls to save</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
@@ -889,7 +889,7 @@
             <span class="n">dset</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">),))</span>
             <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span><span class="p">)</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Hdf5Storage.save_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_urls">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">save_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
@@ -928,8 +928,8 @@
 <span class="sd">            List[str]: List of URLs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
@@ -944,7 +944,7 @@
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">dset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset</span><span class="p">)]</span>  <span class="c1"># type: ignore</span>
-            <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">urls</span></div>
 
 <div class="viewcode-block" id="Hdf5Storage.define_group_from"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.define_group_from">[docs]</a>    <span class="nd">@staticmethod</span>
