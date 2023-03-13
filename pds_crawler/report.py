@@ -70,10 +70,11 @@ class CrawlerReport(Observer):
             self.__file.write(header)
 
     def close_report(self):
-        if self.__file:
+        if self.__file is not None:
             self.__file.flush()
             self.__file.close()
             del self.__file
+            self.__file = None
 
     def notify(self, observable, *args, **kwargs):
         """Receives the notification.
