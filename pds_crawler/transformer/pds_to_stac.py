@@ -383,6 +383,7 @@ class StacCatalogTransformer(StacTransformer):
             catalogs_pds_collections (Iterator[Dict[str, Any]]): Catalogs for all PDS collections
         """
         for catalogs_pds_collection in catalogs_pds_collections:
+            logger.info(f"Creating STAC catalog for {catalogs_pds_collection}")
             self.__stac_pds_collection.catalogs = catalogs_pds_collection
             self.__stac_pds_collection.to_stac()
 
