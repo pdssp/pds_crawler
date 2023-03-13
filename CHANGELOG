@@ -1,4 +1,14 @@
-### Add multiversion doc (HEAD -> main)
+### Change the way to lock the file (HEAD -> main)
+>Mon, 13 Mar 2023 09:36:13 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add multiversion doc (tag: latest, tag: 1.0.0rc1, origin/main)
 >Mon, 13 Mar 2023 04:59:14 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +18,7 @@
 
 
 
-### Fix option in tqdm (tag: v1.0.0-rc0, tag: rm, origin/main)
+### Fix option in tqdm
 >Mon, 13 Mar 2023 03:48:28 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

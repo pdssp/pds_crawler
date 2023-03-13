@@ -4,8 +4,6 @@
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 import concurrent.futures
-import errno
-import fcntl
 import logging
 import os
 import time
@@ -530,19 +528,15 @@ class ProgressLogger:
 class Locking:
     @staticmethod
     def lock_file(file):
+        lock_file = file + ".lock"
         locking = False
         while not locking:
             try:
-                # lock the file in exclusif mode
-                fcntl.flock(
-                    file.id.get_vfd_handle(), fcntl.LOCK_EX | fcntl.LOCK_NB
-                )
+                os.mkdir(lock_file)
                 locking = True
-            except IOError as e:
-                if e.errno != errno.EAGAIN:
-                    raise
+            except OSError:
                 time.sleep(0.1)
 
     @staticmethod
     def unlock_file(file):
-        fcntl.flock(file.id.get_vfd_handle(), fcntl.LOCK_UN)
+        os.rmdir(file + ".lock")
