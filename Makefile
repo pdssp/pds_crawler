@@ -93,13 +93,14 @@ tests:  ## Run tests
 tox:
 	tox -e py37
 
-doc:
+doc: #	make html -C docs
 	make licences > third_party.txt
 	rm -rf docs/source/_static/coverage
 	pytest -ra --html=docs/source/_static/report.html
 	make coverage
 	coverage html -d docs/source/_static/coverage
-	make html -C docs
+	sphinx-multiversion docs/source docs/build/html
+	cp docs/source/_static/index.html docs/build/html/index.html
 
 doc-pdf:
 	make doc && make latexpdf -C docs

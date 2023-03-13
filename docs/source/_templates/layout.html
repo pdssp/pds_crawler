@@ -1,6 +1,18 @@
 
 {% extends "!layout.html" %}
 
+{% block document %}
+{% if current_version and latest_version and current_version.name != 'latest' and current_version != latest_version %}
+<div class="admonition attention">
+  <p class="admonition-title">Warning!</p>
+    <p>
+      You are consulting an old version of this documentation.
+      If you want to read the most recent one, it is here <a href="{{ vpathto(latest_version.name) }}">{{latest_version.name}}</a>.
+  </p>
+</div>
+{% endif %}
+{{ super() }}
+{% endblock %}%
 
 {% block footer %}
   <!--<h2>My footer of awesomeness.</h2>-->

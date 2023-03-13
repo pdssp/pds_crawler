@@ -59,10 +59,25 @@ extensions = [
     "sphinxcontrib.plantuml",
     "sphinxcontrib.mermaid",
     "sphinx.ext.githubpages",
+    "sphinx_multiversion",
 ]
+
+smv_tag_whitelist = (
+    r"^v\d+\.\d+.*$|latest"  # all tags of form v*.*.x and latest
+)
+# Whitelist pattern for branches (set to '' to ignore all branches)
+smv_branch_whitelist = ""
+smv_released_pattern = r"v.*"
+smv_latest_version = "v1.0.0-rc0"
+smv_remote_whitelist = None
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
+html_sidebars = {
+    "**": [
+        "versioning.html",
+    ],
+}
 autosummary_generate = True
 
 source_suffix = ".rst"
