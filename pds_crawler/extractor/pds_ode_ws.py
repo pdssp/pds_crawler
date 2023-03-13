@@ -28,6 +28,7 @@ import os
 import urllib.parse
 from contextlib import closing
 from typing import Any
+from typing import cast
 from typing import Dict
 from typing import Iterator
 from typing import List
@@ -44,6 +45,7 @@ from ..models import PdsRecordsModel
 from ..models import PdsRegistryModel
 from ..report import MessageModel
 from ..utils import Observable
+from ..utils import ProgressLogger
 from ..utils import requests_retry_session
 
 logger = logging.getLogger(__name__)
@@ -525,19 +527,22 @@ class PdsRecordsWs(Observable):
             time_sleep (int, optional): Time to way between two download series. Defaults to 1.
             progress_bar (bool, optional): Set progress bar. Defaults to True.
         """
-        for pds_collection in tqdm(
-            pds_collections,
-            desc="Getting collections",
+        with ProgressLogger(
+            total=len(pds_collections),
+            iterable=pds_collections,
+            logger=logger,
+            description="Getting collections",
             position=0,
-            disable=not progress_bar,
-        ):
-            self.download_pds_records_for_one_collection(
-                pds_collection,
-                limit,
-                nb_workers=nb_workers,
-                time_sleep=time_sleep,
-                progress_bar=progress_bar,
-            )
+            disable_tqdm=not progress_bar,
+        ) as progress_logger:
+            for pds_collection in progress_logger:
+                self.download_pds_records_for_one_collection(
+                    cast(PdsRegistryModel, pds_collection),
+                    limit,
+                    nb_workers=nb_workers,
+                    time_sleep=time_sleep,
+                    progress_bar=progress_bar,
+                )
 
     def parse_pds_collection_from_cache(
         self, pds_collection: PdsRegistryModel, progress_bar: bool = True
@@ -575,27 +580,32 @@ class PdsRecordsWs(Observable):
         collection_storage: PdsCollectionStorage = (
             self.database.pds_storage.get_pds_storage_for(pds_collection)
         )
-        for file in tqdm(
-            collection_storage.list_records_files(),
-            desc="Downloaded responses from the collection",
-            disable=not progress_bar,
+        records_files: List[str] = collection_storage.list_records_files()
+        with ProgressLogger(
+            total=len(records_files),
+            iterable=records_files,
+            logger=logger,
+            description="Downloaded responses from the collection",
             position=1,
             leave=False,
-        ):
-            file = os.path.join(collection_storage.directory, file)
-            content: str
-            with open(file, encoding="utf8", errors="ignore") as f:
-                content = f.read()
-                try:
-                    result = json.loads(
-                        content, object_hook=dsRecordsModelDecoder
-                    )
-                    if result is not None:
-                        yield result
-                except json.JSONDecodeError as err:
-                    message = f"{file} must be deleted !"
-                    logger.error(message)
-                    self.notify_observers(MessageModel(file, err))
+        ) as progress_logger:
+            for file_in_records in progress_logger:
+                file = os.path.join(
+                    collection_storage.directory, cast(str, file_in_records)
+                )
+                content: str
+                with open(file, encoding="utf8", errors="ignore") as f:
+                    content = f.read()
+                    try:
+                        result = json.loads(
+                            content, object_hook=dsRecordsModelDecoder
+                        )
+                        if result is not None:
+                            yield result
+                    except json.JSONDecodeError as err:
+                        message = f"{file} must be deleted !"
+                        logger.error(message)
+                        self.notify_observers(MessageModel(file, err))
 
     def __repr__(self) -> str:
         return f"PdsRecordsWs({self.database})"

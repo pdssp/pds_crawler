@@ -40,10 +40,12 @@ from ..exception import CrawlerError
 from ..extractor import PDSCatalogsDescription
 from ..extractor import PdsRecordsWs
 from ..load import Database
+from ..models import PdsRecordModel
 from ..models import PdsRecordsModel
 from ..models import PdsRegistryModel
 from ..report import MessageModel
 from ..utils import Observable
+from ..utils import ProgressLogger
 from .pds3_objects import StacPdsCollection
 
 logger = logging.getLogger(__name__)
@@ -151,23 +153,30 @@ class StacRecordsTransformer(StacTransformer):
                 Iterator[Iterable[pystac.Item]]: Items
             """
             for page in pages:
-                for record in tqdm(
-                    page.pds_records_model,
-                    desc="STAC Item objects creation",
-                    total=len(page.pds_records_model),
+                pds_records_model = page.pds_records_model
+                with ProgressLogger(
+                    total=len(pds_records_model),
+                    iterable=pds_records_model,
+                    logger=logger,
+                    description="STAC Item objects creation",
                     position=2,
                     leave=False,
-                    disable=not progress_bar,
-                ):
-                    if self.database.stac_storage.item_exists(record):
-                        logger.warning(
-                            f"this {record} exists in STAC directory, skip it"
-                        )
-                        continue
-                    try:
-                        yield record.to_stac_item(pds_collection)
-                    except CrawlerError as err:
-                        self.notify_observers(MessageModel(record.ode_id, err))
+                    disable_tqdm=not progress_bar,
+                ) as pds_records_model_pbar:
+                    for record in cast(
+                        List[PdsRecordModel], pds_records_model_pbar
+                    ):
+                        if self.database.stac_storage.item_exists(record):
+                            logger.warning(
+                                f"this {record} exists in STAC directory, skip it"
+                            )
+                            continue
+                        try:
+                            yield record.to_stac_item(pds_collection)
+                        except CrawlerError as err:
+                            self.notify_observers(
+                                MessageModel(record.ode_id, err)
+                            )
 
         pages: Iterator[
             PdsRecordsModel
@@ -202,117 +211,131 @@ class StacRecordsTransformer(StacTransformer):
             pds_collections (List[PdsRegistryModel]): All PDS collections data
             progress_bar (bool, optional): Set progress bar. Defaults to True
         """
-        for pds_collection in tqdm(
-            pds_collections,
-            desc="Processing collection",
+        with ProgressLogger(
             total=len(pds_collections),
+            iterable=pds_collections,
+            logger=logger,
+            description="Processing collection",
             position=0,
-            disable=not progress_bar,
-        ):
-            tqdm.write(f"Processing the collection {pds_collection}")
-
-            # Create items
-            items_stac = self._create_items_stac(
-                pds_records, pds_collection, progress_bar=progress_bar
-            )
-            if len(items_stac.items) == 0:
-                tqdm.write("No new item, skip the STAC catalogs creation")
-                continue
-            else:
-                tqdm.write(f"{len(items_stac.items)} items to add")
-
-            # load STAC collection if it exists
-            stac_collection = cast(
-                pystac.Collection,
-                self.catalog.get_child(
-                    pds_collection.get_collection_id(), recursive=True
-                ),
-            )
-
-            # load STAC instrument if it exists
-            stac_instru = cast(
-                pystac.Catalog,
-                self.catalog.get_child(
-                    pds_collection.get_instrument_id(), recursive=True
-                ),
-            )
-
-            # load STAC plateform if it exists
-            stac_host = cast(
-                pystac.Catalog,
-                self.catalog.get_child(
-                    pds_collection.get_plateform_id(), recursive=True
-                ),
-            )
-
-            # load STAC mission if it exists
-            stac_mission: pystac.Catalog = cast(
-                pystac.Catalog,
-                self.catalog.get_child(
-                    pds_collection.get_mission_id(), recursive=True
-                ),
-            )
-
-            # load STAC body if it exists
-            stac_body: pystac.Catalog = cast(
-                pystac.Catalog,
-                self.catalog.get_child(pds_collection.get_body_id()),
-            )
-
-            new_catalog: Optional[
-                Union[pystac.Catalog, pystac.Collection]
-            ] = None
-
-            if not self._is_exist(stac_body):
-                stac_body: pystac.Catalog = (
-                    pds_collection.create_stac_body_catalog()
+            disable_tqdm=not progress_bar,
+        ) as progress_logger:
+            for pds_collection in cast(
+                List[PdsRegistryModel], progress_logger
+            ):
+                progress_logger.write_msg(
+                    f"Processing the collection {pds_collection}"
                 )
-                if new_catalog is None:
-                    new_catalog = stac_body
-                self.catalog.add_child(stac_body)
 
-            if not self._is_exist(stac_mission):
-                stac_mission: pystac.Catalog = (
-                    pds_collection.create_stac_mission_catalog()
+                # Create items
+                items_stac = self._create_items_stac(
+                    pds_records, pds_collection, progress_bar=progress_bar
                 )
-                if new_catalog is None:
-                    new_catalog = stac_mission
-                stac_body.add_child(stac_mission)
+                if len(items_stac.items) == 0:
+                    progress_logger.write_msg(
+                        "No new item, skip the STAC catalogs creation"
+                    )
+                    continue
+                else:
+                    progress_logger.write_msg(
+                        f"{len(items_stac.items)} items to add"
+                    )
 
-            if not self._is_exist(stac_host):
-                stac_host: pystac.Catalog = (
-                    pds_collection.create_stac_platform_catalog()
+                # load STAC collection if it exists
+                stac_collection = cast(
+                    pystac.Collection,
+                    self.catalog.get_child(
+                        pds_collection.get_collection_id(), recursive=True
+                    ),
                 )
-                if new_catalog is None:
-                    new_catalog = stac_host
-                stac_mission.add_child(stac_host)
 
-            if not self._is_exist(stac_instru):
-                stac_instru: pystac.Catalog = (
-                    pds_collection.create_stac_instru_catalog()
+                # load STAC instrument if it exists
+                stac_instru = cast(
+                    pystac.Catalog,
+                    self.catalog.get_child(
+                        pds_collection.get_instrument_id(), recursive=True
+                    ),
                 )
-                if new_catalog is None:
-                    new_catalog = stac_instru
-                stac_host.add_child(stac_instru)
 
-            if not self._is_exist(stac_collection):
-                stac_collection: pystac.Catalog = (
-                    pds_collection.create_stac_collection()
+                # load STAC plateform if it exists
+                stac_host = cast(
+                    pystac.Catalog,
+                    self.catalog.get_child(
+                        pds_collection.get_plateform_id(), recursive=True
+                    ),
                 )
+
+                # load STAC mission if it exists
+                stac_mission: pystac.Catalog = cast(
+                    pystac.Catalog,
+                    self.catalog.get_child(
+                        pds_collection.get_mission_id(), recursive=True
+                    ),
+                )
+
+                # load STAC body if it exists
+                stac_body: pystac.Catalog = cast(
+                    pystac.Catalog,
+                    self.catalog.get_child(pds_collection.get_body_id()),
+                )
+
+                new_catalog: Optional[
+                    Union[pystac.Catalog, pystac.Collection]
+                ] = None
+
+                if not self._is_exist(stac_body):
+                    stac_body: pystac.Catalog = (
+                        pds_collection.create_stac_body_catalog()
+                    )
+                    if new_catalog is None:
+                        new_catalog = stac_body
+                    self.catalog.add_child(stac_body)
+
+                if not self._is_exist(stac_mission):
+                    stac_mission: pystac.Catalog = (
+                        pds_collection.create_stac_mission_catalog()
+                    )
+                    if new_catalog is None:
+                        new_catalog = stac_mission
+                    stac_body.add_child(stac_mission)
+
+                if not self._is_exist(stac_host):
+                    stac_host: pystac.Catalog = (
+                        pds_collection.create_stac_platform_catalog()
+                    )
+                    if new_catalog is None:
+                        new_catalog = stac_host
+                    stac_mission.add_child(stac_host)
+
+                if not self._is_exist(stac_instru):
+                    stac_instru: pystac.Catalog = (
+                        pds_collection.create_stac_instru_catalog()
+                    )
+                    if new_catalog is None:
+                        new_catalog = stac_instru
+                    stac_host.add_child(stac_instru)
+
+                if not self._is_exist(stac_collection):
+                    stac_collection: pystac.Catalog = (
+                        pds_collection.create_stac_collection()
+                    )
+                    if new_catalog is None:
+                        new_catalog = stac_collection
+                    stac_instru.add_child(stac_collection)
+
+                stac_collection.add_items(items_stac)
+
                 if new_catalog is None:
-                    new_catalog = stac_collection
-                stac_instru.add_child(stac_collection)
-
-            stac_collection.add_items(items_stac)
-
-            if new_catalog is None:
-                self.database.stac_storage.normalize_and_save(stac_collection)
-                parent = cast(pystac.Collection, stac_collection.get_parent())
-                parent.save_object(include_self_link=False)
-            else:
-                self.database.stac_storage.normalize_and_save(new_catalog)
-                parent = cast(pystac.Catalog, new_catalog.get_parent())
-                parent.save_object(include_self_link=False)
+                    self.database.stac_storage.normalize_and_save(
+                        stac_collection
+                    )
+                    parent = cast(
+                        pystac.Collection, stac_collection.get_parent()
+                    )
+                    parent.save_object(include_self_link=False)
+                else:
+                    self.database.stac_storage.normalize_and_save(new_catalog)
+                    parent = cast(pystac.Catalog, new_catalog.get_parent())
+                    parent.save_object(include_self_link=False)
 
     def describe(self):
         """Describes the STAC catalog and its children as a tree"""

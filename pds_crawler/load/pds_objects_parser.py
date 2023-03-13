@@ -928,8 +928,11 @@ class PdsParserFactory(ABC):
         parser: Lark
         content: str
         logger.debug(f"[PdsParserFactory] {uri}")
-        if Path(uri).is_file and not uri.startswith("PDS_VERSION_ID"):
+        if Path(uri).is_file and "PDS_VERSION_ID" not in uri:
             # Path(uri).is_file is not enough for the test
+            # for instance, some catalog starts like that
+            # 'CCSD3ZF0000100000001NJPL3IF0PDSX00000001
+            # instead of by PDS_VERSION_ID                       = PDS3
             logger.debug("[PdsParserFactory] URI is a file")
             with open(uri, encoding="utf8", errors="ignore") as f:
                 content = f.read()

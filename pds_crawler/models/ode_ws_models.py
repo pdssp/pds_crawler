@@ -88,6 +88,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
 from typing import Any
+from typing import cast
 from typing import Dict
 from typing import Iterator
 from typing import List
@@ -109,6 +110,7 @@ from ..exception import DateConversionError
 from ..exception import PdsCollectionAttributeError
 from ..exception import PdsRecordAttributeError
 from ..exception import PlanetNotFound
+from ..utils import ProgressLogger
 from ..utils import utc_to_iso
 from ..utils import UtilsMath
 from .common import AbstractModel
@@ -1264,15 +1266,20 @@ class PdsRecordsModel(AbstractModel):
     def to_stac_item_iter(
         self, pds_registry: PdsRegistryModel, progress_bar: bool = True
     ) -> Iterator[pystac.Item]:
-        for pds_record_model in tqdm(
-            self.pds_records_model,
-            desc="pystac.Item processing",
-            total=len(self.pds_records_model),
-            position=2,
+        pds_records = self.pds_records_model
+        with ProgressLogger(
+            total=len(pds_records),
+            iterable=pds_records,
+            logger=logger,
+            description="Downloaded responses from the collection",
+            position=1,
             leave=False,
-            disable=not progress_bar,
-        ):
-            yield pds_record_model.to_stac_item(pds_registry)
+            disable_tqdm=not progress_bar,
+        ) as progress_logger:
+            for pds_record_model in progress_logger:
+                yield cast(PdsRecordModel, pds_record_model).to_stac_item(
+                    pds_registry
+                )
 
     def __repr__(self) -> str:
         return f"PdsRecordsModel({self.target_name}/{self.plateform_id}/{self.instrument_id}/{self.dataset_id}, nb_records={len(self.pds_records_model)})"

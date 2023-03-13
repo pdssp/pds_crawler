@@ -1,4 +1,14 @@
-### Parse web page to get the volumeid param based on the volume_id value (HEAD -> main)
+### Add a progress bar using tqdm or logger (HEAD -> main)
+>Mon, 13 Mar 2023 02:46:51 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Parse web page to get the volumeid param based on the volume_id value
 >Mon, 13 Mar 2023 02:40:10 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
