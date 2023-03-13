@@ -1,4 +1,14 @@
-### Add a progress bar using tqdm or logger (HEAD -> main)
+### Fix log dsplay (HEAD -> main)
+>Mon, 13 Mar 2023 03:05:17 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add a progress bar using tqdm or logger (origin/main)
 >Mon, 13 Mar 2023 02:46:51 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -38,7 +48,7 @@
 
 
 
-### Fix a bug when writting in HDF5 (origin/main)
+### Fix a bug when writting in HDF5
 >Sun, 12 Mar 2023 04:41:05 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

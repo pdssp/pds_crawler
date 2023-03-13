@@ -360,7 +360,7 @@ class StacETL(ETL):
             )
             if coll is None:
                 nb_to_ingest += 1
-                logger.info("{pds_collection} was not ingested")
+                logger.info(f"{pds_collection} was not ingested")
         return nb_to_ingest
 
     def _check_updates_from_PDS(
