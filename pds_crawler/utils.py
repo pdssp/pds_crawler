@@ -520,10 +520,7 @@ class ProgressLogger:
 
     @staticmethod
     def write(msg: str, logger: logging.Logger):
-        if tqdm.disable:
-            logger.info(msg)
-        else:
-            tqdm.write(msg)
+        logger.info(msg)
 
     def close(self):
         if self.pbar:

@@ -34,7 +34,6 @@ from typing import Optional
 from typing import Union
 
 import pystac
-from tqdm import tqdm
 
 from ..exception import CrawlerError
 from ..extractor import PDSCatalogsDescription

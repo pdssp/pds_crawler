@@ -36,8 +36,6 @@ from typing import Optional
 from typing import Set
 from typing import Tuple
 
-from tqdm import tqdm
-
 from ..exception import PdsCollectionAttributeError
 from ..load import Database
 from ..load import PdsCollectionStorage

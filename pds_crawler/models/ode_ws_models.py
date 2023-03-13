@@ -103,7 +103,6 @@ from pymarsseason import PyMarsSeason
 from pymarsseason import Season
 from shapely import geometry
 from shapely import wkt
-from tqdm import tqdm
 
 from ..exception import CrawlerError
 from ..exception import DateConversionError
