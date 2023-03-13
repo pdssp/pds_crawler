@@ -35,6 +35,7 @@ from typing import Iterator
 from typing import List
 from typing import Optional
 from typing import Union
+from urllib.parse import parse_qs
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
 
@@ -287,7 +288,7 @@ class PDSCatalogDescription(Observable):
     """
 
     DATASET_EXPLORER = Template(
-        "https://ode.rsl.wustl.edu/$ODEMetaDB/DataSetExplorer.aspx?target=$ODEMetaDB&instrumenthost=$ihid&instrumentid=$iid&datasetid=$Data_Set_Id&volumeid=$PDSVolume_Id"
+        "https://ode.rsl.wustl.edu/$ODEMetaDB/DataSetExplorer.aspx?target=$ODEMetaDB&instrumenthost=$ihid&instrumentid=$iid&datasetid=$Data_Set_Id"
     )
 
     def __init__(self, database: Database, *args, **kwargs):
@@ -370,18 +371,26 @@ class PDSCatalogDescription(Observable):
     def catalogs_urls(self) -> List[str]:
         return self.__catalogs_urls
 
-    def _build_url_ode_collection(self):
+    def _build_url_ode_collection(self, volume_id: Optional[str] = None):
         """Computes the ODE URL.
 
         This ODE URL is used to parse the web page to get the PDS objects.
+        Sometimes the volume_id value is renamed. In this case, the web page
+        must be parsed by getting the volume_id label to find the correct volume_id
+
+        Args:
+            with_volume_id (str, optional): volume_id to set. Defaults to None.
         """
-        self.__url = PDSCatalogDescription.DATASET_EXPLORER.substitute(
+        url_build: str = PDSCatalogDescription.DATASET_EXPLORER.substitute(
             ODEMetaDB=self.pds_collection.ODEMetaDB.lower(),
             ihid=self.record.ihid,
             iid=self.record.iid,
             Data_Set_Id=self.record.Data_Set_Id,
-            PDSVolume_Id=self.record.PDSVolume_Id,
         )
+        if volume_id:
+            self.__url = url_build + f"&volumeid={volume_id}"
+        else:
+            self.__url = url_build
 
     def _find_volume_desc_url(self) -> str:
         """Find the URL volume description by parsing the ODE URL.
@@ -407,6 +416,30 @@ class PDSCatalogDescription(Observable):
             )
         logger.info(f"voldesc.cat found in {vol_desc_url}")
         return vol_desc_url
+
+    def _find_volume_id(self) -> str:
+        """Find volume_id in web page
+
+        Raises:
+            NoFileExistInFolder: Volume_id not found
+
+        Returns:
+            str: volume_id
+        """
+        self._build_url_ode_collection()
+        crawler = Crawler(self.url)
+        links = crawler.parse()
+        volume_id = None
+        for link in links:
+            if link["name"] == self.record.PDSVolume_Id:
+                url: str = link["url"]
+                parsed_url = urlparse(url)
+                volume_id = parse_qs(parsed_url.query)["volumeid"][0]
+                break
+        if volume_id is None:
+            raise NoFileExistInFolder(f"volumeid not found in {self.url}")
+        logger.info(f"volume_id found : {volume_id}")
+        return volume_id
 
     def _parse_volume_desc_cat(self) -> VolumeModel:
         """Set the volume description file by parsing the ODE URL.
@@ -435,7 +468,12 @@ class PDSCatalogDescription(Observable):
 
     def _load_volume_description(self):
         """Load the volume description."""
-        self.__volume_desc_url: str = self._find_volume_desc_url()
+        try:
+            self.__volume_desc_url: str = self._find_volume_desc_url()
+        except NoFileExistInFolder:
+            volume_id = self._find_volume_id()
+            self._build_url_ode_collection(volume_id=volume_id)
+            self.__volume_desc_url: str = self._find_volume_desc_url()
         self.__vol_desc_cat: VolumeModel = self._parse_volume_desc_cat()
 
     def _find_catalogs_urls(self) -> List[Dict[str, str]]:
@@ -548,7 +586,7 @@ class PDSCatalogDescription(Observable):
         Returns:
             List[str]: List of URLs
         """
-        self._build_url_ode_collection()
+        self._build_url_ode_collection(volume_id=self.record.PDSVolume_Id)
 
         # Extract the Volume description catalog
         # that contains an index of all catalogs
@@ -635,12 +673,15 @@ class PDSCatalogDescription(Observable):
                 MessageModel(catalog_name, Exception(message))
             )
 
-    def load_catalogs_urls(self, pds_collection: PdsRegistryModel):
+    def load_catalogs_urls(
+        self, pds_collection: PdsRegistryModel, progress_bar: bool = True
+    ):
         """Loads the catalogs URLs from cache for a given
         `pds_collection` collection.
 
         Args:
             pds_collection (PdsRegistryModel): PDS collection
+            progress_bar (bool, True): Set progress_bar. Defaults to True.
         """
         self._initialize_values()
         self.__pds_collection = pds_collection
@@ -648,7 +689,7 @@ class PDSCatalogDescription(Observable):
             PdsRecordsModel
         ] = self.pds_records.parse_pds_collection_from_cache(
             pds_collection,
-            progress_bar=True,
+            progress_bar=progress_bar,
         )
         try:
             records: PdsRecordsModel = next(records_iter)
@@ -783,20 +824,23 @@ class PDSCatalogsDescription(Observable):
     def database(self) -> Database:
         return self.__database
 
-    def _build_all_urls(self, pds_collection: PdsRegistryModel) -> List[str]:
+    def _build_all_urls(
+        self, pds_collection: PdsRegistryModel, progress_bar: bool = True
+    ) -> List[str]:
         """Builds all the PDS objects URLs for collections of space missions.
 
         These URLs are used to retrieve all PDS objects.
 
         Args:
             pds_collection (PdsRegistryModel): the collections of space missions
+            progress_bar (bool, True): Set progress_bar. Defaults to True.
 
         Returns:
             List[str]: List of URLs
         """
         logger.info(f"Fetching Catalogs URLs from {pds_collection}")
         urls_list: List[str] = list()
-        self.pds_object_cats.load_catalogs_urls(pds_collection)
+        self.pds_object_cats.load_catalogs_urls(pds_collection, progress_bar)
         urls: List[str] = self.pds_object_cats.catalogs_urls
         if len(urls) != 0:
             urls_list.extend(urls)
@@ -824,10 +868,12 @@ class PDSCatalogsDescription(Observable):
             pds_collections (List[PdsRegistryModel]): the collections of space missions
             nb_workers (int, optional): Number of workers in parallel. Defaults to 3.
             time_sleep (int, optional): Time to way between two download series. Defaults to 1.
-            progress_bar (int, True): Set progress_bar. Defaults to True.
+            progress_bar (bool, True): Set progress_bar. Defaults to True.
         """
         for pds_collection in pds_collections:
-            urls_list: List[str] = self._build_all_urls(pds_collection)
+            urls_list: List[str] = self._build_all_urls(
+                pds_collection, progress_bar
+            )
             try:
                 file_storage: PdsCollectionStorage = (
                     self.database.pds_storage.get_pds_storage_for(
