@@ -42,7 +42,7 @@
 
     class DataSetHostModel {
         INSTRUMENT_HOST_ID: str
-        INSTRUMENT_ID: str
+        INSTRUMENT_ID: List[str]
     }
 
     class DataSetMissionModel {
@@ -316,6 +316,12 @@ import pystac
 
 from ..utils import utc_to_iso
 from .common import AbstractModel
+from .pdssp_models import PdsspModel
+
+
+@dataclass
+class Labo:
+    ID = "PDS"
 
 
 @dataclass(frozen=True, eq=True)
@@ -502,17 +508,21 @@ class DataSetTargetModel(AbstractModel):
 @dataclass(frozen=True, eq=True)
 class DataSetHostModel(AbstractModel):
     INSTRUMENT_HOST_ID: str
-    INSTRUMENT_ID: str
+    INSTRUMENT_ID: Union[str, List[str]]
 
-    def get_instrument_id(self):
-        instru_stac_name_compatible: str = self.INSTRUMENT_ID.replace("/", "_")
-        return f"urn:pdssp:pds:instru:{instru_stac_name_compatible}"
+    def get_instrument_id(self) -> Union[str, List[str]]:
+        result: Union[str, List[str]]
+        if isinstance(self.INSTRUMENT_ID, str):
+            result = PdsspModel.create_instru_id(Labo.ID, self.INSTRUMENT_ID)
+        else:
+            result = [
+                PdsspModel.create_instru_id(Labo.ID, instrument)
+                for instrument in self.INSTRUMENT_ID
+            ]
+        return result
 
     def get_plateform_id(self):
-        plateform_stac_name_compatible: str = self.INSTRUMENT_HOST_ID.replace(
-            "/", "_"
-        )
-        return f"urn:pdssp:pds:plateform:{plateform_stac_name_compatible}"
+        return PdsspModel.create_platform_id(Labo.ID, self.INSTRUMENT_HOST_ID)
 
     def update_stac(self, stac_collection: pystac.Collection):
         if not stac_collection.extra_fields:
@@ -554,8 +564,7 @@ class DataSetModel(AbstractModel):
     )
 
     def get_collection_id(self) -> str:
-        dataset_name_stac_compatible: str = self.DATA_SET_ID.replace("/", "_")
-        return f"urn:pdssp:pds:collection:{dataset_name_stac_compatible}"
+        return PdsspModel.create_collection_id(Labo.ID, self.DATA_SET_ID)
 
     def _add_citations(
         self,
@@ -633,10 +642,12 @@ class DataSetModel(AbstractModel):
 
     def create_stac_collection(
         self,
+        body_id: str,
         citations: Optional[ReferencesModel],
         data_supplier: Optional["DataSupplierModel"],
         data_producer: Optional["DataProducerModel"],
     ) -> pystac.Collection:
+        extension: Dict = PdsspModel.create_ssys_extension(body_id)
         stac_collection = pystac.Collection(
             id=self.get_collection_id(),
             description="",
@@ -644,7 +655,11 @@ class DataSetModel(AbstractModel):
                 pystac.SpatialExtent(bboxes=[[]]),
                 pystac.TemporalExtent(intervals=[[None, None]]),
             ),
+            stac_extensions=list(),
+            extra_fields=dict(),
         )
+        stac_collection.stac_extensions.extend(extension["stac_extensions"])
+        stac_collection.extra_fields.update(extension["extra_fields"])
         self.DATA_SET_INFORMATION.update_stac(stac_collection)
         self.DATA_SET_TARGET[0].update_stac(stac_collection)
         self.DATA_SET_HOST.update_stac(stac_collection)
@@ -690,14 +705,10 @@ class InstrumentModel(AbstractModel):
     )
 
     def get_plateform_id(self):
-        plateform_name_stac_compatible: str = self.INSTRUMENT_HOST_ID.replace(
-            "/", "_"
-        )
-        return f"urn:pdssp:pds:plateform:{plateform_name_stac_compatible}"
+        return PdsspModel.create_platform_id(Labo.ID, self.INSTRUMENT_HOST_ID)
 
     def get_instrument_id(self):
-        instru_name_stac_compatible: str = self.INSTRUMENT_ID.replace("/", "_")
-        return f"urn:pdssp:pds:instru:{instru_name_stac_compatible}"
+        return PdsspModel.create_instru_id(Labo.ID, self.INSTRUMENT_ID)
 
     def _add_citations(
         self,
@@ -736,13 +747,18 @@ class InstrumentModel(AbstractModel):
         return cls(**{k: v for k, v in data.items()})
 
     def create_stac_catalog(
-        self, citations: Optional[ReferencesModel] = None
+        self, body_id: str, citations: Optional[ReferencesModel] = None
     ) -> pystac.Catalog:
+        extension: Dict = PdsspModel.create_ssys_extension(body_id)
         stac_catalog = pystac.Catalog(
             title=self.INSTRUMENT_ID,
             id=self.get_instrument_id(),
             description="",
+            stac_extensions=list(),
+            extra_fields=dict(),
         )
+        stac_catalog.stac_extensions.extend(extension["stac_extensions"])
+        stac_catalog.extra_fields.update(extension["extra_fields"])
         self._add_citations(stac_catalog, citations)
         self.INSTRUMENT_INFORMATION.update_stac(stac_catalog)
 
@@ -779,10 +795,7 @@ class InstrumentHostModel(AbstractModel):
     ] = field(repr=False, compare=False)
 
     def get_plateform_id(self) -> str:
-        plateform_stac_compatible: str = self.INSTRUMENT_HOST_ID.replace(
-            "/", "_"
-        )
-        return f"urn:pdssp:pds:plateform:{plateform_stac_compatible}"
+        return PdsspModel.create_platform_id(Labo.ID, self.INSTRUMENT_HOST_ID)
 
     def _add_citations(
         self,
@@ -821,13 +834,18 @@ class InstrumentHostModel(AbstractModel):
         return cls(**{k: v for k, v in data.items()})
 
     def create_stac_catalog(
-        self, citations: Optional[ReferencesModel] = None
+        self, body_id: str, citations: Optional[ReferencesModel] = None
     ) -> pystac.Catalog:
+        extension: Dict = PdsspModel.create_ssys_extension(body_id)
         stac_catalog = pystac.Catalog(
             title=self.INSTRUMENT_HOST_ID,
             id=self.get_plateform_id(),
             description="",
+            stac_extensions=list(),
+            extra_fields=dict(),
         )
+        stac_catalog.stac_extensions.extend(extension["stac_extensions"])
+        stac_catalog.extra_fields.update(extension["extra_fields"])
         self._add_citations(stac_catalog, citations)
         self.INSTRUMENT_HOST_INFORMATION.update_stac(stac_catalog)
 
@@ -843,10 +861,7 @@ class MissionInformationModel(AbstractModel):
     MISSION_STOP_DATE: str
 
     def get_mission_id(self):
-        alias_name_stac_compatible: str = self.MISSION_ALIAS_NAME.replace(
-            "/", "_"
-        )
-        return f"urn:pdssp:pds:mission:{alias_name_stac_compatible}"
+        return PdsspModel.create_mission_id(Labo.ID, self.MISSION_ALIAS_NAME)
 
     @classmethod
     def from_dict(cls, env):
@@ -991,11 +1006,18 @@ class MissionModel(AbstractModel):
         return cls(**{k: v for k, v in data.items() if k in parameters})
 
     def create_stac_catalog(
-        self, citations: Optional[ReferencesModel] = None
+        self, body: str, citations: Optional[ReferencesModel] = None
     ) -> pystac.Catalog:
+        extension = PdsspModel.create_ssys_extension(body)
         stac_catalog = pystac.Catalog(
-            title=self.MISSION_NAME, id="", description=""
+            title=self.MISSION_NAME,
+            id="",
+            description="",
+            stac_extensions=list(),
+            extra_fields=dict(),
         )
+        stac_catalog.stac_extensions.extend(extension["stac_extensions"])
+        stac_catalog.extra_fields.update(extension["extra_fields"])
         self.MISSION_HOST.update_stac(stac_catalog)
         self.MISSION_INFORMATION.update_stac(stac_catalog)
 

@@ -97,10 +97,6 @@ from urllib.parse import urlparse
 
 import numpy as np
 import pystac
-from astropy.time import Time
-from pymarsseason import Hemisphere
-from pymarsseason import PyMarsSeason
-from pymarsseason import Season
 from shapely import geometry
 from shapely import wkt
 
@@ -113,6 +109,8 @@ from ..utils import ProgressLogger
 from ..utils import utc_to_iso
 from ..utils import UtilsMath
 from .common import AbstractModel
+from .pds_models import Labo
+from .pdssp_models import PdsspModel
 
 logger = logging.getLogger(__name__)
 
@@ -225,25 +223,25 @@ class PdsRegistryModel(AbstractModel):
     """Maximum special value 2"""
 
     def get_collection_id(self) -> str:
-        return f"urn:pdssp:pds:collection:{self.get_collection()}"
+        return PdsspModel.create_collection_id(Labo.ID, self.get_collection())
 
     def get_collection(self) -> str:
         return self.DataSetId
 
     def get_instrument_id(self) -> str:
-        return f"urn:pdssp:pds:instru:{self.IID}"
+        return PdsspModel.create_instru_id(Labo.ID, self.IID)
 
     def get_instrument(self) -> str:
         return self.IName
 
     def get_plateform_id(self) -> str:
-        return f"urn:pdssp:pds:plateform:{self.IHID}"
+        return PdsspModel.create_platform_id(Labo.ID, self.IHID)
 
     def get_plateform(self) -> str:
         return self.IHName
 
     def get_mission_id(self) -> str:
-        return f"urn:pdssp:pds:mission:{self.IHID}"
+        return PdsspModel.create_mission_id(Labo.ID, self.IHID)
 
     def get_mission(self) -> str:
         return self.IHName
@@ -253,7 +251,7 @@ class PdsRegistryModel(AbstractModel):
         return body
 
     def get_body_id(self) -> str:
-        return f"urn:pdssp:pds:body:{self.get_body()}"
+        return PdsspModel.create_body_id(Labo.ID, self.get_body())
 
     def get_range_orbit(self) -> Optional[pystac.RangeSummary]:
         range: Optional[pystac.RangeSummary] = None
@@ -409,15 +407,16 @@ class PdsRegistryModel(AbstractModel):
                 raise PlanetNotFound(
                     f"Unexpected body to parse : {self.ODEMetaDB.upper()}"
                 )
+        extension: Dict = PdsspModel.create_ssys_extension(self.get_body())
         catalog = pystac.Catalog(
             id=self.get_body_id(),
             title=self.get_body(),
             description="",
-            stac_extensions=[
-                "https://raw.githubusercontent.com/thareUSGS/ssys/main/json-schema/schema.json"
-            ],
-            extra_fields={"ssys:targets": [self.get_body()]},
+            stac_extensions=list(),
+            extra_fields=dict(),
         )
+        catalog.stac_extensions.extend(extension["stac_extensions"])
+        catalog.extra_fields.update(extension["extra_fields"])
         catalog.add_link(
             pystac.Link(
                 rel=pystac.RelType.PREVIEW,
@@ -791,25 +790,25 @@ class PdsRecordModel(AbstractModel):
         return self.Description
 
     def get_collection_id(self) -> str:
-        return f"urn:pdssp:pds:collection:{self.get_collection()}"
+        return PdsspModel.create_collection_id(Labo.ID, self.get_collection())
 
     def get_collection(self) -> str:
         return self.Data_Set_Id
 
     def get_instrument_id(self) -> str:
-        return f"urn:pdssp:pds:instru:{self.iid}"
+        return PdsspModel.create_instru_id(Labo.ID, self.iid)
 
     def get_instrument(self, pds_registry_model: PdsRegistryModel) -> str:
         return pds_registry_model.IName
 
     def get_plateform_id(self) -> str:
-        return f"urn:pdssp:pds:plateform:{self.ihid}"
+        return PdsspModel.create_platform_id(Labo.ID, self.ihid)
 
     def get_plateform(self, pds_registry_model: PdsRegistryModel) -> str:
         return pds_registry_model.IHName
 
     def get_mission_id(self) -> str:
-        return f"urn:pdssp:pds:mission:{self.get_mission()}"
+        return PdsspModel.create_mission_id(Labo.ID, self.get_mission())
 
     def get_mission(self) -> str:
         return self.ihid
@@ -819,7 +818,7 @@ class PdsRecordModel(AbstractModel):
         return body
 
     def get_body_id(self) -> str:
-        return f"urn:pdssp:pds:body:{self.get_body()}"
+        return PdsspModel.create_body_id(Labo.ID, self.get_body())
 
     def get_start_date(self):
         start_date: Optional[datetime] = None
@@ -883,40 +882,6 @@ class PdsRecordModel(AbstractModel):
             raise ValueError("No datetime")
         return datetime.fromisoformat(utc_to_iso(date_obs))
 
-    def add_mars_keywords_if_mars(self) -> Dict[str, Any]:
-        """Add specific keywords for Mars
-
-        If Mars, add solar longitude and season otherwise
-        returns an empty dictionary
-
-        Raises:
-            ValueError: _description_
-
-        Returns:
-            Dict[str, Any]: _description_
-        """
-        mars: Dict[str, Any] = dict()
-        if self.get_body() != "Mars":
-            return mars
-        if self.Center_latitude is None:
-            logger.warning(f"No latitude for Mars : {self.ode_id}")
-            return mars
-        py_mars_season: Dict[
-            Hemisphere | str, Season | float
-        ] = PyMarsSeason().compute_season_from_time(
-            Time(self.get_datetime().isoformat(), format="isot", scale="utc")
-        )
-        if self.Solar_longitude is None:
-            mars["Solar_longitude"] = py_mars_season["ls"]
-
-        hemisphere: Hemisphere = (
-            Hemisphere.NORTH
-            if float(self.Center_latitude) > 0
-            else Hemisphere.SOUTH
-        )
-        mars["season"] = hemisphere.value
-        return mars
-
     def get_properties(self) -> Dict[str, Any]:
         properties = {
             key: self.__dict__[key]
@@ -968,7 +933,14 @@ class PdsRecordModel(AbstractModel):
             ]
             and self.__dict__[key] is not None
         }
-        properties.update(self.add_mars_keywords_if_mars())
+        season: Dict = PdsspModel.add_mars_keywords_if_mars(
+            body_id=self.get_body(),
+            ode_id=self.ode_id,
+            lat=self.Center_latitude,
+            slong=self.Solar_longitude,
+            date=self.get_datetime(),
+        )
+        properties.update(season)
         return properties
 
     def set_common_metadata(

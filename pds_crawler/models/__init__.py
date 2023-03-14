@@ -11,10 +11,12 @@ from .pds_models import DataSetMapProjectionModel
 from .pds_models import DataSetModel
 from .pds_models import InstrumentHostModel
 from .pds_models import InstrumentModel
+from .pds_models import Labo
 from .pds_models import MissionModel
 from .pds_models import PersonnelsModel
 from .pds_models import ReferencesModel
 from .pds_models import VolumeModel
+from .pdssp_models import PdsspModel
 
 __all__ = [
     "PdsRegistryModel",
@@ -29,4 +31,6 @@ __all__ = [
     "VolumeModel",
     "DataSetMapProjectionModel",
     "CatalogModel",
+    "PdsspModel",
+    "Labo",
 ]

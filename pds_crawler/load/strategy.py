@@ -100,7 +100,7 @@ class LargeDataVolumeStrategy:
                         JoinType.URL, parent_dir, "catalog.json"
                     )
                 else:
-                    new_id = col.id.split(":")[-1]
+                    new_id = str(col.id).split(":")[-1]
                     path = join_path_or_url(
                         JoinType.URL, parent_dir, new_id, "catalog.json"
                     )

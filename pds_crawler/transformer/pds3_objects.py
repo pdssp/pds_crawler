@@ -35,6 +35,7 @@ Author:
 from __future__ import annotations
 
 import logging
+import os
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
@@ -138,38 +139,61 @@ class MissionHandler(AbstractHandler):
     def _is_must_be_updated(
         self, mission_stac: pystac.Catalog, mission: MissionModel
     ) -> bool:
-        return (
+        """Check if mission_stac must be updated.
+
+        To check if mission_stac must be updated, we need to check :
+        - mission_stac is alreay on disk
+        - the description is shorter than the mission description
+
+        Args:
+            mission_stac (pystac.Catalog): mission in memory or in disk
+            mission (MissionModel): new mission information
+
+        Returns:
+            bool: True of the mission_stac on disk must be updated by mission information
+        """
+        return os.path.exists(mission_stac.self_href) and len(
             mission_stac.description
-            != mission.MISSION_INFORMATION.MISSION_DESC
-        )
+        ) < len(mission.MISSION_INFORMATION.MISSION_DESC)
 
     def _update(self, mission_stac: pystac.Catalog, mission: MissionModel):
-        mission_stac_new = mission.create_stac_catalog(self.citations)
+        mission_stac_new = mission.create_stac_catalog(
+            self.body_id, self.citations
+        )
         mission_stac.title = mission_stac_new.title
-        mission_stac.description = mission_stac.description
-        mission_stac.stac_extensions = mission_stac.stac_extensions
-        mission_stac.extra_fields = mission_stac.extra_fields
+        mission_stac.description = mission_stac_new.description
+        mission_stac.stac_extensions = mission_stac_new.stac_extensions
+        mission_stac.extra_fields = mission_stac_new.extra_fields
         mission_stac.save_object(include_self_link=False)
 
     def handle(self, request: Any) -> None:
         if isinstance(request, MissionModel):
+            # Get the mission from the STAC catalog
             mission: MissionModel = request
             mission_stac = cast(
                 pystac.Catalog,
                 self.catalog.get_child(self.mission_id, recursive=True),
             )
+
             if not self._is_exists(mission_stac):
-                stac_mission = mission.create_stac_catalog(self.citations)
-                stac_mission.id = (
-                    self.mission_id
-                )  # use mission_id of PDS collection to avoid interop problem
+                # mission is not found, so create it
+                stac_mission = mission.create_stac_catalog(
+                    self.body_id, self.citations
+                )
+
+                # use mission_id of PDS collection to avoid interop problem
+                stac_mission.id = self.mission_id
+
+                # Get the parent of mission: the solar body
                 body_cat = cast(
                     pystac.Catalog, self.catalog.get_child(self.body_id)
                 )
+
+                # Add the mission to the planet
                 body_cat.add_child(stac_mission)
-                logger.debug(f"{stac_mission.id} added to {body_cat.id}")
+                logger.info(f"{stac_mission.id} added to {body_cat.id}")
             elif self._is_must_be_updated(mission_stac, mission):
-                logger.info(f"{mission} has been updated")
+                logger.info(f"{mission_stac.self_href} has been updated")
                 self._update(mission_stac, mission)
         else:
             super().handle(request)
@@ -179,16 +203,22 @@ class PlateformHandler(AbstractHandler):
     def __init__(
         self,
         catalog: pystac.Catalog,
+        body_id: str,
         mission_id: str,
         citations: Optional[ReferencesModel],
     ):
         self.__catalog: pystac.Catalog = catalog
+        self.__body_id: str = body_id
         self.__mission_id: str = mission_id
         self.__citations: Optional[ReferencesModel] = citations
 
     @property
     def catalog(self) -> pystac.Catalog:
         return self.__catalog
+
+    @property
+    def body_id(self) -> str:
+        return self.__body_id
 
     @property
     def mission_id(self) -> str:
@@ -201,15 +231,16 @@ class PlateformHandler(AbstractHandler):
     def _is_must_be_updated(
         self, plateform_stac: pystac.Catalog, plateform: InstrumentHostModel
     ) -> bool:
-        return (
+        return os.path.exists(plateform_stac.self_href) and len(
             plateform_stac.description
-            != plateform.INSTRUMENT_HOST_INFORMATION.INSTRUMENT_HOST_DESC
-        )
+        ) < len(plateform.INSTRUMENT_HOST_INFORMATION.INSTRUMENT_HOST_DESC)
 
     def _update(
         self, plateform_stac: pystac.Catalog, plateform: InstrumentHostModel
     ):
-        plateform_stac_new = plateform.create_stac_catalog(self.citations)
+        plateform_stac_new = plateform.create_stac_catalog(
+            self.body_id, self.citations
+        )
         plateform_stac.title = plateform_stac_new.title
         plateform_stac.description = plateform_stac_new.description
         plateform_stac.stac_extensions = plateform_stac_new.stac_extensions
@@ -228,11 +259,13 @@ class PlateformHandler(AbstractHandler):
                 self.catalog.get_child(self.mission_id, recursive=True),
             )
             logger.debug(f"Looking for {self.mission_id}: {stac_mission}")
-            stac_plateform = plateform.create_stac_catalog(self.citations)
+            stac_plateform = plateform.create_stac_catalog(
+                self.body_id, self.citations
+            )
             stac_mission.add_child(stac_plateform)
             logger.debug(f"{stac_plateform.id} added to {stac_mission.id}")
         elif self._is_must_be_updated(plateform_stac, plateform):
-            logger.info(f"{plateform} has been updated")
+            logger.info(f"{plateform_stac.self_href} has been updated")
             self._update(plateform_stac, plateform)
 
     def _add_plateforms_to_mission(
@@ -256,14 +289,22 @@ class PlateformHandler(AbstractHandler):
 
 class InstrumentHandler(AbstractHandler):
     def __init__(
-        self, catalog: pystac.Catalog, citations: Optional[ReferencesModel]
+        self,
+        catalog: pystac.Catalog,
+        body_id: str,
+        citations: Optional[ReferencesModel],
     ):
         self.__catalog: pystac.Catalog = catalog
+        self.__body_id: str = body_id
         self.__citations: Optional[ReferencesModel] = citations
 
     @property
     def catalog(self) -> pystac.Catalog:
         return self.__catalog
+
+    @property
+    def body_id(self) -> str:
+        return self.__body_id
 
     @property
     def citations(self) -> Optional[ReferencesModel]:
@@ -272,15 +313,16 @@ class InstrumentHandler(AbstractHandler):
     def _is_must_be_updated(
         self, instrument_stac: pystac.Catalog, instrument: InstrumentModel
     ) -> bool:
-        return (
+        return os.path.exists(instrument_stac.self_href) and len(
             instrument_stac.description
-            != instrument.INSTRUMENT_INFORMATION.INSTRUMENT_DESC
-        )
+        ) < len(instrument.INSTRUMENT_INFORMATION.INSTRUMENT_DESC)
 
     def _update(
         self, instrument_stac: pystac.Catalog, instrument: InstrumentModel
     ):
-        instrument_stac_new = instrument.create_stac_catalog(self.citations)
+        instrument_stac_new = instrument.create_stac_catalog(
+            self.body_id, self.citations
+        )
         instrument_stac.title = instrument_stac_new.title
         instrument_stac.description = instrument_stac_new.description
         instrument_stac.stac_extensions = instrument_stac_new.stac_extensions
@@ -300,11 +342,13 @@ class InstrumentHandler(AbstractHandler):
                 self.catalog.get_child(plateform_id, recursive=True),
             )
             logger.debug(f"Looking for {plateform_id}: {stac_plateform}")
-            stac_instrument = instrument.create_stac_catalog(self.citations)
+            stac_instrument = instrument.create_stac_catalog(
+                self.body_id, self.citations
+            )
             stac_plateform.add_child(stac_instrument)
             logger.debug(f"{stac_instrument.id} added to {stac_plateform.id}")
         elif self._is_must_be_updated(instrument_stac, instrument):
-            logger.info(f"{instrument} has been updated")
+            logger.info(f"{instrument_stac.self_href} has been updated")
             self._update(instrument_stac, instrument)
 
     def _add_instruments_to_mission(self, instruments: List[InstrumentModel]):
@@ -328,10 +372,12 @@ class DatasetHandler(AbstractHandler):
     def __init__(
         self,
         catalog: pystac.Catalog,
+        body_id: str,
         volume_desc: VolumeModel,
         citations: Optional[ReferencesModel],
     ):
         self.__catalog: pystac.Catalog = catalog
+        self.__body_id: str = body_id
         self.__citations: Optional[ReferencesModel] = citations
         self.__data_supplier: Optional[
             DataSupplierModel
@@ -341,6 +387,10 @@ class DatasetHandler(AbstractHandler):
     @property
     def catalog(self) -> pystac.Catalog:
         return self.__catalog
+
+    @property
+    def body_id(self) -> str:
+        return self.__body_id
 
     @property
     def data_supplier(self) -> Optional[DataSupplierModel]:
@@ -357,14 +407,21 @@ class DatasetHandler(AbstractHandler):
     def _is_must_be_updated(
         self, dataset_stac: pystac.Collection, dataset: DataSetModel
     ) -> bool:
+        description: Optional[
+            str
+        ] = dataset.DATA_SET_INFORMATION._get_description()
         return (
-            dataset_stac.description
-            != dataset.DATA_SET_INFORMATION._get_description()
+            os.path.exists(dataset_stac.self_href)
+            and description is not None
+            and len(dataset_stac.description) < len(description)
         )
 
     def _update(self, dataset_stac: pystac.Collection, dataset: DataSetModel):
         dataset_stac_new = dataset.create_stac_collection(
-            self.citations, self.data_supplier, self.data_producer
+            self.body_id,
+            self.citations,
+            self.data_supplier,
+            self.data_producer,
         )
         dataset_stac.title = dataset_stac_new.title
         dataset_stac.description = dataset_stac_new.description
@@ -379,19 +436,41 @@ class DatasetHandler(AbstractHandler):
             self.catalog.get_child(dataset_id, recursive=True),
         )
         if not self._is_exists(dataset_stac):
-            instrument_id: str = dataset.DATA_SET_HOST.get_instrument_id()
-            stac_instrument = cast(
-                pystac.Catalog,
-                self.catalog.get_child(instrument_id, recursive=True),
-            )
-            logger.debug(f"Looking for {instrument_id}: {stac_instrument}")
             stac_dataset = dataset.create_stac_collection(
-                self.citations, self.data_supplier, self.data_producer
+                self.body_id,
+                self.citations,
+                self.data_supplier,
+                self.data_producer,
             )
-            stac_instrument.add_child(stac_dataset)
-            logger.debug(f"{stac_dataset.id} added to {stac_instrument.id}")
+            instrument_ids: Union[
+                str, List[str]
+            ] = dataset.DATA_SET_HOST.get_instrument_id()
+            if isinstance(instrument_ids, str):
+                instrument_id: str = cast(str, instrument_ids)
+                stac_instrument = cast(
+                    pystac.Catalog,
+                    self.catalog.get_child(instrument_id, recursive=True),
+                )
+                logger.debug(f"Looking for {instrument_id}: {stac_instrument}")
+                stac_instrument.add_child(stac_dataset)
+                logger.debug(
+                    f"{stac_dataset.id} added to {stac_instrument.id}"
+                )
+            else:
+                for instrument_id in instrument_ids:
+                    stac_instrument = cast(
+                        pystac.Catalog,
+                        self.catalog.get_child(instrument_id, recursive=True),
+                    )
+                    logger.debug(
+                        f"Looking for {instrument_id}: {stac_instrument}"
+                    )
+                    stac_instrument.add_child(stac_dataset)
+                    logger.debug(
+                        f"{stac_dataset.id} added to {stac_instrument.id}"
+                    )
         elif self._is_must_be_updated(dataset_stac, dataset):
-            logger.info(f"{dataset} has been updated")
+            logger.info(f"{dataset_stac.self_href} has been updated")
             self._update(dataset_stac, dataset)
 
     def _add_datasets_to_instrument(self, datasets: List[DataSetModel]):
@@ -452,7 +531,6 @@ class StacPdsCollection:
         return self.__root_stac
 
     def to_stac(self):
-        logger.info(f"STAC transformation of {self.catalogs}")
         # Get the PDS3 reference catalog
         ref_catalog_name: str = (
             PdsParserFactory.FileGrammary.REFERENCE_CATALOG.name
@@ -483,9 +561,13 @@ class StacPdsCollection:
         mission = MissionHandler(
             self.root_stac, body_id, mission_id, citations
         )
-        plateform = PlateformHandler(self.root_stac, mission_id, citations)
-        instrument = InstrumentHandler(self.root_stac, citations)
-        dataset = DatasetHandler(self.root_stac, volume_desc, citations)
+        plateform = PlateformHandler(
+            self.root_stac, body_id, mission_id, citations
+        )
+        instrument = InstrumentHandler(self.root_stac, body_id, citations)
+        dataset = DatasetHandler(
+            self.root_stac, body_id, volume_desc, citations
+        )
         mission.set_next(plateform).set_next(instrument).set_next(dataset)
 
         catalogs = list(self.catalogs.keys())

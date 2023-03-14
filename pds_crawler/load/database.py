@@ -134,8 +134,10 @@ import h5py
 import numpy as np
 import pystac
 
+from ..models import Labo
 from ..models import PdsRecordModel
 from ..models import PdsRegistryModel
+from ..models import PdsspModel
 from ..models import VolumeModel
 from ..utils import Locking
 from ..utils import parallel_requests
@@ -193,7 +195,7 @@ class StacStorage:
             self.__root_catalog = None
             logger.debug("[StacStorage] root_catalog not found, create one")
             self.__root_catalog = pystac.Catalog(
-                id="urn:pdssp:pds",
+                id=PdsspModel.create_lab_id(Labo.ID),
                 title="Planetary Data System",
                 description="Georeferenced data extracted from ode.rsl.wustl.edu",
             )
