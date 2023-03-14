@@ -21,16 +21,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        for tag in $(git tag); do
-          git checkout ${tag}
-          make doc
-          touch docs/build/html/.nojekyll
-          cd docs/build/html && \
-          git init && \
-          git add . && \
-          git -c user.name='GitHub Actions' -c user.email='actions@github.com' \
-          commit -m "Deploy Sphinx documentation for tag: ${tag}" && \
-          git push -f "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-          main:gh-pages-${tag}
-          cd ../../..
-        done        
+        make doc
+        cd docs/build/html && \
+        git init && \
+        git add . && \
+        git -c user.name='GitHub Actions' -c user.email='actions@github.com' \
+        commit -m "Deploy Sphinx documentation" && \
+        git push -f "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+        master:gh-pages
+    
