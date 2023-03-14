@@ -23,10 +23,11 @@ jobs:
       run: |
         make doc
         cd docs/build/html && \
+        git config --global init.defaultBranch master        
         git init && \
         git add . && \
         git -c user.name='GitHub Actions' -c user.email='actions@github.com' \
         commit -m "Deploy Sphinx documentation" && \
         git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git && \
-        git push origin gh-pages        
+        git push gh-pages        
         
