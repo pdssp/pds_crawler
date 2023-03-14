@@ -17,11 +17,20 @@ jobs:
     - name: Install dependencies for development/documentation
       run: |
         pip install -r requirements_dev.txt
-    - name: Generate static files
+    - name: Generate and deploy documentation for each tag to GH Pages 🚀
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        make doc
-    - name: Deploy to GH Pages 🚀
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/build/html
+        for tag in $(git tag); do
+          git checkout ${tag}
+          make doc
+          touch docs/build/html/.nojekyll
+          cd docs/build/html && \
+          git init && \
+          git add . && \
+          git -c user.name='GitHub Actions' -c user.email='actions@github.com' \
+          commit -m "Deploy Sphinx documentation for tag: ${tag}" && \
+          git push -f "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+          main:gh-pages-${tag}
+          cd ../../..
+        done        
