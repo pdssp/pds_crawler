@@ -27,6 +27,6 @@ jobs:
         git add . && \
         git -c user.name='GitHub Actions' -c user.email='actions@github.com' \
         commit -m "Deploy Sphinx documentation" && \
-        git push -f "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-        master:gh-pages
-    
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git && \
+        git push origin gh-pages        
+        
