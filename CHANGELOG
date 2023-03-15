@@ -1,4 +1,84 @@
-### Fix 2 bugs when STAC generation Add PDSSP data model (HEAD -> main)
+### Back to old deploy.yml (HEAD -> main)
+>Wed, 15 Mar 2023 12:08:58 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Update deploy.yml (origin/main)
+>Wed, 15 Mar 2023 11:41:06 +0100
+
+>Author: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Update deploy.yml
+>Wed, 15 Mar 2023 10:55:00 +0100
+
+>Author: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Update deploy.yml
+>Wed, 15 Mar 2023 10:33:20 +0100
+
+>Author: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Update deploy.yml
+>Tue, 14 Mar 2023 18:26:06 +0100
+
+>Author: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Update deploy.yml
+>Tue, 14 Mar 2023 18:02:03 +0100
+
+>Author: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Update deploy.yml
+>Tue, 14 Mar 2023 17:34:00 +0100
+
+>Author: Jean-Christophe Malapert (jcmalapert@googlemail.com)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Update deploy.yml
+>Tue, 14 Mar 2023 17:07:34 +0100
+
+>Author: Jean-Christophe Malapert (jcmalapert@googlemail.com)
+
+>Commiter: GitHub (noreply@github.com)
+
+
+
+
+### Fix 2 bugs when STAC generation Add PDSSP data model
 >Tue, 14 Mar 2023 07:59:35 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -8,7 +88,7 @@
 
 
 
-### Fix a bug (origin/main)
+### Fix a bug
 >Mon, 13 Mar 2023 15:01:24 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

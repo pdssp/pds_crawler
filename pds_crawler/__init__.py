@@ -3,7 +3,12 @@
 # Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)
 # This file is part of pds-crawler <https://github.com/pdssp/pds_crawler>
 # SPDX-License-Identifier: LGPL-3.0-or-later
-"""The system architecture consists of several components that work together to crawl
+"""
+The objective of the pds_crawler is to create a catalog of observations by retrieving all
+the metadata of the georeferenced observations completed by collection metadata corresponding
+to the PDS3 catalogs.
+
+The system architecture consists of several components that work together to crawl
 planetary data. The main component can be grouped in two layers:
 
 * persistence layer that includes three storage systems: STAC_Storage, PDS_Storage, and HDF5_Storage, which store data in the File System.
