@@ -1,0 +1,1101 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Operations basics &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Operations manual" href="operation_manual.html" />
+    <link rel="prev" title="Operations environment" href="operations_environment.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="_static/report.html">Tests</a></li>
+                <li><a href="_static/coverage/index.html">Coverage</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Operations basics</a><ul>
+<li><a class="reference internal" href="#use-cases">Use cases</a><ul>
+<li><a class="reference internal" href="#main-use-case-uc-1-ingestion-of-one-pds-collection">Main use case : UC 1 - Ingestion of one PDS collection</a><ul>
+<li><a class="reference internal" href="#sub-use-case-uc-1-1-ingestion-of-all-pds-collections">Sub use case : UC 1.1 - Ingestion of all PDS collections</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-1-2-find-all-pds-collections">Sub use case :  UC 1.2 - Find all PDS collections</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-1-3-ingest-sample">Sub use case :  UC 1.3 - Ingest sample</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-1-4-save-collection">Sub use case :  UC 1.4 - Save collection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#main-use-case-uc-2-extraction-of-one-collection">Main use case : UC 2 - Extraction of one collection</a><ul>
+<li><a class="reference internal" href="#sub-use-case-uc-2-1-extract-records-for-one-pds-collection">Sub use case : UC 2.1 - Extract records for one PDS collection</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-2-2-extract-pds3-objects">Sub use case : UC 2.2 - Extract PDS3 objects</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-2-3-resume-record-extraction-for-all-pds-collections">Sub use case : UC 2.3 - Resume record extraction for all PDS collections</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-2-4-resume-pds3-objects-extraction">Sub use case : UC 2.4 - Resume PDS3 objects extraction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#main-use-case-uc-3-transformation">Main use case : UC 3 - Transformation</a><ul>
+<li><a class="reference internal" href="#sub-use-case-uc-3-1-transform-pds3-objects-from-the-collection">Sub use case : UC 3.1 - Transform PDS3 objects from the collection</a></li>
+<li><a class="reference internal" href="#sub-use-case-uc-3-2-transform-records-from-one-pds-collection">Sub use case : UC 3.2 - Transform records from one PDS collection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operations">Operations</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="operations_environment.html" title="Previous Chapter: Operations environment"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Operations en...</span>
+    </a>
+  </li>
+  <li>
+    <a href="operation_manual.html" title="Next Chapter: Operations manual"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Operations manual &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/operations_basics.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="operations-basics">
+<h1>Operations basics<a class="headerlink" href="#operations-basics" title="Permalink to this headline">¶</a></h1>
+<section id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<p>The use cases modeled here describe the interactions between aitflow and
+the PDS crawler to perform various tasks related to ingestion, extraction,
+transformation, and report generation for PDS data collections.</p>
+<p>The use cases identify user goals and the tasks they must perform to achieve
+those goals, providing a comprehensive overview of the PDS crawler’s requirements.</p>
+<p class="plantuml">
+<img src="_images/plantuml-6ee30feebc9cccf10e2995689f1acfb4b6e08edf.png" alt="rectangle &quot;PDS crawer use cases&quot; {
+
+(Ingestion of all PDS collections) as (UC1)
+(Find all PDS collections) as (UC1_1)
+(Save collection) as (UC1_2)
+(Ingestion one PDS collection) as (UC1_3)
+(Ingest sample) as (UC1_4)
+(Ingest STAC in PDSSP catalog) as (UC4)
+(Reset storage) as (UC5)
+(Reset files) as (UC5_1)
+(Reset STAC) as (UC5_2)
+(Reset collection) as (UC5_3)
+
+  rectangle &quot;Extraction (UC2.)&quot; {
+    (Extract one PDS collection) as (UC2)
+
+    (Extract records for one PDS collection) as (UC2_1)
+    (Extract PDS3 objects) as (UC2_2)
+
+    (Resume record extraction for all PDS collections) as (UC2_3)
+    (Resume PDS3 objects extraction) as (UC2_4)
+
+    (Download and save Data) as (UC2_5)
+
+    UC2 -.-&gt; UC2_1: &lt;includes&gt;
+    UC2 -.-&gt; UC2_2: &lt;includes&gt;
+    UC2_3 --&gt; UC2_1: &lt;extends&gt;
+    UC2_4 --&gt; UC2_2: &lt;extends&gt;
+    UC2_1 -.-&gt; UC2_5: &lt;includes&gt;
+    UC2_2 -.-&gt; UC2_5: &lt;includes&gt;
+
+  }
+
+  rectangle &quot;Transformation (UC3.)&quot; {
+
+    (Transform one PDS collection) as (UC3)
+    (Transform records for one PDS collection) as (UC3_1)
+    (Transform PDS3 objects) as (UC3_2)
+    (Create report for data analysis and correction) as (UC3_3)
+    (Save STAC) as (UC3_4)
+    (Update STAC) as (UC3_5)
+    UC3 -.-&gt; UC3_1: &lt;includes&gt;
+    UC3 -.-&gt; UC3_2: &lt;includes&gt;
+    UC3 -.-&gt; UC3_3: &lt;includes&gt;
+    UC3_1 -.-&gt; UC3_4: &lt;includes&gt;
+    UC3_2 -.-&gt; UC3_4: &lt;includes&gt;
+    UC3_5 --&gt; UC3_4: &lt;extends&gt;
+
+  }
+
+UC1 --&gt; UC1_3: &lt;extends&gt;
+UC1 -.-&gt; UC1_1 : &lt;includes&gt;
+UC1_2 --&gt; UC1_1: &lt;extends&gt;
+UC1_4 --&gt; UC1_3: &lt;extends&gt;
+UC1_3 -.-&gt; UC2 : &lt;includes&gt;
+UC1_3 -.-&gt; UC3 : &lt;includes&gt;
+UC5_1 --&gt; UC5: &lt;extends&gt;
+UC5_2 --&gt; UC5: &lt;extends&gt;
+UC5_3 --&gt; UC5: &lt;extends&gt;
+
+}
+
+Airflow -&gt; UC1_3
+Airflow -&gt; UC4
+Airflow -&gt; UC5
+
+UC1_2 -&gt; Storage_facility
+UC2_5 -&gt; Storage_facility
+UC3_3 -&gt; Storage_facility
+UC3_4 -&gt; Storage_facility
+UC4 -&gt; PDSSP_catalog
+UC1_3 -&gt; PDS_Data_Repositories"/>
+</p>
+<p>The following sections describe the main functions.</p>
+<section id="main-use-case-uc-1-ingestion-of-one-pds-collection">
+<h3>Main use case : UC 1 - Ingestion of one PDS collection<a class="headerlink" href="#main-use-case-uc-1-ingestion-of-one-pds-collection" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Use case : Ingestion of one PDS collection</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Ingestion of one PDS Collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to ingest one PDS (Planetary Data System) collection into a system for further processing and analysis.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a> are accessible and contain the relevant collections.</p></li>
+<li><p>The PDS crawler has sufficient storage capacity to store the ingested data.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Extract one collection: The PDS crawler downloads the identified collections from the <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a>.</p></li>
+<li><p>2 - Store extracted data: The extracted data are stored in the PDS crawler’s storage for further analysis.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The collection has been ingested into the PDS crawler.</p></li>
+<li><p>The ingested data is available in the PDS crawler’s storage.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If a records cannot be downloaded or processed, an error message is generated and the system moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><ul class="simple">
+<li><p>If the PDS crawler encounters an error during the ingestion process, it generates an error message and attempts to recover or retry the process.</p></li>
+<li><p>If the PDS Data Repositories is inaccessible or unavailable, the Data Ingestion System generates an error message and waits for the repositories to become available again.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>The transformation process may involve several sub-steps, such as data cleaning, normalization, and feature engineering, depending on the specific requirements of the analysis.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="sub-use-case-uc-1-1-ingestion-of-all-pds-collections">
+<h4>Sub use case : UC 1.1 - Ingestion of all PDS collections<a class="headerlink" href="#sub-use-case-uc-1-1-ingestion-of-all-pds-collections" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Use case : Ingestion of one PDS collection</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Ingestion of all PDS Collections</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case is an extension of <em>UC 1 - Ingestion of one PDS collection</em>. This use case addresses the need to ingest all PDS (Planetary Data System) collections into a system for further processing and analysis.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a> are accessible and contain the relevant collections.</p></li>
+<li><p>The PDS crawler has sufficient storage capacity to store the ingested data.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Find all PDS collections: The PDS crawler queries the <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a> to identify all available collections.</p></li>
+<li><p>2 - Extract all collections: The PDS crawler downloads the identified collections from the <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a>.</p></li>
+<li><p>3 - Store ingested data: The extracted data are stored in the PDS crawler’s storage for further analysis.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>All PDS collections have been ingested into the PDS crawler.</p></li>
+<li><p>The ingested data is available in the PDS crawler’s storage.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If a collection cannot be downloaded or processed, an error message is generated and the system moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><ul class="simple">
+<li><p>If the PDS crawler encounters an error during the ingestion process, it generates an error message and attempts to recover or retry the process.</p></li>
+<li><p>If the <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a> are inaccessible or unavailable, the Data Ingestion System generates an error message and waits for the repositories to become available again.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>The transformation process may involve several sub-steps, such as data cleaning, normalization, and feature engineering, depending on the specific requirements of the analysis.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-1-2-find-all-pds-collections">
+<h4>Sub use case :  UC 1.2 - Find all PDS collections<a class="headerlink" href="#sub-use-case-uc-1-2-find-all-pds-collections" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Use case : Find all PDS collections</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Find all PDS collections</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to find all georeferenced PDS (Planetary Data System) collections for further downloading.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is accessible.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Request all PDS collections: The PDS crawler queries <em>https://oderest.rsl.wustl.edu/live2/?query=iipt&amp;output=json</em> to get all georeferenced collections. The <em>iipt</em> option allows a user to get a list of instrument hosts/instrument/product type sets</p></li>
+<li><p>2 - Parse the response: The response is parsed. The response is specified in <cite>Link Table11 https://oderest.rsl.wustl.edu/ODE_REST_V2.1.pdf</cite></p></li>
+<li><p>3 - Filter the response : Only collections having <em>ValidFootprints != ‘F’ and NumberProducts != 0</em> are selected to get georeferenced records</p></li>
+<li><p>4 - Store the response in an object: the response is stored to be easily processed in for further storing</p></li>
+<li><p>4 - Store the object in a HDF5 for persistence: The object is stored in a HDF5 node for further processing.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>All PDS collections have been ingested into a HDF5 file.</p></li>
+<li><p>The ingested data is available in the PDS crawler’s storage.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If a collection cannot be processed, an error message is generated and the system moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><ul class="simple">
+<li><p>If a collection is not goreferenced, the PDS crawler generates an warning message and the system moves on to the next available collection.</p></li>
+<li><p>If an attribute of the collection is missing, the PDS crawle generates an error message and stores it in a report and the system moves on to the next available collection.</p></li>
+<li><p>If the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is inaccessible or unavailable, the PDS crawler generates an error message and waits for the repositories to become available again.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>User manual of ODE web service : <a class="reference external" href="https://oderest.rsl.wustl.edu/ODE_REST_V2.1.pdf">https://oderest.rsl.wustl.edu/ODE_REST_V2.1.pdf</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-1-3-ingest-sample">
+<h4>Sub use case :  UC 1.3 - Ingest sample<a class="headerlink" href="#sub-use-case-uc-1-3-ingest-sample" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Use case : Ingest sample</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Ingest sample</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case is an extension of <em>UC 1 - Ingestion of one PDS collection</em>. This use case addresses the need to retrieve a subset of the collection.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a> are accessible and contain the relevant collections.</p></li>
+<li><p>The PDS crawler has sufficient storage capacity to store the ingested data.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Define the number of pages to retrieve per collection</p></li>
+<li><p>2 - Extract one collection: The PDS crawler downloads the identified collections from the <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a>.</p></li>
+<li><p>3 - Store extracted data: The extracted data are stored in the PDS crawler’s storage for further analysis.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The collection has been ingested into the PDS crawler.</p></li>
+<li><p>The ingested data is available in the PDS crawler’s storage.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If a records cannot be downloaded or processed, an error message is generated and the system moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><ul class="simple">
+<li><p>If the PDS crawler encounters an error during the ingestion process, it generates an error message and attempts to recover or retry the process.</p></li>
+<li><p>If the PDS Data Repositories is inaccessible or unavailable, the Data Ingestion System generates an error message and waits for the repositories to become available again.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>The transformation process may involve several sub-steps, such as data cleaning, normalization, and feature engineering, depending on the specific requirements of the analysis.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-1-4-save-collection">
+<h4>Sub use case :  UC 1.4 - Save collection<a class="headerlink" href="#sub-use-case-uc-1-4-save-collection" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Use case : Save collection</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Save collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case is an extension of <em>UC 1.2 - Find all PDS collections</em>. This use case addresses the need to save the current collection in the PDS crawler storage in order to be able to search for it and process it completely in case of an error.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><p>The PDS crawler has sufficient storage capacity to store the ingested data.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Check if the collection had already saved</p></li>
+<li><p>2 - Save the collection in the HDF5 file</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><p>The collection is available in the HDF5 file of the PDS crawler’s storage.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If the collection has already saved, the collection is not saved.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><ul class="simple">
+<li><p>TODO  :  If the PDS crawler encounters an error during the ingestion process, it generates an error message and attempts to recover or retry the process.</p></li>
+<li><p>TOD   :  If the PDS Data Repositories is inaccessible or unavailable, the Data Ingestion System generates an error message and waits for the repositories to become available again.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="main-use-case-uc-2-extraction-of-one-collection">
+<h3>Main use case : UC 2 - Extraction of one collection<a class="headerlink" href="#main-use-case-uc-2-extraction-of-one-collection" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Use case : Extraction of one collection</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Extraction of one collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to extract PDS information from the <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-PDS-Data-Repositories"><span class="xref std std-term">PDS Data Repositories</span></a> are accessible and contain the relevant collections.</p></li>
+<li><p>The PDS crawler has sufficient storage capacity to store the ingested data.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Extract records from the PDS collection</p></li>
+<li><p>2 - Download the records from the PDS collection</p></li>
+<li><p>3 - Extract the PDS3 objects from the PDS collection</p></li>
+<li><p>4 - Download the PDS3 objects from the PDS collection</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS collection has been ingested into the PDS crawler.</p></li>
+<li><p>The ingested data is available in the PDS crawler’s storage.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If the collection cannot be downloaded or processed, an error message is generated and the system continues.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><ul class="simple">
+<li><p>TODO  :  If the PDS crawler encounters an error during the ingestion process, it generates an error message and attempts to recover or retry the process.</p></li>
+<li><p>TODO   :  If the PDS Data Repositories is inaccessible or unavailable, the Data Ingestion System generates an error message and waits for the repositories to become available again.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="sub-use-case-uc-2-1-extract-records-for-one-pds-collection">
+<h4>Sub use case : UC 2.1 - Extract records for one PDS collection<a class="headerlink" href="#sub-use-case-uc-2-1-extract-records-for-one-pds-collection" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text">Use case : Extract records for one PDS collection</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Extract records for one PDS collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to extract the georeferenced records from the PDS (Planetary Data System) collection for further transforming them to STAC format.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is accessible.</p></li>
+<li><p>The collection to query has been retrieved by the <em>Find all PDS collections</em> use case</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>Get the PDS collection : Retrieve the PDS collection from the cache</p></li>
+<li><p>Generate all Urls: Builds the URLs corresponding to the different pages to get the whole collection.</p></li>
+<li><p>Massive download of URLs content: The PDS crawler downloads the URLs contain from the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a>.</p></li>
+<li><p>Store the download: The PDS crawler stores the contain on the filesystem with a structure based on <em>mission/plateform/instrument/dataset</em></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The downloaded data is available in the PDS crawler’s storage in the data struture <em>mission/plateform/instrument/dataset</em></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is inaccessible or unavailable, the PDS crawler generates an error message and waits for the repositories to become available again.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>After a number of unsuccessful configurable attempts, the PDS crawler generates an error message and the PDS crawler moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><ul class="simple">
+<li><p>The downloaded data can contain not expected information due to problems on the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> (e.g HTML response instead of JSON response)</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-2-2-extract-pds3-objects">
+<h4>Sub use case : UC 2.2 - Extract PDS3 objects<a class="headerlink" href="#sub-use-case-uc-2-2-extract-pds3-objects" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-text">Use case : Extract PDS3 objects</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Extract PDS3 objects</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>PDS3 catalog objects contain information about the mission, the plateform, the instrument and the dataset. These information are more detailed that those provided by the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a>. These objets are available on the the <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a> is accessible.</p></li>
+<li><p>The records of the collections provided by the <em>Extract records for all PDS collection</em> are stored on the PDS crawler’s storage</p></li>
+<li><p>The collections to query have been retrieved by the <em>Find all PDS collections</em> use case</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>Get the PDS collections : Retrieve the PDS collections from cache</p></li>
+<li><p>Get the necessary information for each collection : Get mission, plateform, instrument, dataset attributes</p></li>
+<li><p>Get the first record for the collection: Retrieve the record for the collection from the cache</p></li>
+<li><p>Get the necessary information from the record : Get pds_volume from the record</p></li>
+<li><p>Request <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a>: Build the request based on parameters mission, plateformn instrument, dataset and performs the request</p></li>
+<li><p>Extract the URLs of the PDS3 catalog objects: Parse the HTML page and extract the link for each PDS3 object catalog.</p></li>
+<li><p>Download the PDS3 catalog objects: Download the identified URLs and store them in the PDS crawler’s storage</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The downloaded data is available in the PDS crawler’s storage in the data struture <em>mission/plateform/instrument/dataset</em></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is inaccessible or unavailable, the PDS crawler generates an error message and waits for the repositories to become available again.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>After a number of unsuccessful configurable attempts, the PDS crawler generates an error message and the PDS crawler moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><ul class="simple">
+<li><p>The PDS3 objects specification : <a class="reference external" href="https://pds.nasa.gov/datastandards/pds3/standards/">https://pds.nasa.gov/datastandards/pds3/standards/</a></p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-2-3-resume-record-extraction-for-all-pds-collections">
+<h4>Sub use case : UC 2.3 - Resume record extraction for all PDS collections<a class="headerlink" href="#sub-use-case-uc-2-3-resume-record-extraction-for-all-pds-collections" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-text">Use case : Resume record extraction for one PDS collection</span><a class="headerlink" href="#id9" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Resume record extraction for all PDS collections</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to fully or partially reprocess all unprocessed downloaded responses from the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is accessible.</p></li>
+<li><p>The collection to query has been retrieved by the <em>Find all PDS collections</em> use case</p></li>
+<li><p>The result of the previous <em>Extract records for one PDS collection</em> is stored</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>Get the PDS collection: Retrieve the PDS collection from cache</p></li>
+<li><p>Get all URLs from cache: Retrieve all URLs</p></li>
+<li><p>Massive download of URLs content: The PDS crawler downloads URLs that are not available in the cache</p></li>
+<li><p>Store the download: The PDS crawler stores the contain on the filesystem with a structure based on <em>mission/plateform/instrument/dataset</em></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The downloaded data is available in the PDS crawler’s storage in the data struture <em>mission/plateform/instrument/dataset</em></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is inaccessible or unavailable, the PDS crawler generates an error message and waits for the repositories to become available again.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>After a number of unsuccessful configurable attempts, the PDS crawler generates an error message and the PDS crawler moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><ul class="simple">
+<li><p>The downloaded data can contain not expected information due to problems on the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> (e.g HTML response instead of JSON response)</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-2-4-resume-pds3-objects-extraction">
+<h4>Sub use case : UC 2.4 - Resume PDS3 objects extraction<a class="headerlink" href="#sub-use-case-uc-2-4-resume-pds3-objects-extraction" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">Use case : Resume PDS3 objects extraction</span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Resume PDS3 objects extraction</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to fully or partially reprocess all unprocessed PDS3 objects in the collection</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler, <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><ul class="simple">
+<li><p>The PDS crawler is running and connected to the internet.</p></li>
+<li><p>The <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a> is accessible.</p></li>
+<li><p>The records of the collection provided by the <em>Extract PDS3 objects</em> are stored on the PDS crawler’s storage</p></li>
+<li><p>The collection to query has been retrieved by the <em>Find all PDS collections</em> use case and stored in the PDS crawler’s storage</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>Get the PDS collection : Retrieve the PDS collection from cache</p></li>
+<li><p>Get the necessary information for each collection : Get mission, plateform, instrument, dataset attributes</p></li>
+<li><p>Get one record for each collection: Retrieve one record per collection from the cache</p></li>
+<li><p>Get the necessary information from the record : Get pds_volume from the record</p></li>
+<li><p>Request <a class="reference internal" href="glossary.html#term-PDS-dataset-browser"><span class="xref std std-term">PDS dataset browser</span></a>: Build the request based on parameters mission, plateformn instrument, dataset and performs the request</p></li>
+<li><p>Extract the URLs of the PDS3 catalog objects: Parse the HTML page and extract the link for each PDS3 object catalog.</p></li>
+<li><p>Download the PDS3 catalog objects: Download the identified URLs, not already downloaded and store them in the PDS crawler’s storage</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><ul class="simple">
+<li><p>The downloaded data is available in the PDS crawler’s storage in the data struture <em>mission/plateform/instrument/dataset</em></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If the <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> is inaccessible or unavailable, the PDS crawler generates an error message and waits for the repositories to become available again.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>After a number of unsuccessful configurable attempts, the PDS crawler generates an error message and the PDS crawler moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><ul class="simple">
+<li><p>The PDS3 objects specification : <a class="reference external" href="https://pds.nasa.gov/datastandards/pds3/standards/">https://pds.nasa.gov/datastandards/pds3/standards/</a></p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="main-use-case-uc-3-transformation">
+<h3>Main use case : UC 3 - Transformation<a class="headerlink" href="#main-use-case-uc-3-transformation" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text">Use case : Transformation</span><a class="headerlink" href="#id11" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Transformation of one PDS Collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to transform the extracted collection in a STAC format.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><p>The extracted data is available in the PDS crawler’s storage.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Find the PDS collection: The PDS crawler queries the cache of the PDS crawler’s storage to get the collection.</p></li>
+<li><p>2 - Load PDS3 object catalogs: The PDS crawler loads the PDS3 objet catalogs as objects.</p></li>
+<li><p>3 - Convert PDS3 object catalogs to STAC: The PDS3 objects catalogs are converted to STAC such as PDS root, mission, plateform, instrument, collection</p></li>
+<li><p>4 - Load the downloaded JSON responses from <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> as object.</p></li>
+<li><p>5 - Convert ODE objects to STAC such as : items, collection (if not available as PDS3 object), instrument (if not available as PDS3 object), plateform (if not available as PDS3 object), mission (if not available as PDS3 object)</p></li>
+<li><p>6 - Store the STAC object in the PDS crawler’s storage</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><p>For each collection, a mission catalog, a plateform catalog, a instrument catalog, a collection and items are available on the PDS crawler’s storage.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If an error occurs when a collection is being processed, an error message is generated, notified, and the system moves on to the next available collection.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>STAC specifications : <a class="reference external" href="https://github.com/radiantearth/stac-spec/">https://github.com/radiantearth/stac-spec/</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="sub-use-case-uc-3-1-transform-pds3-objects-from-the-collection">
+<h4>Sub use case : UC 3.1 - Transform PDS3 objects from the collection<a class="headerlink" href="#sub-use-case-uc-3-1-transform-pds3-objects-from-the-collection" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-text">Use case : Transform PDS3 objects from the collection</span><a class="headerlink" href="#id12" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Transform PDS3 objects from the collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>PDS3 objects contain a wealth of information about the mission, platform, instrument and collection. This use case addresses the need to transform these information in a STAC format.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><p>The extracted data is available in the PDS crawler’s storage.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Find the PDS collection: The PDS crawler queries the cache of the PDS crawler’s storage to get the collection.</p></li>
+<li><p>2 - Load PDS3 object catalogs: The PDS crawler loads the PDS3 objet catalogs as objects.</p></li>
+<li><p>3 - Convert PDS3 object catalogs to STAC: The PDS3 objects catalogs are converted to STAC such as PDS root, mission, plateform, instrument, collection</p></li>
+<li><p>4 - Store the STAC object in the PDS crawler’s storage</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><p>a mission catalog, a plateform catalog, a instrument catalog and a collection are available on the PDS crawler’s storage.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If an error occurs while processing the collection, it is possible that no catalog is generated. If a catalog is missing, the system will notify the error</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>STAC specifications : <a class="reference external" href="https://github.com/radiantearth/stac-spec/">https://github.com/radiantearth/stac-spec/</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-use-case-uc-3-2-transform-records-from-one-pds-collection">
+<h4>Sub use case : UC 3.2 - Transform records from one PDS collection<a class="headerlink" href="#sub-use-case-uc-3-2-transform-records-from-one-pds-collection" title="Permalink to this headline">¶</a></h4>
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-text">Use case : Transform records from one PDS collection</span><a class="headerlink" href="#id13" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><th class="stub"><p>Use case Title</p></th>
+<td><p>Transform records from one PDS collection</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Description</p></th>
+<td><p>This use case addresses the need to transform the extracted collection in a STAC format.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Actors</p></th>
+<td><p>PDS crawler</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Preconditions</p></th>
+<td><p>The extracted data is available in the PDS crawler’s storage.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Steps</p></th>
+<td><ul class="simple">
+<li><p>1 - Find the PDS collection: The PDS crawler queries the cache of the PDS crawler’s storage to get the collection.</p></li>
+<li><p>2 - Load the downloaded JSON responses from <a class="reference internal" href="glossary.html#term-ODE-web-service"><span class="xref std std-term">ODE web service</span></a> as object.</p></li>
+<li><p>3 - Convert ODE objects to STAC such as : items, collection (if not available as PDS3 object), instrument (if not available as PDS3 object), plateform (if not available as PDS3 object), mission (if not available as PDS3 object)</p></li>
+<li><p>4 - Store the STAC object in the PDS crawler’s storage</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Postconditions</p></th>
+<td><p>items must be generated et enventualy the instrument, plateform, mission as well if these catalogs are not available.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Alternate Flows</p></th>
+<td><p>If an error occurs when a collection is being processed, an error message is generated, notified, and the system continues</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>Exception Flows</p></th>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>Notes</p></th>
+<td><p>STAC specifications : <a class="reference external" href="https://github.com/radiantearth/stac-spec/">https://github.com/radiantearth/stac-spec/</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
+<p>The main operations of the PDSSP crawler are the following</p>
+<p class="plantuml">
+<img src="_images/plantuml-4f0bd2ffd8db2995541cb077de82ad8b2fe1202c.png" alt="start
+:Extract goereferenced collections;
+:Extract PDS records for each collection;
+:Extract PDS3 objects for each collection;
+if (Load PDS3 objects went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PD3 objects) then (yes)
+    stop
+  endif
+endif
+:Transform PDS3 objects to STAC;
+:Save STAC objects to disk;
+if (Load PDS records went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PDS records ?) then (yes)
+    stop
+  endif
+endif
+:Transform PDS records to STAC;
+:Update STAC objects to disk;
+stop"/>
+</p>
+<p>After fixing the PDS3 Objects, the operations are the following</p>
+<p class="plantuml">
+<img src="_images/plantuml-13669a094a806ad851d7ed3bc1bb5582adb2a5c8.png" alt="start
+:correct PDS3 objects;
+if (Load PDS3 objects went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PD3 objects) then (yes)
+    stop
+  endif
+endif
+:Transform PDS objects to STAC;
+:Update STAC objects to disk;
+if (Load PDS records went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PDS records ?) then (yes)
+    stop
+  endif
+endif
+:Transform PDS records to STAC;
+:Update STAC objects to disk;
+stop"/>
+</p>
+<p>if there was a problem loading the PDS records, this indicates
+that the extraction of the PDS records went wrong. The operations
+are therefore as follows</p>
+<p class="plantuml">
+<img src="_images/plantuml-9276d1757d18850e9b2a6435c312476dbd6c8356.png" alt="start
+:Remove the invalid PDS records;
+:Extract PDS records;
+if (Load PDS records went wrong ?) then (yes)
+  : create report;
+  if (operator wants to fix PD3 records ?) then (yes)
+    stop
+  endif
+endif
+:Transform PDS records to STAC;
+:Update STAC objects to disk;
+stop"/>
+</p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

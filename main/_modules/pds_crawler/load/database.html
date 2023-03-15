@@ -1,0 +1,1081 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pds_crawler.load.database &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="../../../_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="../../../_static/report.html">Tests</a></li>
+                <li><a href="../../../_static/coverage/index.html">Coverage</a></li>
+                <li><a href="../../../glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for pds_crawler.load.database</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># pds-crawler - ETL to index PDS data to pdssp</span>
+<span class="c1"># Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)</span>
+<span class="c1"># This file is part of pds-crawler &lt;https://github.com/pdssp/pds_crawler&gt;</span>
+<span class="c1"># SPDX-License-Identifier: LGPL-3.0-or-later</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module Name:</span>
+<span class="sd">    database</span>
+
+<span class="sd">Description:</span>
+<span class="sd">    The database module provides capabilities to store and load the PDS insformation.</span>
+<span class="sd">    The stored information comes from the models:</span>
+<span class="sd">    - PdsRegistryModel : collection information</span>
+<span class="sd">    - List[str] : list of precomputed URL to download all PDS data from ODE webservice</span>
+<span class="sd">    - ...</span>
+
+<span class="sd">Classes:</span>
+<span class="sd">    Database :</span>
+<span class="sd">        Database implementation</span>
+<span class="sd">    StacStorage:</span>
+<span class="sd">        Storage for STAC</span>
+<span class="sd">    PdsStorage:</span>
+<span class="sd">        PDS storage</span>
+<span class="sd">    PdsCollectionStorage</span>
+<span class="sd">        PDS collection storage</span>
+
+
+<span class="sd">.. uml::</span>
+
+<span class="sd">    class Database {</span>
+<span class="sd">        - __base_directory: str</span>
+<span class="sd">        - __pds_dir: str</span>
+<span class="sd">        - __stac_dir: str</span>
+<span class="sd">        - __hdf5_name: str</span>
+<span class="sd">        - __stac_storage: StacStorage</span>
+<span class="sd">        - __pds_storage: PdsStorage</span>
+<span class="sd">        - __hdf5_storage: Hdf5Storage</span>
+
+<span class="sd">        + base_directory: str</span>
+<span class="sd">        + pds_dir: str</span>
+<span class="sd">        + stac_dir: str</span>
+<span class="sd">        + hdf5_name: str</span>
+<span class="sd">        + stac_storage: StacStorage</span>
+<span class="sd">        + pds_storage: PdsStorage</span>
+<span class="sd">        + hdf5_storage: Hdf5Storage</span>
+
+<span class="sd">        + __init__(base_directory: str) -&gt; None</span>
+<span class="sd">        + init_storage() -&gt; None</span>
+<span class="sd">        + reset_storage() -&gt; None</span>
+<span class="sd">        + __repr__() -&gt; str</span>
+<span class="sd">    }</span>
+
+<span class="sd">    class PdsCollectionStorage {</span>
+<span class="sd">        - __directory: str</span>
+<span class="sd">        +__init__(self, directory: str) -&gt; None</span>
+<span class="sd">        + directory: str</span>
+<span class="sd">        + list_files() : List[str]</span>
+<span class="sd">        + get_volume_description() : VolumeModel</span>
+<span class="sd">        + list_catalogs() : Dict[str, Any]</span>
+<span class="sd">        + get_catalog(file: str, catalogue_type: PdsParserFactory.FileGrammary) : Any</span>
+<span class="sd">        + download(urls: List[str], nb_workers: int = 3, timeout: int = 180, time_sleep: int = 1) -&gt; None</span>
+<span class="sd">        + __repr__() : str</span>
+<span class="sd">    }</span>
+
+<span class="sd">    class PdsStorage{</span>
+<span class="sd">        + __init__(base_directory: str) -&gt; None</span>
+<span class="sd">        -__directory: str</span>
+<span class="sd">        +init_storage_directory()</span>
+<span class="sd">        +reset_storage()</span>
+<span class="sd">        +get_pds_storage_for(pds_collection: PdsRegistryModel) -&gt; PdsCollectionStorage</span>
+<span class="sd">        +directory: str</span>
+<span class="sd">        +__repr__() -&gt; str</span>
+<span class="sd">    }</span>
+
+<span class="sd">    class Hdf5Storage{</span>
+<span class="sd">        - HDF_SEP: str = &quot;/&quot;</span>
+<span class="sd">        - DS_URLS: str = &quot;urls&quot;</span>
+<span class="sd">        - __name</span>
+<span class="sd">        + name</span>
+<span class="sd">        + init_storage(name:str)</span>
+<span class="sd">        + reset_storage()</span>
+<span class="sd">        - _has_changed(store_db:Any, pds_collection:PdsRegistryModel):bool</span>
+<span class="sd">        - _has_attribute_in_group(node:Any):bool</span>
+<span class="sd">        - _save_collection(pds_collection:PdsRegistryModel, f:Any):bool</span>
+<span class="sd">        - _read_and_convert_attributes(node:Any):Dict[str,Any]</span>
+<span class="sd">        - _save_urls_in_new_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])</span>
+<span class="sd">        - _save_urls_in_existing_dataset(self, pds_collection: PdsRegistryModel, urls: List[str])</span>
+<span class="sd">        + save_collection(pds_collection:PdsRegistryModel): bool</span>
+<span class="sd">        + save_collections(collections_pds:List[PdsRegistryModel]): bool</span>
+<span class="sd">        + load_collections(body:Optional[str]=None, dataset_id:Optional[str]=None):List[PdsRegistryModel]</span>
+<span class="sd">        + save_urls(pds_collection: PdsRegistryModel, urls: List[str])</span>
+<span class="sd">        + load_urls(pds_collection: PdsRegistryModel) -&gt; List[str]</span>
+<span class="sd">        + static define_group_from(words: List[str]) -&gt; str</span>
+<span class="sd">    }</span>
+
+<span class="sd">    class StacStorage {</span>
+<span class="sd">        -__directory: str</span>
+<span class="sd">        -__root_catalog: pystac.Catalog</span>
+<span class="sd">        -__layout: LargeDataVolumeStrategy</span>
+<span class="sd">        +directory: str</span>
+<span class="sd">        +root_catalog: pystac.Catalog</span>
+<span class="sd">        +__init__(directory: str)</span>
+<span class="sd">        -_load_root_catalog()</span>
+<span class="sd">        +init_storage_directory()</span>
+<span class="sd">        +reset_storage()</span>
+<span class="sd">        +refresh()</span>
+<span class="sd">        +item_exists(record: PdsRecordModel) -&gt; bool</span>
+<span class="sd">        +catalog_normalize_and_save()</span>
+<span class="sd">        +root_normalize_and_save(catalog: pystac.Catalog)</span>
+<span class="sd">        +normalize_and_save(cat_or_coll: Union[pystac.Collection, pystac.Catalog])</span>
+<span class="sd">        +__repr__() -&gt; str</span>
+<span class="sd">    }</span>
+
+<span class="sd">    Database *-- PdsStorage</span>
+<span class="sd">    Database *-- Hdf5Storage</span>
+<span class="sd">    Database *-- StacStorage</span>
+<span class="sd">    PdsStorage *-- PdsCollectionStorage</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Jean-Christophe Malapert</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pystac</span>
+
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Labo</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRecordModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRegistryModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsspModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">VolumeModel</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">Locking</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">parallel_requests</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">UtilsMonitoring</span>
+<span class="kn">from</span> <span class="nn">.pds_objects_parser</span> <span class="kn">import</span> <span class="n">PdsParserFactory</span>
+<span class="kn">from</span> <span class="nn">.strategy</span> <span class="kn">import</span> <span class="n">LargeDataVolumeStrategy</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="StacStorage"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage">[docs]</a><span class="k">class</span> <span class="nc">StacStorage</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;STAC storage.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StacStorage.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initializes several private properties, including a pystac.Catalog</span>
+<span class="sd">        object representing the root catalog.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            directory (str): base directory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__directory</span> <span class="o">=</span> <span class="n">directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__layout</span> <span class="o">=</span> <span class="n">LargeDataVolumeStrategy</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[StacStorage] Initialize StacDorage with diretory=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__directory</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_storage_directory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_root_catalog</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the directory path.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the directory path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__directory</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">root_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the root catalog as a pystac.Catalog object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[pystac.Catalog]: the root catalog as a pystac.Catalog object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__root_catalog</span>
+
+<div class="viewcode-block" id="StacStorage._load_root_catalog"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage._load_root_catalog">[docs]</a>    <span class="k">def</span> <span class="nf">_load_root_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load root STAC catalog&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__root_catalog</span> <span class="o">=</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;catalog.json&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;[StacStorage] root_catalog found&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__root_catalog</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;[StacStorage] root_catalog not found, create one&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__root_catalog</span> <span class="o">=</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">PdsspModel</span><span class="o">.</span><span class="n">create_lab_id</span><span class="p">(</span><span class="n">Labo</span><span class="o">.</span><span class="n">ID</span><span class="p">),</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Planetary Data System&quot;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Georeferenced data extracted from ode.rsl.wustl.edu&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__root_catalog</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+                <span class="n">pystac</span><span class="o">.</span><span class="n">Link</span><span class="p">(</span>
+                    <span class="n">rel</span><span class="o">=</span><span class="n">pystac</span><span class="o">.</span><span class="n">RelType</span><span class="o">.</span><span class="n">PREVIEW</span><span class="p">,</span>
+                    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;https://pdsmgmt.gsfc.nasa.gov/images/PDS_Logo.png&quot;</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PDS logo&quot;</span><span class="p">,</span>
+                    <span class="n">media_type</span><span class="o">=</span><span class="n">pystac</span><span class="o">.</span><span class="n">MediaType</span><span class="o">.</span><span class="n">PNG</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root_normalize_and_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__root_catalog</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacStorage.init_storage_directory"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.init_storage_directory">[docs]</a>    <span class="k">def</span> <span class="nf">init_storage_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates the storage directory if it doesn&#39;t exist.&quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacStorage.reset_storage"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.reset_storage">[docs]</a>    <span class="k">def</span> <span class="nf">reset_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes the storage directory and all its contents.&quot;&quot;&quot;</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacStorage.refresh"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reloads the root catalog from the catalog.json file.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_root_catalog</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StacStorage.item_exists"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.item_exists">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">item_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">PdsRecordModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if an item (represented by a PdsRecordModel object) exists in</span>
+<span class="sd">        the storage directory, otherwise False.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            record (PdsRecordModel): item</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if an item (represented by a PdsRecordModel object) exists in</span>
+<span class="sd">            the storage directory, otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_body_id</span><span class="p">(),</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_mission_id</span><span class="p">(),</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_plateform_id</span><span class="p">(),</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_instrument_id</span><span class="p">(),</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_collection_id</span><span class="p">(),</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[StacStorage] item_exists in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacStorage.catalog_normalize_and_save"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.catalog_normalize_and_save">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">catalog_normalize_and_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Normalizes the root catalog and saves it to disk.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;[StacStorage] catalog_normalize_and_save - root_catalog not found&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;[StacStorage] catalog_normalize_and_save - root_catalog not found&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot load STAC root&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_catalog</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
+            <span class="n">catalog_type</span><span class="o">=</span><span class="n">pystac</span><span class="o">.</span><span class="n">CatalogType</span><span class="o">.</span><span class="n">SELF_CONTAINED</span><span class="p">,</span>
+            <span class="n">strategy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__layout</span><span class="o">.</span><span class="n">get_strategy</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacStorage.root_normalize_and_save"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.root_normalize_and_save">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">root_normalize_and_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">catalog</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Normalizes the given catalog and saves it to disk using the root</span>
+<span class="sd">        directory as the output directory.&quot;&quot;&quot;</span>
+        <span class="n">catalog</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
+            <span class="n">catalog_type</span><span class="o">=</span><span class="n">pystac</span><span class="o">.</span><span class="n">CatalogType</span><span class="o">.</span><span class="n">SELF_CONTAINED</span><span class="p">,</span>
+            <span class="n">strategy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__layout</span><span class="o">.</span><span class="n">get_strategy</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacStorage.normalize_and_save"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.StacStorage.normalize_and_save">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">normalize_and_save</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">cat_or_coll</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Normalizes the given catalog or collection and saves it to disk.&quot;&quot;&quot;</span>
+        <span class="n">cat_or_coll</span><span class="o">.</span><span class="n">normalize_hrefs</span><span class="p">(</span>
+            <span class="n">cat_or_coll</span><span class="o">.</span><span class="n">self_href</span><span class="p">,</span>
+            <span class="n">strategy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__layout</span><span class="o">.</span><span class="n">get_strategy</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">cat_or_coll</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a string representation of the StacStorage object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: a string representation of the StacStorage object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;StacStorage(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="PdsCollectionStorage"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage">[docs]</a><span class="k">class</span> <span class="nc">PdsCollectionStorage</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Storage for a Planetary Data System (PDS) collection..&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PdsCollectionStorage.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the class instance with the provided directory string argument.</span>
+
+<span class="sd">        This directory is created if it does not already exist.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            directory (str): diretory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__directory</span> <span class="o">=</span> <span class="n">directory</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the directory path.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the directory path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__directory</span>
+
+<div class="viewcode-block" id="PdsCollectionStorage.list_files"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.list_files">[docs]</a>    <span class="k">def</span> <span class="nf">list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of filenames in the directory that are regular files.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: list of filenames</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="PdsCollectionStorage.list_records_files"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.list_records_files">[docs]</a>    <span class="k">def</span> <span class="nf">list_records_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of filenames in the directory that are regular files coming from PdsRecordsWs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: list of filenames</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">f</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+            <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">)</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="PdsCollectionStorage.get_volume_description"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.get_volume_description">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_volume_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VolumeModel</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a VolumeModel object containing the parsed contents of the &quot;voldesc.cat&quot; file in the directory</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            timeout (int, optional): parser timeout in seconds. Defaults to 30</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            VolumeModel: Voldesc.cat object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">voldesc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;voldesc.cat&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">voldesc</span><span class="p">,</span>
+            <span class="n">type_file</span><span class="o">=</span><span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span><span class="o">.</span><span class="n">VOL_DESC</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsCollectionStorage.list_catalogs"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.list_catalogs">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">list_catalogs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dictionary containing the contents of the CATALOG object</span>
+<span class="sd">        in the VolumeModel returned by get_volume_description</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, Any]: a dictionary containing the contents of the CATALOG</span>
+<span class="sd">            object in the VolumeModel</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">volume</span><span class="p">:</span> <span class="n">VolumeModel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_volume_description</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">volume</span><span class="o">.</span><span class="n">CATALOG</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">volume</span><span class="o">.</span><span class="n">CATALOG</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="PdsCollectionStorage.get_catalog"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.get_catalog">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_catalog</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">catalogue_type</span><span class="p">:</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the parsed contents of a PDS catalogue file specified by</span>
+<span class="sd">        the file argument, using the catalogue_type argument to specify the</span>
+<span class="sd">        type of catalogue parser to use.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (str): PDS catalog</span>
+<span class="sd">            catalogue_type (PdsParserFactory.FileGrammary): Information about the catalog</span>
+<span class="sd">            timeout (int, optional): parser timeout. Defaults to 30</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: the parsed contents of a PDS catalogue file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">type_file</span><span class="o">=</span><span class="n">catalogue_type</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsCollectionStorage.download"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsCollectionStorage.download">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">nb_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span>
+        <span class="n">time_sleep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download URLs in parallel in the collection storage.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            urls (List[str]): List of URLs to download</span>
+<span class="sd">            nb_workers (int, optional): nb workers. Defaults to 3.</span>
+<span class="sd">            timeout (int, optional): timeout in seconds. Defaults to 180</span>
+<span class="sd">            time_sleep (int, optional): sleep. Defaults to 1.</span>
+<span class="sd">            progress_bar (bool, optional): Set progress_bar. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parallel_requests</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
+            <span class="n">urls</span><span class="p">,</span>
+            <span class="n">nb_workers</span><span class="o">=</span><span class="n">nb_workers</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">time_sleep</span><span class="o">=</span><span class="n">time_sleep</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a string representation of the class instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;PdsCollectionStorage(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="PdsStorage"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsStorage">[docs]</a><span class="k">class</span> <span class="nc">PdsStorage</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Main PDS storage.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PdsStorage.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.PdsStorage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_storage_directory</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">init_storage_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+
+    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_pds_storage_for</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PdsCollectionStorage</span><span class="p">:</span>
+        <span class="n">relative_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">relative_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PdsCollectionStorage</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__directory</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;PdsStorage(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="Hdf5Storage"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage">[docs]</a><span class="k">class</span> <span class="nc">Hdf5Storage</span><span class="p">:</span>
+    <span class="n">HDF_SEP</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="n">DS_URLS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;urls&quot;</span>
+
+<div class="viewcode-block" id="Hdf5Storage.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_storage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+
+    <span class="k">def</span> <span class="nf">init_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;author&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">metadata</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Jean-Christophe Malapert&quot;</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Hdf5Storage._has_changed"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._has_changed">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_has_changed</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">store_db</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check if the same version of the PDS collection has already been stored.</span>
+
+<span class="sd">        To check the if the version is an update or not, the comparison is performed based on</span>
+<span class="sd">        the number of products and the existing keywords `NumberProducts` in store_db.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            store_db (Any): node in HDF5</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True when the collection is new or must be updated otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="s2">&quot;NumberProducts&quot;</span> <span class="ow">in</span> <span class="n">store_db</span><span class="o">.</span><span class="n">attrs</span>
+            <span class="ow">and</span> <span class="n">pds_collection</span><span class="o">.</span><span class="n">NumberProducts</span>
+            <span class="o">==</span> <span class="n">store_db</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;NumberProducts&quot;</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage._has_attribute_in_group"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._has_attribute_in_group">[docs]</a>    <span class="k">def</span> <span class="nf">_has_attribute_in_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check if it exists attributes in the node.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node (Any): the HDF5 node</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True when both the node is a h5py.Group and node has attributes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">h5py</span><span class="o">.</span><span class="n">Group</span><span class="p">)</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">attrs</span>  <span class="c1"># type: ignore</span></div>
+
+    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_save_collection</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">is_saved</span><span class="p">:</span> <span class="nb">bool</span>
+        <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+                <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">store_hdf</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group_path</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">store_hdf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;[StacStorage] _save_collection - store_hdf does not exist&quot;</span>
+            <span class="p">)</span>
+            <span class="n">store_hdf</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">group_path</span><span class="p">)</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">to_hdf5</span><span class="p">(</span><span class="n">store_hdf</span><span class="p">)</span>
+            <span class="n">is_saved</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_changed</span><span class="p">(</span><span class="n">store_hdf</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[StacStorage] _save_collection - Update HDF5&quot;</span><span class="p">)</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">to_hdf5</span><span class="p">(</span><span class="n">store_hdf</span><span class="p">)</span>
+            <span class="n">is_saved</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2"> has not changed, skip the record in the database&quot;</span>
+            <span class="p">)</span>
+            <span class="n">is_saved</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">is_saved</span>
+
+<div class="viewcode-block" id="Hdf5Storage._read_and_convert_attributes"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._read_and_convert_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">_read_and_convert_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Read and converts convert attributs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node (Any): HDF5 group or dataset</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, Any]: attributs as dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">group_attributes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">group_attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group_attributes</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">):</span>
+                <span class="n">group_attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span>
+                    <span class="n">group_attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">group_attributes</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.save_collection"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_collection">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">save_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Save the PDS collection in the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): the PDS collection</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True is the collection is saved otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">is_saved</span><span class="p">:</span> <span class="nb">bool</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">is_saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">is_saved</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.save_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_collections">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">save_collections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">collections_pds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Save all the PDS collections in the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            collections_pds (List[PdsRegistryModel]): the collections.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True is the collection is saved otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">is_saved</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">collections_pds</span><span class="p">:</span>
+                <span class="n">is_saved</span> <span class="o">=</span> <span class="n">is_saved</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">is_saved</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.load_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.load_collections">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">load_collections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Load all collections metadata from the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            body (Optional[str]): name of the body to get. Defaults to None</span>
+<span class="sd">            dataset_id (Optional[str]): Dataset ID , used to filtr the collection. Defaults to None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[PdsRegistryModel]: All PDS collections metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">extract_attributes</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;metadata&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_attribute_in_group</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="n">dico</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_and_convert_attributes</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">pds_collections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PdsRegistryModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dico</span><span class="p">))</span>
+
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">visititems</span><span class="p">(</span><span class="n">extract_attributes</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># filter pds_collection by body name</span>
+        <span class="n">pds_registry_models</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">pds_registry_model</span>
+            <span class="k">for</span> <span class="n">pds_registry_model</span> <span class="ow">in</span> <span class="n">pds_collections</span>
+            <span class="k">if</span> <span class="n">body</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">pds_registry_model</span><span class="o">.</span><span class="n">get_body</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">body</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="p">]</span>
+
+        <span class="c1"># filter pds_collections by dataset ID</span>
+        <span class="n">pds_registry_model</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">pds_registry_model</span>
+            <span class="k">for</span> <span class="n">pds_registry_model</span> <span class="ow">in</span> <span class="n">pds_registry_models</span>
+            <span class="k">if</span> <span class="n">dataset_id</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">pds_registry_model</span><span class="o">.</span><span class="n">DataSetId</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">dataset_id</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">pds_registry_model</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage._save_urls_in_new_dataset"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._save_urls_in_new_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">_save_urls_in_new_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save URLS in a new dataset, which is represented by pds_collection</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection, used to define the name of the dataset</span>
+<span class="sd">            urls (List[str]): URLs to save</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="n">max_shape</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">),)</span>
+            <span class="n">dset</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">group_path</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">DS_URLS</span><span class="p">,</span>
+                <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">maxshape</span><span class="o">=</span><span class="n">max_shape</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">special_dtype</span><span class="p">(</span><span class="n">vlen</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+                <span class="n">chunks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage._save_urls_in_existing_dataset"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage._save_urls_in_existing_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">_save_urls_in_existing_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save URLs in existing dataset, which is represented by pds_collection</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collections used to define the name of the dataset to load</span>
+<span class="sd">            urls (List[str]): urls to save</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">dset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">group_path</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">DS_URLS</span>
+            <span class="p">)</span>
+            <span class="n">dset</span><span class="p">:</span> <span class="n">h5py</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">h5py</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">dset_name</span><span class="p">])</span>
+
+            <span class="c1"># Update the Urls</span>
+            <span class="n">dset</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">),))</span>
+            <span class="n">dset</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">urls</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> URLs in hdf5:</span><span class="si">{</span><span class="n">group_path</span><span class="si">}</span><span class="s2">/urls&quot;</span><span class="p">)</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.save_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.save_urls">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">save_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Save URLs in the &quot;urls&quot; dataset in a given group where the group name is built from pds_collection.</span>
+<span class="sd">        The dataset can be an existing dataset or a new one</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
+<span class="sd">            urls (List[str]): all pregenerated url to download the data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">old_urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_urls</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_urls_in_new_dataset</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">old_urls</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;These urls </span><span class="si">{</span><span class="n">urls</span><span class="si">}</span><span class="s2"> are already stored for </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">, skip to save the URLs dataset&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            Updates the Urls in dataset for </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">:</span>
+<span class="s2">                old_urls: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">old_urls</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">                new_urls: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_urls_in_existing_dataset</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.load_urls"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.load_urls">[docs]</a>    <span class="nd">@UtilsMonitoring</span><span class="o">.</span><span class="n">io_display</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">load_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Loads pregenerated URLs for a given PDS collection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of URLs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">lock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">group_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">define_group_from</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+                    <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">dset</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">group_path</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span> <span class="o">+</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">DS_URLS</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">dset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dset</span><span class="p">)]</span>  <span class="c1"># type: ignore</span>
+        <span class="n">Locking</span><span class="o">.</span><span class="n">unlock_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">urls</span></div>
+
+<div class="viewcode-block" id="Hdf5Storage.define_group_from"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Hdf5Storage.define_group_from">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">define_group_from</span><span class="p">(</span><span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create a valid name for HDF5 node based on words.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            words (List[str]): Words</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Valid name for HDF5 node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Hdf5Storage</span><span class="o">.</span><span class="n">HDF_SEP</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9_]&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hdf5(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Provides the database implementation using a HDF5 file.&quot;&quot;&quot;</span>
+
+    <span class="n">PDS_STORAGE_DIR</span> <span class="o">=</span> <span class="s2">&quot;files&quot;</span>
+    <span class="n">STAC_STORAGE_DIR</span> <span class="o">=</span> <span class="s2">&quot;stac&quot;</span>
+    <span class="n">HDF5_STORAGE_NAME</span> <span class="o">=</span> <span class="s2">&quot;pds.h5&quot;</span>
+
+<div class="viewcode-block" id="Database.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.database.Database.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__base_directory</span> <span class="o">=</span> <span class="n">base_directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pds_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Database</span><span class="o">.</span><span class="n">PDS_STORAGE_DIR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stac_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Database</span><span class="o">.</span><span class="n">STAC_STORAGE_DIR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hdf5_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Database</span><span class="o">.</span><span class="n">HDF5_STORAGE_NAME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_storage</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            Path to the database : </span><span class="si">{</span><span class="n">base_directory</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            Path to HDF5 STorage : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            Path to PDS Storage : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pds_storage</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            Path to STAC Storage: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stac_storage</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">base_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__base_directory</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pds_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pds_dir</span>
+
+    <span class="nd">@pds_dir</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pds_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pds_dir</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stac_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stac_dir</span>
+
+    <span class="nd">@stac_dir</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">stac_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stac_dir</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hdf5_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hdf5_name</span>
+
+    <span class="nd">@hdf5_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">hdf5_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hdf5_name</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stac_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StacStorage</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stac_storage</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pds_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PdsStorage</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pds_storage</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hdf5_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hdf5Storage</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hdf5_storage</span>
+
+    <span class="k">def</span> <span class="nf">init_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">files_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pds_dir</span><span class="p">)</span>
+        <span class="n">stac_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stac_dir</span><span class="p">)</span>
+        <span class="n">hdf5_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdf5_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stac_storage</span> <span class="o">=</span> <span class="n">StacStorage</span><span class="p">(</span><span class="n">stac_directory</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pds_storage</span> <span class="o">=</span> <span class="n">PdsStorage</span><span class="p">(</span><span class="n">files_directory</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__hdf5_storage</span> <span class="o">=</span> <span class="n">Hdf5Storage</span><span class="p">(</span><span class="n">hdf5_file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">reset_storage</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pds_storage</span><span class="o">.</span><span class="n">reset_storage</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">reset_storage</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Database(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_directory</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pds_storage</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stac_storage</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

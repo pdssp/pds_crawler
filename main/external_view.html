@@ -1,0 +1,637 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>External view of the software &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Operations environment" href="operations_environment.html" />
+    <link rel="prev" title="Purpose of the Software" href="purpose.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="_static/report.html">Tests</a></li>
+                <li><a href="_static/coverage/index.html">Coverage</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">External view of the software</a><ul>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#interfaces">Interfaces</a><ul>
+<li><a class="reference internal" href="#pdssp-plateform">PDSSP Plateform</a></li>
+<li><a class="reference internal" href="#data-files">Data files</a><ul>
+<li><a class="reference internal" href="#module-pds_crawler.models.pds_models">PDS3 Objects</a></li>
+<li><a class="reference internal" href="#module-pds_crawler.models.ode_ws_models">ODE web services</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="purpose.html" title="Previous Chapter: Purpose of the Software"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Purpose of th...</span>
+    </a>
+  </li>
+  <li>
+    <a href="operations_environment.html" title="Next Chapter: Operations environment"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Operations en... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/external_view.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="external-view-of-the-software">
+<h1>External view of the software<a class="headerlink" href="#external-view-of-the-software" title="Permalink to this headline">¶</a></h1>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p>This section describes the interactions of PDS crawler with external interfaces on
+the <a class="reference internal" href="glossary.html#term-PDSSP"><span class="xref std std-term">PDSSP</span></a> infrastructure. The different interfaces are the following:</p>
+<ul class="simple">
+<li><p>the platform where the PDS crawler is hosted</p></li>
+<li><p>the <a class="reference internal" href="glossary.html#term-PDS"><span class="xref std std-term">PDS</span></a> as data source</p></li>
+<li><p>the airflow software that allow the operator to pilot the PDS crawler</p></li>
+</ul>
+<a class="reference internal image-reference" href="https://pdssp.github.io/pdssp-docs/_images/pdssp_architecture.png"><img alt="the PDSSP infrastructure" src="https://pdssp.github.io/pdssp-docs/_images/pdssp_architecture.png" style="width: 800px;" /></a>
+</section>
+<section id="interfaces">
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h2>
+<section id="pdssp-plateform">
+<h3>PDSSP Plateform<a class="headerlink" href="#pdssp-plateform" title="Permalink to this headline">¶</a></h3>
+<p>The plateform must be a computer with Linux system where the following components must be installed :</p>
+<ul class="simple">
+<li><p>a browser to operate Airflow</p></li>
+<li><p>docker</p></li>
+</ul>
+<p>The platform must have xxx GB of disk space for data and xxx for images and containers</p>
+</section>
+<section id="data-files">
+<h3>Data files<a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h3>
+<section id="module-pds_crawler.models.pds_models">
+<span id="pds3-objects"></span><h4>PDS3 Objects<a class="headerlink" href="#module-pds_crawler.models.pds_models" title="Permalink to this headline">¶</a></h4>
+<p>PDS models for catalogs</p>
+<p class="plantuml">
+<img src="_images/plantuml-6f664ad98dc63b54a9c45b97ad85d02cfcb66011.png" alt="class ReferenceModel {
+    REFERENCE_KEY_ID: str
+    REFERENCE_DESC: str
+}
+
+class ReferencesModel {
+    REFERENCES: List[ReferenceModel]
+}
+
+ReferencesModel --&gt; ReferenceModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-d518f4571f134950f930938088055be811ada553.png" alt="class DataSetInformationModel {
+    CONFIDENCE_LEVEL_NOTE: str
+    DATA_SET_COLLECTION_MEMBER_FLG: str
+    DATA_SET_DESC: str
+    DATA_SET_NAME: str
+    DATA_SET_RELEASE_DATE: str
+    DETAILED_CATALOG_FLAG: str
+    PRODUCER_FULL_NAME: Union[str, List[str]]
+    START_TIME: str
+    STOP_TIME: str
+    DATA_OBJECT_TYPE: Optional[str]
+    ABSTRACT_DESC: Optional[str]
+    CITATION_DESC: Optional[str]
+    DATA_SET_TERSE_DESC: Optional[str]
+}
+
+class DataSetTargetModel {
+    TARGET_NAME: str
+}
+
+class DataSetHostModel {
+    INSTRUMENT_HOST_ID: str
+    INSTRUMENT_ID: List[str]
+}
+
+class DataSetMissionModel {
+    MISSION_NAME: str
+}
+
+class DataSetReferenceInformationModel {
+    REFERENCE_KEY_ID: str
+}
+
+class DataSetModel {
+    DATA_SET_ID: str
+    DATA_SET_INFORMATION: DataSetInformationModel
+    DATA_SET_TARGET: List[DataSetTargetModel]
+    DATA_SET_HOST: DataSetHostModel
+    DATA_SET_REFERENCE_INFORMATION: List[DataSetReferenceInformationModel]
+    DATA_SET_MISSION: Optional[DataSetMissionModel]
+}
+
+DataSetModel --&gt; DataSetInformationModel
+DataSetModel --&gt; DataSetTargetModel
+DataSetModel --&gt; DataSetHostModel
+DataSetModel --&gt; DataSetReferenceInformationModel
+DataSetModel --&gt; DataSetMissionModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-30c991be6c32f213d5d34447d06ac2a7da61aa03.png" alt="class InstrumentReferenceInfoModel {
+    REFERENCE_KEY_ID: str
+}
+
+class InstrumentInformationModel {
+    INSTRUMENT_DESC: str
+    INSTRUMENT_NAME: str
+    INSTRUMENT_TYPE: str
+}
+
+class InstrumentModel {
+    INSTRUMENT_HOST_ID: str
+    INSTRUMENT_ID: str
+    INSTRUMENT_INFORMATION: InstrumentInformationModel
+    INSTRUMENT_REFERENCE_INFO: List[InstrumentReferenceInfoModel]
+}
+
+class InstrumentHostInformationModel {
+    INSTRUMENT_HOST_DESC: str
+    INSTRUMENT_HOST_NAME: str
+    INSTRUMENT_HOST_TYPE: str
+}
+
+class InstrumentHostReferenceInfoModel {
+    REFERENCE_KEY_ID: str
+}
+
+class InstrumentHostModel {
+    INSTRUMENT_HOST_ID: str
+    INSTRUMENT_HOST_INFORMATION: InstrumentHostInformationModel
+    INSTRUMENT_HOST_REFERENCE_INFO: List[InstrumentHostReferenceInfoModel]
+}
+
+InstrumentHostModel --&gt; InstrumentHostInformationModel
+InstrumentHostModel --&gt; InstrumentHostReferenceInfoModel
+InstrumentModel --&gt; InstrumentInformationModel
+InstrumentModel --&gt; InstrumentReferenceInfoModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-e2f86a5006c1ba08f6b5e43b6b8a8234b5533bd7.png" alt="class MissionInformationModel {
+    MISSION_ALIAS_NAME: str
+    MISSION_DESC: str
+    MISSION_OBJECTIVES_SUMMARY: str
+    MISSION_START_DATE: str
+    MISSION_STOP_DATE: str
+}
+
+class MissionTargetModel {
+    TARGET_NAME: str
+}
+
+class MissionHostModel {
+    INSTRUMENT_HOST_ID: str
+    MISSION_TARGET: List[MissionTargetModel]
+}
+
+class MissionReferenceInformationModel {
+    REFERENCE_KEY_ID: str
+}
+
+class MissionModel {
+    MISSION_NAME: str
+    MISSION_HOST: MissionHostModel
+    MISSION_INFORMATION: MissionInformationModel
+    MISSION_REFERENCE_INFORMATION: List[MissionReferenceInformationModel]
+}
+
+MissionModel --&gt; MissionHostModel
+MissionModel --&gt; MissionInformationModel
+MissionModel --&gt; MissionReferenceInformationModel
+MissionHostModel --&gt; MissionTargetModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-7acc8ff4de44903777e8e56a43e393f832a6db92.png" alt="class DataSetMapProjectionRefInfoModel {
+    REFERENCE_KEY_ID: str
+}
+
+class DataSetMapProjectionInfoModel {
+    MAP_PROJECTION_DESC: str
+    MAP_PROJECTION_TYPE: str
+    ROTATIONAL_ELEMENT_DESC: str
+    DS_MAP_PROJECTION_REF_INFO: List[DataSetMapProjectionRefInfoModel]
+}
+
+class DataSetMapProjectionModel {
+    DATA_SET_ID: str
+    DATA_SET_MAP_PROJECTION_INFO: DataSetMapProjectionInfoModel
+}
+
+DataSetMapProjectionModel --&gt; DataSetMapProjectionInfoModel
+DataSetMapProjectionInfoModel --&gt; DataSetMapProjectionRefInfoModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-c9dc43f4aaed59255738424f7ed6de3e808aad55.png" alt="class PersonnelInformationModel {
+    ADDRESS_TEXT: str
+    ALTERNATE_TELEPHONE_NUMBER: str
+    FAX_NUMBER: str
+    FULL_NAME: str
+    INSTITUTION_NAME: str
+    LAST_NAME: str
+    NODE_ID: str
+    PDS_AFFILIATION: str
+    REGISTRATION_DATE: str
+    TELEPHONE_NUMBER: str
+    PDS_ADDRESS_BOOK_FLAG: Optional[str]
+}
+
+class PersonnelElectronicMailModel {
+    ELECTRONIC_MAIL_ID: str
+    ELECTRONIC_MAIL_TYPE: str
+    PREFERENCE_ID: Optional[str]
+}
+
+class PersonnelModel {
+    PDS_USER_ID: str
+    PERSONNEL_ELECTRONIC_MAIL: PersonnelElectronicMailModel
+    PERSONNEL_INFORMATION: PersonnelInformationModel
+}
+
+class PersonnelsModel {
+    PERSONNELS: List[PersonnelModel]
+}
+
+PersonnelsModel --&gt; PersonnelElectronicMailModel
+PersonnelsModel --&gt; PersonnelInformationModel
+PersonnelsModel --&gt; PersonnelModel"/>
+</p>
+<p class="plantuml">
+<img src="_images/plantuml-55a7fd38a7846d6b660df5ce82b5b0d804ba699d.png" alt="class CatalogModel {
+    DATA_SET_CATALOG: Optional[Union[str, List[str]]]
+    INSTRUMENT_CATALOG: Optional[str]
+    INSTRUMENT_HOST_CATALOG: Optional[str]
+    MISSION_CATALOG: Optional[str]
+    LOGICAL_VOLUME_PATHNAME: Optional[str]
+    LOGICAL_VOLUMES: Optional[str]
+    DATA_SET_ID: Optional[str]
+    DATA_SET_COLLECTION_CATALOG: Optional[str]
+    PERSONNEL_CATALOG: Optional[str]
+    REFERENCE_CATALOG: Optional[str]
+    TARGET_CATALOG: Optional[str]
+}
+
+class DataProducerModel {
+    INSTITUTION_NAME: str
+    FACILITY_NAME: str
+    FULL_NAME: str
+    ADDRESS_TEXT: str
+    DISCIPLINE_NAME: Optional[str]
+    NODE_NAME: Optional[str] = field(default=None, repr=False, compare=False)
+    TELEPHONE_NUMBER: Optional[str]
+    ELECTRONIC_MAIL_TYPE: Optional[str]
+    ELECTRONIC_MAIL_ID: Optional[str]
+}
+
+class FileModel {
+    RECORD_TYPE: str
+    DESCRIPTION: Optional[str]
+    ENCODING_TYPE: Optional[str]
+    FILE_NAME: Optional[str]
+    FILE_RECORDS: Optional[str]
+    INTERCHANGE_FORMAT: Optional[str]
+    LABEL_RECORDS: Optional[str]
+    RECORD_BYTES: Optional[str]
+    REQUIRED_STORAGE_BYTES: Optional[str]
+    SEQUENCE_NUMBER: Optional[str]
+    UNCOMPRESSED_FILE_NAME: Optional[str]
+}
+
+class DirectoryModel {
+    NAME: str
+    FILE: List[FileModel]
+    RECORD_TYPE: Optional[str]
+    SEQUENCE_NUMBER: Optional[str]
+}
+
+class DataSupplierModel {
+    INSTITUTION_NAME: str
+    FACILITY_NAME: str
+    FULL_NAME: str
+    ADDRESS_TEXT: str
+    TELEPHONE_NUMBER: str
+    ELECTRONIC_MAIL_TYPE: str
+    ELECTRONIC_MAIL_ID: str
+    DISCIPLINE_NAME: Optional[str]
+    NODE_NAME: Optional[str]
+}
+
+class VolumeModel {
+    DATA_SET_ID: str
+    DESCRIPTION: str
+    MEDIUM_TYPE: str
+    PUBLICATION_DATE: str
+    VOLUME_FORMAT: str
+    VOLUME_ID: str
+    VOLUME_NAME: str
+    VOLUME_SERIES_NAME: str
+    VOLUME_SET_NAME: str
+    VOLUME_SET_ID: str
+    VOLUME_VERSION_ID: str
+    VOLUMES: str
+    CATALOG: CatalogModel
+    DATA_PRODUCER: DataProducerModel
+    DIRECTORY: Optional[DirectoryModel]
+    FILE: Optional[FileModel]
+    DATA_SUPPLIER: Optional[DataSupplierModel]
+    BLOCK_BYTES: Optional[str]
+    DATA_SET_COLLECTION_ID: Optional[str]
+    FILES: Optional[str]
+    HARDWARE_MODEL_ID: Optional[str]
+    LOGICAL_VOLUMES: Optional[str]
+    LOGICAL_VOLUME_PATH_NAME: Optional[str]
+    MEDIUM_FORMAT: Optional[str]
+    NOTE: Optional[str]
+    OPERATING_SYSTEM_ID
+    PRODUCT_TYPE: Optional[str]
+    TRANSFER_COMMAND_TEXT: Optional[str]
+    VOLUME_INSERT_TEXT: Optional[str]
+}
+
+VolumeModel --&gt; CatalogModel
+VolumeModel --&gt; DataProducerModel
+VolumeModel --&gt; DirectoryModel
+VolumeModel --&gt; FileModel
+VolumeModel --&gt; DataSupplierModel"/>
+</p>
+</section>
+<section id="module-pds_crawler.models.ode_ws_models">
+<span id="ode-web-services"></span><h4>ODE web services<a class="headerlink" href="#module-pds_crawler.models.ode_ws_models" title="Permalink to this headline">¶</a></h4>
+<p>ODE services models</p>
+<p class="plantuml">
+<img src="_images/plantuml-ccfc059538d80eb2e8e77f17e87704c8326ba78a.png" alt="class PdsRegistryModel {
+    +ODEMetaDB: str
+    +IHID: str
+    +IHName: str
+    +IID: str
+    +IName: str
+    +PT: str
+    +PTName: str
+    +DataSetId: str
+    +NumberProducts: int
+    +ValidTargets: Dict[str, List[str]]
+    +MinOrbit: Optional[int]
+    +MaxOrbit: Optional[int]
+    +MinObservationTime: Optional[str]
+    +MaxObservationTime: Optional[str]
+    +NumberObservations: Optional[int]
+    +SpecialValue1: Optional[str]
+    +MinSpecialValue1: Optional[float]
+    +MaxSpecialValue1: Optional[float]
+    +SpecialValue2: Optional[str]
+    +MinSpecialValue2: Optional[float]
+    +MaxSpecialValue2: Optional[float]
+}
+
+class PdsRecordModel {
+    +ode_id: str
+    +pdsid: str
+    +ihid: str
+    +iid: str
+    +pt: str
+    +LabelFileName: str
+    +Product_creation_time: str
+    +Target_name: str
+    +Data_Set_Id: str
+    +Easternmost_longitude: float
+    +Maximum_latitude: float
+    +Minimum_latitude: float
+    +Westernmost_longitude: float
+    +Product_version_id: Optional[str]
+    +RelativePathtoVol: Optional[str]
+    +label: Optional[str]
+    +PDS4LabelURL: Optional[str]
+    +PDSVolume_Id: Optional[str]
+    +Label_product_type: Optional[str]
+    +Observation_id: Optional[str]
+    +Observation_number: Optional[int]
+    +Observation_type: Optional[str]
+    +Producer_id: Optional[str]
+    +Product_name: Optional[str]
+    +Product_release_date: Optional[str]
+    +Activity_id: Optional[str]
+    +Predicted_dust_opacity: Optional[float]
+    +Predicted_dust_opacity_text: Optional[str]
+    +Observation_time: Optional[str]
+    +SpaceCraft_clock_start_count: Optional[str]
+    +SpaceCraft_clock_stop_count: Optional[str]
+    +Start_orbit_number: Optional[int]
+    +Stop_orbit_number: Optional[int]
+    +UTC_start_time: Optional[str]
+    +UTC_stop_time: Optional[str]
+    +Emission_angle: Optional[float]
+}
+
+class ProductFile {
+    +FileName: str
+    +Type: Optional[str]
+    +KBytes: Optional[float]
+    +URL: Optional[str]
+    +Description: Optional[str]
+    +Creation_date: Optional[str]
+}
+
+PdsRecordModel --&gt; ProductFile"/>
+</p>
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -1,0 +1,819 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pds_crawler.extractor.pds_ode_ws &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="../../../_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="../../../_static/report.html">Tests</a></li>
+                <li><a href="../../../_static/coverage/index.html">Coverage</a></li>
+                <li><a href="../../../glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for pds_crawler.extractor.pds_ode_ws</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># pds-crawler - ETL to index PDS data to pdssp</span>
+<span class="c1"># Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)</span>
+<span class="c1"># This file is part of pds-crawler &lt;https://github.com/pdssp/pds_crawler&gt;</span>
+<span class="c1"># SPDX-License-Identifier: LGPL-3.0-or-later</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module Name:</span>
+<span class="sd">    pds_ode_ws</span>
+
+<span class="sd">Description:</span>
+<span class="sd">    the pds_ode_ws provides the metadata for the observations by querying ODE web services.</span>
+
+<span class="sd">Classes:</span>
+<span class="sd">    PdsRegistry :</span>
+<span class="sd">        Provides the list of georeferenced PDS collections by retrieving</span>
+<span class="sd">        a list of Planetary Data System (PDS) data collections rom the</span>
+<span class="sd">        PDS ODE (Outer Planets Data Exploration) web service.</span>
+<span class="sd">    PdsRecordsWs :</span>
+<span class="sd">        Handles the PDS records (download, store and load the records for</span>
+<span class="sd">        one of several PDS collection).</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Jean-Christophe Malapert</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">PdsCollectionAttributeError</span>
+<span class="kn">from</span> <span class="nn">..load</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">..load</span> <span class="kn">import</span> <span class="n">PdsCollectionStorage</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRecordsModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRegistryModel</span>
+<span class="kn">from</span> <span class="nn">..report</span> <span class="kn">import</span> <span class="n">MessageModel</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">Observable</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">ProgressLogger</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">requests_retry_session</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PdsRegistry"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry">[docs]</a><span class="k">class</span> <span class="nc">PdsRegistry</span><span class="p">(</span><span class="n">Observable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Provides the list of georeferenced PDS collections by retrieving</span>
+<span class="sd">    a list of Planetary Data System (PDS) data collections rom the</span>
+<span class="sd">    PDS ODE (Outer Planets Data Exploration) web service.</span>
+
+<span class="sd">    .. uml::</span>
+
+<span class="sd">        class PdsRegistry {</span>
+<span class="sd">            +Database database</span>
+<span class="sd">            - build_params(target: str = None) Dict[str, str]</span>
+<span class="sd">            - get_response(params: Dict[str, str]) str</span>
+<span class="sd">            - parse_response_collection(response: str) Tuple[Dict[str, int], List[PdsRegistryModel]]</span>
+<span class="sd">            + get_pds_collections(body: str = None) Tuple[Dict[str, str], List[PdsRegistryModel]]</span>
+<span class="sd">            + cache_pds_collections(pds_collections: List[PdsRegistryModel])</span>
+<span class="sd">            + load_pds_collections_from_cache() List[PdsRegistryModel]</span>
+<span class="sd">            + query_cache(dataset_id: str) Optional[PdsRegistryModel]</span>
+<span class="sd">            + distinct_dataset_values() Set</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SERVICE_ODE_END_POINT</span> <span class="o">=</span> <span class="s2">&quot;https://oderest.rsl.wustl.edu/live2/?&quot;</span>
+
+<div class="viewcode-block" id="PdsRegistry.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the collection by setting a database to store the content that has</span>
+<span class="sd">        been retrieved from the PDS</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            database (Database): database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__report</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__report</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__database</span> <span class="o">=</span> <span class="n">database</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Database</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the database</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Database: database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__database</span>
+
+<div class="viewcode-block" id="PdsRegistry._build_request_params"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry._build_request_params">[docs]</a>    <span class="k">def</span> <span class="nf">_build_request_params</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Build the query parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target (str, optional): target. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, str]: Query parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;iipt&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;odemetadb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="k">return</span> <span class="n">params</span></div>
+
+<div class="viewcode-block" id="PdsRegistry._get_response"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry._get_response">[docs]</a>    <span class="k">def</span> <span class="nf">_get_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the content of web service response designed by</span>
+<span class="sd">        the SERVICE_ODE_END_POINT and the query params.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params (Dict[str, str]): Query parameters</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: PDS ODE REST API query error</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the content of the web service response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span>
+            <span class="n">requests_retry_session</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">PdsRegistry</span><span class="o">.</span><span class="n">SERVICE_ODE_END_POINT</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">1800</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+            <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Requesting </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> to get the collections: </span><span class="se">\</span>
+<span class="s2">                    </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;odemetadb&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;odemetadb&#39;</span> <span class="ow">in</span> <span class="n">params</span> <span class="k">else</span> <span class="s1">&#39;All&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;PDS ODE REST API query </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                    error: url=</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">content</span></div>
+
+<div class="viewcode-block" id="PdsRegistry._parse_collection_response"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry._parse_collection_response">[docs]</a>    <span class="k">def</span> <span class="nf">_parse_collection_response</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Parses the JSON response and returns a tuple that contains a</span>
+<span class="sd">        statistic dictionary and a list of PdsRegistryModel objects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            response (str): JSON response</span>
+<span class="sd">            dataset_id (Optional[str]): dataset_id parameter, used to filter the response. Defaults to None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[Dict[str, int], List[PdsRegistryModel]]: statistic dictionary and a list of PdsRegistryModel objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">iiptset_dicts</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ODEResults&quot;</span><span class="p">][</span><span class="s2">&quot;IIPTSets&quot;</span><span class="p">][</span><span class="s2">&quot;IIPTSet&quot;</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+        <span class="n">nb_records</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iiptset_dicts</span><span class="p">)</span>
+        <span class="n">errors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">nb_collections</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">iiptset_dict</span> <span class="ow">in</span> <span class="n">iiptset_dicts</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span> <span class="o">=</span> <span class="n">PdsRegistryModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                    <span class="n">iiptset_dict</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">pds_collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="n">dataset_id</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="ow">or</span> <span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">dataset_id</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="n">nb_records</span> <span class="o">+=</span> <span class="n">pds_collection</span><span class="o">.</span><span class="n">NumberProducts</span>
+                    <span class="n">pds_collections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">PdsCollectionAttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">errors</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">nb_collections</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">)</span>
+        <span class="n">skip</span> <span class="o">=</span> <span class="n">total</span> <span class="o">-</span> <span class="p">(</span><span class="n">nb_collections</span> <span class="o">+</span> <span class="n">errors</span><span class="p">)</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="n">skip</span><span class="p">,</span>
+            <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="n">errors</span><span class="p">,</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">iiptset_dicts</span><span class="p">),</span>
+            <span class="s2">&quot;nb_records&quot;</span><span class="p">:</span> <span class="n">nb_records</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">pds_collections</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRegistry.get_pds_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.get_pds_collections">[docs]</a>    <span class="k">def</span> <span class="nf">get_pds_collections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve a list of Planetary Data System (PDS) data collections</span>
+<span class="sd">        from the PDS ODE (Outer Planets Data Exploration) web service.</span>
+
+<span class="sd">        The method takes an optional body argument that specifies the name</span>
+<span class="sd">        of the body for which to retrieve collections. If no argument is</span>
+<span class="sd">        provided, the method retrieves collections for all bodys.</span>
+<span class="sd">        The method sends an HTTP request to the PDS ODE web service with the</span>
+<span class="sd">        appropriate parameters constructed from the body argument and</span>
+<span class="sd">        parses the JSON response to extract the data collections.</span>
+<span class="sd">        It then returns a tuple containing a dictionary of statistics and</span>
+<span class="sd">        a list of PdsRegistryModel objects representing the data collections.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            body (str, optional): body. Defaults to None.</span>
+<span class="sd">            dataset_id (str, optional): dataset ID. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[Dict[str, str], List[PdsRegistryModel]]: a dictionary of s</span>
+<span class="sd">            tatistics and a list of PdsRegistryModel objects representing the</span>
+<span class="sd">            data collections</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">request_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_request_params</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_response</span><span class="p">(</span><span class="n">request_params</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_collection_response</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span> <span class="n">dataset_id</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        ODE Summary</span>
+<span class="s2">        -----------</span>
+<span class="s2">        Nb records = </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;nb_records&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        Nb collections : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        Nb errors : </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        Nb skip : </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;skip&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRegistry.cache_pds_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.cache_pds_collections">[docs]</a>    <span class="k">def</span> <span class="nf">cache_pds_collections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Caches the PDS collections information by saving the PDS</span>
+<span class="sd">        collections in the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collections (List[PdsRegistryModel]): the PDS collections information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">save_collections</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[PdsRegistry] No new collection to process&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRegistry.load_pds_collections_from_cache"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.load_pds_collections_from_cache">[docs]</a>    <span class="k">def</span> <span class="nf">load_pds_collections_from_cache</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Loads the PDS collections information from the cache by loading</span>
+<span class="sd">        the information from the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            body (Optional[str], optional): name of the body to get. Defaults to None.</span>
+<span class="sd">            dataset_id (Optional[str], optional): Dataset ID parameter, used to filter the collection. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[PdsRegistryModel]: the PDS collections information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">load_collections</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRegistry.query_cache"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.query_cache">[docs]</a>    <span class="k">def</span> <span class="nf">query_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Query a local cache of PDS data collections for a specific</span>
+<span class="sd">        dataset identified by its ID.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset_id (str): ID of thr dataset</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[PdsRegistryModel]: PDS data collection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_pds_collections_from_cache</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">collection</span><span class="o">.</span><span class="n">DataSetId</span> <span class="o">==</span> <span class="n">dataset_id</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">collection</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="PdsRegistry.distinct_dataset_values"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRegistry.distinct_dataset_values">[docs]</a>    <span class="k">def</span> <span class="nf">distinct_dataset_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Gets a set of distinct values for the DataSetId attribute of</span>
+<span class="sd">        PdsRegistryModel objects in a local cache of PDS data collections.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Set: Distinct values for the DataSetId attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
+            <span class="n">PdsRegistryModel</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_pds_collections_from_cache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span> <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">pds_collections</span><span class="p">]</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="PdsRecordsWs"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs">[docs]</a><span class="k">class</span> <span class="nc">PdsRecordsWs</span><span class="p">(</span><span class="n">Observable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Handles the PDS records web service.</span>
+
+<span class="sd">    Responsible to download from the web service and stores the JSON response in the database.</span>
+<span class="sd">    This class is also responsible to parse the stored JSON and converts each record in the</span>
+<span class="sd">    PdsRecordsModel.</span>
+
+<span class="sd">    .. uml::</span>
+
+<span class="sd">        class PdsRecordsWs {</span>
+<span class="sd">            +Database database</span>
+<span class="sd">            - build_params(target: str, ihid: str, iid: str, pt: str, offset: int, limit: int = 1000,) Dict[str, str]</span>
+<span class="sd">            - generate_all_pagination_params(target: str, ihid: str, iid: str, pt: str, total: int, offset: int = 1, limit: int = 1000) List[Tuple[str, Any]]</span>
+<span class="sd">            - generate_urls_for_pages(self, all_pagination_params: List[Tuple[str]]) -&gt; List[str]</span>
+<span class="sd">            - __repr__(self) str</span>
+<span class="sd">            + generate_urls_for_one_collection(pds_collection: PdsRegistryModel, offset: int = 1, limit: int = 5000):</span>
+<span class="sd">            + generate_urls_for_all_collections(pds_collection: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)</span>
+<span class="sd">            + generate_urls_for_all_collections(pds_collections: List[PdsRegistryModel], offset: int = 1, limit: int = 5000)</span>
+<span class="sd">            + download_pds_records_for_one_collection(pds_collection: PdsRegistryModel, limit: Optional[int] = None)</span>
+<span class="sd">            + download_pds_records_for_all_collections(pds_collections: List[PdsRegistryModel])</span>
+<span class="sd">            + parse_pds_collection_from_cache(pds_collection: PdsRegistryModel, disable_tqdm: bool = False) Iterator[PdsRecordsModel]</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SERVICE_ODE_END_POINT</span> <span class="o">=</span> <span class="s2">&quot;https://oderest.rsl.wustl.edu/live2/?&quot;</span>
+
+<div class="viewcode-block" id="PdsRecordsWs.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__database</span> <span class="o">=</span> <span class="n">database</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__report</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__report</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Database</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the database</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Database: database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__database</span>
+
+<div class="viewcode-block" id="PdsRecordsWs._build_request_params"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs._build_request_params">[docs]</a>    <span class="k">def</span> <span class="nf">_build_request_params</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">ihid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">iid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Builds the query parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target (str): body</span>
+<span class="sd">            ihid (str): plateforme</span>
+<span class="sd">            iid (str): instrument</span>
+<span class="sd">            pt (str): product type</span>
+<span class="sd">            offset (int): record number where the pagination start</span>
+<span class="sd">            limit (int, optional): number of records in the response. Defaults to 1000.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, str]: key/value to prepare the query</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;product&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
+            <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="s2">&quot;copmf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ihid&quot;</span><span class="p">:</span> <span class="n">ihid</span><span class="p">,</span>
+            <span class="s2">&quot;iid&quot;</span><span class="p">:</span> <span class="n">iid</span><span class="p">,</span>
+            <span class="s2">&quot;pt&quot;</span><span class="p">:</span> <span class="n">pt</span><span class="p">,</span>
+            <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="n">offset</span><span class="p">,</span>
+            <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">limit</span><span class="p">,</span>
+            <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">params</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs._generate_all_pagination_params"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs._generate_all_pagination_params">[docs]</a>    <span class="k">def</span> <span class="nf">_generate_all_pagination_params</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">ihid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">iid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">total</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Generates all pagination parameters</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target (str): body</span>
+<span class="sd">            ihid (str): plateform</span>
+<span class="sd">            iid (str): instrument</span>
+<span class="sd">            pt (str): product type</span>
+<span class="sd">            total (int): total number of records that we want</span>
+<span class="sd">            offset (int, optional): record number where the pagination starts. Defaults to 1.</span>
+<span class="sd">            limit (int, optional): maximum number of records in the response. Defaults to 1000.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple[str]]: List of (target, ihid, iid, pt, total, pagination_start, limit)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params_paginations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">pagination_start</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="k">while</span> <span class="n">pagination_start</span> <span class="o">&lt;=</span> <span class="n">total</span><span class="p">:</span>
+            <span class="n">params_paginations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">ihid</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">pagination_start</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">pagination_start</span> <span class="o">=</span> <span class="n">pagination_start</span> <span class="o">+</span> <span class="n">limit</span>
+        <span class="k">return</span> <span class="n">params_paginations</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs._generate_urls_for_pages"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs._generate_urls_for_pages">[docs]</a>    <span class="k">def</span> <span class="nf">_generate_urls_for_pages</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">all_pagination_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Generates all URLs based on all pagination parameters of the pages</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            all_pagination_params (List[Tuple[str]]): pargination parameters for all pages</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: all URLs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pagination_params</span> <span class="ow">in</span> <span class="n">all_pagination_params</span><span class="p">:</span>
+            <span class="n">param_url</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">pagination_params</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="o">*</span><span class="n">pagination_params</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]]</span>
+            <span class="n">request_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_request_params</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">param_url</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">PdsRecordsWs</span><span class="o">.</span><span class="n">SERVICE_ODE_END_POINT</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span>
+                <span class="n">request_params</span>
+            <span class="p">)</span>
+            <span class="n">urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">urls</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs.generate_urls_for_one_collection"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.generate_urls_for_one_collection">[docs]</a>    <span class="k">def</span> <span class="nf">generate_urls_for_one_collection</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates the URLs for one collection and save them in the database.</span>
+
+<span class="sd">        There Urls will be used to dowload massively the records.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): pds collection</span>
+<span class="sd">            offset (int, optional): record number from which the response starts. Defaults to 1.</span>
+<span class="sd">            limit (int, optional): maximum number of records per page. Defaults to 5000.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_pagination_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
+            <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_all_pagination_params</span><span class="p">(</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">ODEMetaDB</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>  <span class="c1"># type: ignore</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">IHID</span><span class="p">,</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">PT</span><span class="p">,</span>
+            <span class="n">pds_collection</span><span class="o">.</span><span class="n">NumberProducts</span><span class="p">,</span>
+            <span class="n">offset</span><span class="p">,</span>
+            <span class="n">limit</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">urls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_urls_for_pages</span><span class="p">(</span><span class="n">all_pagination_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">save_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs.generate_urls_for_all_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.generate_urls_for_all_collections">[docs]</a>    <span class="k">def</span> <span class="nf">generate_urls_for_all_collections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates the URLs for all the collections and save them in the database.</span>
+
+<span class="sd">        There Urls will be used to dowload massively the records.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collections (List[PdsRegistryModel]): PDS collections</span>
+<span class="sd">            offset (int, optional): record number. Defaults to 1.</span>
+<span class="sd">            limit (int, optional): limit per page. Defaults to 5000.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">pds_collections</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generate_urls_for_one_collection</span><span class="p">(</span>
+                <span class="n">pds_collection</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">limit</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs.download_pds_records_for_one_collection"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.download_pds_records_for_one_collection">[docs]</a>    <span class="k">def</span> <span class="nf">download_pds_records_for_one_collection</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">nb_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">time_sleep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download records for a given PDS collection based on the set of</span>
+<span class="sd">        URLs loaded from the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection</span>
+<span class="sd">            limit (int, optional): Number of pages. Defaults to None.</span>
+<span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
+<span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
+<span class="sd">            progress_bar (False, optional): Set progress_bar. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">load_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># No URL in the cache, generate now</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generate_urls_for_one_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+            <span class="n">urls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">hdf5_storage</span><span class="o">.</span><span class="n">load_urls</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+
+        <span class="c1"># if a sample is needed</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">urls</span> <span class="o">=</span> <span class="n">urls</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">limit</span><span class="p">]</span>
+
+        <span class="c1"># Get the storage for the collection</span>
+        <span class="n">file_storage</span><span class="p">:</span> <span class="n">PdsCollectionStorage</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pds_storage</span><span class="o">.</span><span class="n">get_pds_storage_for</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Download files in the storage</span>
+        <span class="n">file_storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span>
+            <span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">,</span>
+            <span class="n">time_sleep</span><span class="o">=</span><span class="n">time_sleep</span><span class="p">,</span>
+            <span class="n">nb_workers</span><span class="o">=</span><span class="n">nb_workers</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs.download_pds_records_for_all_collections"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.download_pds_records_for_all_collections">[docs]</a>    <span class="k">def</span> <span class="nf">download_pds_records_for_all_collections</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">nb_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">time_sleep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download PDS records for all collections</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collections (List[PdsRegistryModel]): _description_</span>
+<span class="sd">            limit (Optional[int], optional): Number of pages. Defaults to None.</span>
+<span class="sd">            nb_workers (int, optional): Number of workers in parallel. Defaults to 3.</span>
+<span class="sd">            time_sleep (int, optional): Time to way between two download series. Defaults to 1.</span>
+<span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">),</span>
+            <span class="n">iterable</span><span class="o">=</span><span class="n">pds_collections</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Getting collections&quot;</span><span class="p">,</span>
+            <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">progress_logger</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">progress_logger</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">download_pds_records_for_one_collection</span><span class="p">(</span>
+                    <span class="n">cast</span><span class="p">(</span><span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">),</span>
+                    <span class="n">limit</span><span class="p">,</span>
+                    <span class="n">nb_workers</span><span class="o">=</span><span class="n">nb_workers</span><span class="p">,</span>
+                    <span class="n">time_sleep</span><span class="o">=</span><span class="n">time_sleep</span><span class="p">,</span>
+                    <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsRecordsWs.parse_pds_collection_from_cache"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.extractor.pds_ode_ws.PdsRecordsWs.parse_pds_collection_from_cache">[docs]</a>    <span class="k">def</span> <span class="nf">parse_pds_collection_from_cache</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">PdsRecordsModel</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Parses the PDS records from cache.</span>
+
+<span class="sd">        Responsible for parsing PDS records from the local cache of the PDS catalogs.</span>
+
+<span class="sd">        It takes a PdsRegistryModel object as input, which contains the metadata needed</span>
+<span class="sd">        to locate the downloaded PDS records in the local cache.</span>
+
+<span class="sd">        If the parsing is successful and the resulting PdsRecordsModel object is not None,</span>
+<span class="sd">        the method yields the object. If the parsing fails, the method logs an error message</span>
+<span class="sd">        and notifies its observers with a MessageModel object containing information about</span>
+<span class="sd">        the file and the error.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection of the registry</span>
+<span class="sd">            progress_bar (bool, optional): use progress bar. Defaults to True.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Iterator[PdsRecordsModel]: Iterator on the list of records_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">dsRecordsModelDecoder</span><span class="p">(</span><span class="n">dct</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;ODEResults&quot;</span> <span class="ow">in</span> <span class="n">dct</span> <span class="ow">and</span> <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;ODEResults&quot;</span><span class="p">][</span><span class="s2">&quot;Count&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                <span class="n">products_dict</span> <span class="o">=</span> <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;ODEResults&quot;</span><span class="p">][</span><span class="s2">&quot;Products&quot;</span><span class="p">][</span><span class="s2">&quot;Product&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">products_dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">products_dict</span> <span class="o">=</span> <span class="p">[</span><span class="n">products_dict</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">PdsRecordsModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">products_dict</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;ODEResults&quot;</span> <span class="ow">in</span> <span class="n">dct</span> <span class="ow">and</span> <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;ODEResults&quot;</span><span class="p">][</span><span class="s2">&quot;Count&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">dct</span>
+
+        <span class="n">collection_storage</span><span class="p">:</span> <span class="n">PdsCollectionStorage</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pds_storage</span><span class="o">.</span><span class="n">get_pds_storage_for</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">records_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">collection_storage</span><span class="o">.</span><span class="n">list_records_files</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">records_files</span><span class="p">),</span>
+            <span class="n">iterable</span><span class="o">=</span><span class="n">records_files</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Downloaded responses from </span><span class="si">{</span><span class="n">pds_collection</span><span class="o">.</span><span class="n">DataSetId</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">progress_logger</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file_in_records</span> <span class="ow">in</span> <span class="n">progress_logger</span><span class="p">:</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">collection_storage</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">file_in_records</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                            <span class="n">content</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">dsRecordsModelDecoder</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">result</span>
+                    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> must be deleted !&quot;</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">notify_observers</span><span class="p">(</span><span class="n">MessageModel</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">err</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;PdsRecordsWs(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

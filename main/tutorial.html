@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Tutorial &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Reference manual" href="reference_manual.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="_static/report.html">Tests</a></li>
+                <li><a href="_static/coverage/index.html">Coverage</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#python-api">Python API</a><ul>
+<li><a class="reference internal" href="#data-extraction">Data extraction</a></li>
+<li><a class="reference internal" href="#data-transformation">Data transformation</a></li>
+<li><a class="reference internal" href="#etl-api">ETL API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="reference_manual.html" title="Previous Chapter: Reference manual"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Reference manual</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/tutorial.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This section describes tutorials for the use of Python API and the command line.</p>
+</section>
+<section id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h2>
+<section id="data-extraction">
+<h3>Data extraction<a class="headerlink" href="#data-extraction" title="Permalink to this headline">¶</a></h3>
+<p>Package: extractor</p>
+<p>Description:
+This package contains a collection of modules to extract information from PDS WS and PDS web site.</p>
+<p>Exported components:</p>
+<ul class="simple">
+<li><p><cite>pds_ode_website</cite>: A module that parses the PDS3 Dataset explorer to get the different catalogs.</p></li>
+<li><p><cite>pds_ode_ws</cite>: A module that provides the metadata for the observations and collections by querying ODE web services.</p></li>
+</ul>
+<p>Usage:
+To use this package, you can import and use the exported components as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pds_crawler.extractor</span> <span class="kn">import</span> <span class="n">PdsRegistry</span>
+<span class="kn">from</span> <span class="nn">pds_crawler.models</span> <span class="kn">import</span> <span class="n">PdsRegistryModel</span>
+<span class="kn">from</span> <span class="nn">pds_crawler.load</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="c1"># Create a database to store the results</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="s1">&#39;work/database&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create an instance of PdsRegistry to get the collections</span>
+<span class="n">pds_registry</span> <span class="o">=</span> <span class="n">PdsRegistry</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+
+<span class="c1"># Retrieve all the georeferenced collections list</span>
+<span class="n">results</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pds_registry</span><span class="o">.</span><span class="n">get_pds_collections</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>By knowing the collection and a record, it is possible to retrieve additional metadata
+describing general collection information. This metadata is richer than the metadata
+provided in the records of the collection.</p>
+<p>Now , we need to download the records. To limit the time to wait, only the first
+page is downloaded</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pds_crawler.extractor</span> <span class="kn">import</span> <span class="n">PdsRegistry</span><span class="p">,</span> <span class="n">PdsRecordsWs</span>
+<span class="n">pds_collection</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">60</span><span class="p">]</span>
+<span class="n">pds_records_ws</span> <span class="o">=</span> <span class="n">PdsRecordsWs</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+<span class="n">pds_records_ws</span><span class="o">.</span><span class="n">download_pds_records_for_one_collection</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, we can retrieve the catalogs that describes the metadata for mission, plateform,
+instrument and collection</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pds_crawler.extractor</span> <span class="kn">import</span> <span class="n">PDSCatalogsDescription</span><span class="p">,</span> <span class="n">PDSCatalogDescription</span>
+
+<span class="c1"># download the catalogs in the storage</span>
+<span class="n">cats</span> <span class="o">=</span> <span class="n">PDSCatalogsDescription</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+<span class="n">cats</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="n">pds_collection</span><span class="p">])</span>
+
+<span class="c1"># Retrieve the catalogs from the storage</span>
+<span class="n">pds_objects_cat</span> <span class="o">=</span> <span class="n">PDSCatalogDescription</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+<span class="n">pds_objects_cat</span><span class="o">.</span><span class="n">get_ode_catalogs</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="data-transformation">
+<h3>Data transformation<a class="headerlink" href="#data-transformation" title="Permalink to this headline">¶</a></h3>
+<p>Package: transformer</p>
+<p>Description:
+This package contains a collection of modules to transform extracted information to STAC.</p>
+<p>Exported components:</p>
+<ul class="simple">
+<li><p><cite>StacCatalogTransformer</cite>: A module that converts the extracted PDS catalogs to STAC.</p></li>
+<li><p><cite>StacRecordsTransformer</cite>: A module that converts the extracted responses from PDsRecordsWs to STAC.</p></li>
+</ul>
+<p>Usage:
+To use this package, you can import and use the exported components as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pds_crawler.extractor</span> <span class="kn">import</span> <span class="n">PDSCatalogsDescription</span>
+<span class="kn">from</span> <span class="nn">pds_crawler.transformer</span> <span class="kn">import</span> <span class="n">StacCatalogTransformer</span>
+<span class="n">cats</span> <span class="o">=</span> <span class="n">PDSCatalogsDescription</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+<span class="n">cats</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="n">pds_collection</span><span class="p">])</span>
+<span class="n">transf</span> <span class="o">=</span> <span class="n">StacCatalogTransformer</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+<span class="n">transf</span><span class="o">.</span><span class="n">to_stac</span><span class="p">(</span><span class="n">cats</span><span class="p">,</span> <span class="p">[</span><span class="n">pds_collection</span><span class="p">])</span>
+<span class="n">transf</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="etl-api">
+<h3>ETL API<a class="headerlink" href="#etl-api" title="Permalink to this headline">¶</a></h3>
+<p>Provides a ETL API.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pds_crawler.etl</span> <span class="kn">import</span> <span class="n">PdsSourceEnum</span><span class="p">,</span> <span class="n">PdsDataEnum</span><span class="p">,</span> <span class="n">StacETL</span>
+<span class="n">etl</span> <span class="o">=</span> <span class="n">StacETL</span><span class="p">(</span><span class="s2">&quot;work/database&quot;</span><span class="p">)</span>
+<span class="n">etl</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">PdsSourceEnum</span><span class="o">.</span><span class="n">COLLECTIONS_INDEX</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="command-line">
+<h2>Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h2>
+<p>List of all georeferenced collections available in PDS</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pds_crawler extract --type_extract ode_collections
+</pre></div>
+</div>
+<p>Save a georeferenced collection in the cache</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pds_crawler extract --type_extract ode_collections_save --dataset_id CH1-ORB-L-M3-4-L1B-RADIANCE-V1.0
+</pre></div>
+</div>
+<p>Download ODE records for the cached collection</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pds_crawler extract --type_extract ode_records
+</pre></div>
+</div>
+<p>Download PDS objects for the cached collection</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pds_crawler extract --type_extract pds_objects
+</pre></div>
+</div>
+<p>Transform the downloaded ODE records to items and its parents</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pds_crawler transform --type_stac ode_records
+</pre></div>
+</div>
+<p>Update catalogs and collections from downloaded PDS objects</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pds_crawler transform --type_stac pds_objects
+</pre></div>
+</div>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

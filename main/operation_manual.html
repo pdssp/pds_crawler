@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Operations manual &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reference manual" href="reference_manual.html" />
+    <link rel="prev" title="Operations basics" href="operations_basics.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="_static/report.html">Tests</a></li>
+                <li><a href="_static/coverage/index.html">Coverage</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Operations manual</a><ul>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
+<li><a class="reference internal" href="#get-pds-collections-to-retrieve">Get PDS collections to retrieve</a></li>
+<li><a class="reference internal" href="#retrieve-pds-records-from-collections">Retrieve PDS records from collections</a></li>
+<li><a class="reference internal" href="#retrieve-pds3-objects-from-collections">Retrieve PDS3 objects from collections</a></li>
+<li><a class="reference internal" href="#transform-pds3-object">Transform PDS3 object</a></li>
+<li><a class="reference internal" href="#transform-pds-records">Transform PDS records</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mode-selection-and-control">Mode selection and control</a></li>
+<li><a class="reference internal" href="#normal-operations">Normal operations</a></li>
+<li><a class="reference internal" href="#normal-termination">Normal termination</a></li>
+<li><a class="reference internal" href="#error-conditions">Error conditions</a></li>
+<li><a class="reference internal" href="#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="operations_basics.html" title="Previous Chapter: Operations basics"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Operations basics</span>
+    </a>
+  </li>
+  <li>
+    <a href="reference_manual.html" title="Next Chapter: Reference manual"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Reference manual &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/operation_manual.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="operations-manual">
+<h1>Operations manual<a class="headerlink" href="#operations-manual" title="Permalink to this headline">¶</a></h1>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p><em>The</em> <a class="reference internal" href="glossary.html#term-SUM"><span class="xref std std-term">SUM</span></a> <em>shall contain the operational organisation, a reference schedule for each operational profile, the list of all the elementary operations to be carried out at the site, what to do in order to operate the site, the personnel responsible to do it and when.</em></p>
+</section>
+<section id="setup-and-initialisation">
+<h2>Set‐up and initialisation<a class="headerlink" href="#setup-and-initialisation" title="Permalink to this headline">¶</a></h2>
+<p>To install a Python package, you can use pip, a Python package manager that allows
+you to download and install packages from PyPI (Python Package Index). First, make
+sure that pip is installed on your machine by running in your terminal.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip --version
+</pre></div>
+</div>
+<p>If pip is not installed, you can install it using the command on Python versions 3.4
+and above.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python -m ensurepip --default-pip
+</pre></div>
+</div>
+<p>Once pip is installed, you can install a package by running the command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install git+https://github.com/pdssp/pds_crawler.git
+</pre></div>
+</div>
+</section>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>for PDS crawler capabilities, run the command to display the help:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler -h
+
+<span class="go">usage: pds_crawler [-h] [-v] [--level {INFO,DEBUG,WARNING,ERROR,CRITICAL,TRACE}] [-d DATABASE] {extract,check_extract,transform} ...</span>
+
+<span class="go">Crawl and extract PDS planetary data from various sources, including a web service and a website, transform the data into the</span>
+<span class="go">SpatioTemporal Asset Catalog (STAC) format.</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">{extract,check_extract,transform}</span>
+
+<span class="go">options:</span>
+<span class="go">-h, --help            show this help message and exit</span>
+<span class="go">-v, --version         show program&#39;s version number and exit</span>
+<span class="go">--level {INFO,DEBUG,WARNING,ERROR,CRITICAL,TRACE}</span>
+<span class="go">                        set Level log (default: INFO)</span>
+<span class="go">-d DATABASE, --database DATABASE</span>
+<span class="go">                        Path of the database (default: work/database)</span>
+</pre></div>
+</div>
+<section id="get-pds-collections-to-retrieve">
+<h3>Get PDS collections to retrieve<a class="headerlink" href="#get-pds-collections-to-retrieve" title="Permalink to this headline">¶</a></h3>
+<p>To get all georeferenced PDS collections:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler extract --type_extract ode_collections
+</pre></div>
+</div>
+<p>or to get all georeferenced collections from a planet</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler extract --type_extract ode_collections --planet Mars
+</pre></div>
+</div>
+</section>
+<section id="retrieve-pds-records-from-collections">
+<h3>Retrieve PDS records from collections<a class="headerlink" href="#retrieve-pds-records-from-collections" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler extract --type_extract ode_records
+</pre></div>
+</div>
+</section>
+<section id="retrieve-pds3-objects-from-collections">
+<h3>Retrieve PDS3 objects from collections<a class="headerlink" href="#retrieve-pds3-objects-from-collections" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler extract --type_extract pds_objects
+</pre></div>
+</div>
+</section>
+<section id="transform-pds3-object">
+<h3>Transform PDS3 object<a class="headerlink" href="#transform-pds3-object" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler transform --type_stac catalog
+</pre></div>
+</div>
+</section>
+<section id="transform-pds-records">
+<h3>Transform PDS records<a class="headerlink" href="#transform-pds-records" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pds_crawler transform --type_stac records
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mode-selection-and-control">
+<h2>Mode selection and control<a class="headerlink" href="#mode-selection-and-control" title="Permalink to this headline">¶</a></h2>
+<p><em>The</em> <a class="reference internal" href="glossary.html#term-SUM"><span class="xref std std-term">SUM</span></a> <em>shall give an overview of the access and security features of the software that are visible to the user, and in particular:</em></p>
+<ul class="simple">
+<li><p>How and from whom to obtain a password</p></li>
+<li><p>How to add, delete, or change passwords under user control</p></li>
+<li><p>Security and privacy considerations pertaining to the storage and marking of output reports and other media that the user can generate</p></li>
+</ul>
+</section>
+<section id="normal-operations">
+<h2>Normal operations<a class="headerlink" href="#normal-operations" title="Permalink to this headline">¶</a></h2>
+<p class="plantuml">
+<img src="_images/plantuml-d774ac1d9d6673653bd0db0c054f88e1fda46488.png" alt="actor operator as operator
+participant Airflow as airflow
+participant pds_crawler as crawler
+collections &quot;Storage data facility&quot; as storage
+database    &quot;PDSSP Catalog&quot; as pdssp_cat
+database    &quot;PDS data repositories&quot; as pds
+
+operator -&gt; airflow : Start Extraction &amp; Transformation workflow
+airflow -&gt; crawler : Extract one PDS collection
+crawler -&gt; pds: Extract PDS records from collection
+crawler -&gt; pds: Download JSON responses
+crawler -&gt; storage : Store the JSON responses
+crawler -&gt; storage : Loads one record
+crawler -&gt; crawler : Prepare the PDS3 Objets extraction
+crawler -&gt; pds: Extract the PDS3 Objects from collection
+crawler -&gt; pds : Download the PDS3 objects
+crawler -&gt; storage : Store the PDS3 objects
+crawler -&gt; airflow
+
+airflow -&gt; crawler : Transform one PDS collection to STAC
+crawler -&gt; storage: load PDS3 objects
+crawler -&gt; storage : create report if error
+crawler -&gt; storage : convert to STAC catalogs and collection
+
+crawler -&gt; storage: load JSON responses
+crawler -&gt; storage : create report if error
+crawler -&gt; storage : convert to STAC items and if necessary collection and catalogs
+crawler -&gt; airflow
+airflow -&gt; operator
+
+operator -&gt; storage : consults the report
+operator -&gt; storage : correct or create PDS3 objects
+
+operator -&gt; airflow : Start update PDS3 objects workflow
+airflow -&gt; crawler : Transform PDS3 objects for one collection
+crawler -&gt; storage: load PDS3 objects
+crawler -&gt; storage : create report if error
+crawler -&gt; storage : convert to STAC catalogs and collection
+crawler -&gt; airflow
+airflow -&gt; operator
+operator -&gt; storage : consults the report
+operator -&gt; storage : check STAC results
+
+operator -&gt; airflow : Start STAC ingestion workflow
+airflow -&gt; crawler : Ingest STAC repository
+crawler -&gt; pdssp_cat : Ingest STAC repository
+crawler -&gt; airflow
+airflow -&gt; operator"/>
+</p>
+</section>
+<section id="normal-termination">
+<h2>Normal termination<a class="headerlink" href="#normal-termination" title="Permalink to this headline">¶</a></h2>
+<p><em>The</em> <a class="reference internal" href="glossary.html#term-SUM"><span class="xref std std-term">SUM</span></a> <em>shall describe how the user can cease or interrupt use of the software and how to determine whether normal termination or cessation has occurred.</em></p>
+</section>
+<section id="error-conditions">
+<h2>Error conditions<a class="headerlink" href="#error-conditions" title="Permalink to this headline">¶</a></h2>
+<p><em>The</em> <a class="reference internal" href="glossary.html#term-SUM"><span class="xref std std-term">SUM</span></a> <em>shall describe the common error conditions that can occur as a result of executing the function, and how to detect that the error has occurred.</em></p>
+</section>
+<section id="recover-runs">
+<h2>Recover runs<a class="headerlink" href="#recover-runs" title="Permalink to this headline">¶</a></h2>
+<p><em>The</em> <a class="reference internal" href="glossary.html#term-SUM"><span class="xref std std-term">SUM</span></a> <em>shall include the detailed procedures for restart or recovery from errors or malfunctions occurring during processing and for ensuring continuity of operations in the event of emergencies.</em></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

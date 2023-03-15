@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="../../../_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="../../../_static/report.html">Tests</a></li>
+                <li><a href="../../../_static/coverage/index.html">Coverage</a></li>
+                <li><a href="../../../glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for pds_crawler.transformer.pds_to_stac</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># pds-crawler - ETL to index PDS data to pdssp</span>
+<span class="c1"># Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)</span>
+<span class="c1"># This file is part of pds-crawler &lt;https://github.com/pdssp/pds_crawler&gt;</span>
+<span class="c1"># SPDX-License-Identifier: LGPL-3.0-or-later</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module Name:</span>
+<span class="sd">    pds_to_stac</span>
+
+<span class="sd">Description:</span>
+<span class="sd">    the pds_to_stac module convert the PDS3 objects and records from ODE web service to a unique</span>
+<span class="sd">    STAC PDS catalog.</span>
+
+<span class="sd">Classes:</span>
+<span class="sd">    StacTransformer:</span>
+<span class="sd">        Abstract class.</span>
+<span class="sd">    StacRecordsTransformer :</span>
+<span class="sd">        Converts records from ODE webservice to PDS STAC catalog.</span>
+<span class="sd">    StacCatalogTransformer :</span>
+<span class="sd">        Converts PDS3 object from ODE archive to PDS STAC catalog (without items)</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Jean-Christophe Malapert</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pystac</span>
+
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">CrawlerError</span>
+<span class="kn">from</span> <span class="nn">..extractor</span> <span class="kn">import</span> <span class="n">PDSCatalogsDescription</span>
+<span class="kn">from</span> <span class="nn">..extractor</span> <span class="kn">import</span> <span class="n">PdsRecordsWs</span>
+<span class="kn">from</span> <span class="nn">..load</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRecordModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRecordsModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PdsRegistryModel</span>
+<span class="kn">from</span> <span class="nn">..report</span> <span class="kn">import</span> <span class="n">MessageModel</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">Observable</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">ProgressLogger</span>
+<span class="kn">from</span> <span class="nn">.pds3_objects</span> <span class="kn">import</span> <span class="n">StacPdsCollection</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="StacTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacTransformer">[docs]</a><span class="k">class</span> <span class="nc">StacTransformer</span><span class="p">(</span><span class="n">ABC</span><span class="p">,</span> <span class="n">Observable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for STAC transformation&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StacTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">Database</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;[StacTransformer] must be initialized with database attribute of type Dtabase.&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__database</span> <span class="o">=</span> <span class="n">database</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Database</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the database</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Database: Database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__database</span></div>
+
+
+<div class="viewcode-block" id="StacRecordsTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer">[docs]</a><span class="k">class</span> <span class="nc">StacRecordsTransformer</span><span class="p">(</span><span class="n">StacTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert the records to STAC.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StacRecordsTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init the transformer of :class:`pds_crawler.extractor.PdsRecordModel`</span>
+<span class="sd">        provided by the response :class:`pds_crawler.extractor.PdsRecordsWs`</span>
+
+<span class="sd">        In addition, it is possible to pass a class by *report* keyword</span>
+<span class="sd">        to notify information to this class</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            database (Database): Database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__report</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__report</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__catalog</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a pySTAC catalog</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pystac.Catalog: pySTAC catalog</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__catalog</span>
+
+<div class="viewcode-block" id="StacRecordsTransformer.load_root_catalog"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer.load_root_catalog">[docs]</a>    <span class="k">def</span> <span class="nf">load_root_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads the root catalog&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+            <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">root_catalog</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacRecordsTransformer._create_items_stac"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer._create_items_stac">[docs]</a>    <span class="k">def</span> <span class="nf">_create_items_stac</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_records</span><span class="p">:</span> <span class="n">PdsRecordsWs</span><span class="p">,</span>
+        <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">ItemCollection</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Creates a collection of STAC items of records from a PDS collection.</span>
+
+<span class="sd">        The records are loaded from the local storage, handled by `PdsRecord`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_records (PdsRecordsWs): Object that handle Records</span>
+<span class="sd">            pds_collection (PdsRegistryModel): PDS collection data</span>
+<span class="sd">            progress_bar (bool, optional) : Set progress bar. Defaults to True</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pystac.ItemCollection: Collection of items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">create_items</span><span class="p">(</span>
+            <span class="n">pages</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">PdsRecordsModel</span><span class="p">],</span>
+            <span class="n">pds_collection</span><span class="p">:</span> <span class="n">PdsRegistryModel</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">]:</span>
+            <span class="sd">&quot;&quot;&quot;Creates items</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                pages (Iterator[PdsRecordsModel]): the different pages of the web service response</span>
+<span class="sd">                pds_collection (PdsRegistryModel): information about the collection</span>
+<span class="sd">                progress_bar (bool, optional) : Set progress bar. Defaults to True</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                Iterable[pystac.Item]: Items</span>
+
+<span class="sd">            Yields:</span>
+<span class="sd">                Iterator[Iterable[pystac.Item]]: Items</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">pages</span><span class="p">:</span>
+                <span class="n">pds_records_model</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">pds_records_model</span>
+                <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
+                    <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_records_model</span><span class="p">),</span>
+                    <span class="n">iterable</span><span class="o">=</span><span class="n">pds_records_model</span><span class="p">,</span>
+                    <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;STAC Item objects creation&quot;</span><span class="p">,</span>
+                    <span class="n">position</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">pds_records_model_pbar</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">cast</span><span class="p">(</span>
+                        <span class="n">List</span><span class="p">[</span><span class="n">PdsRecordModel</span><span class="p">],</span> <span class="n">pds_records_model_pbar</span>
+                    <span class="p">):</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">item_exists</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;this </span><span class="si">{</span><span class="n">record</span><span class="si">}</span><span class="s2"> exists in STAC directory, skip it&quot;</span>
+                            <span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="k">yield</span> <span class="n">record</span><span class="o">.</span><span class="n">to_stac_item</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="n">CrawlerError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">notify_observers</span><span class="p">(</span>
+                                <span class="n">MessageModel</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ode_id</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                            <span class="p">)</span>
+
+        <span class="n">pages</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span>
+            <span class="n">PdsRecordsModel</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">pds_records</span><span class="o">.</span><span class="n">parse_pds_collection_from_cache</span><span class="p">(</span><span class="n">pds_collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pystac</span><span class="o">.</span><span class="n">ItemCollection</span><span class="p">(</span>
+            <span class="n">create_items</span><span class="p">(</span><span class="n">pages</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacRecordsTransformer._is_exist"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer._is_exist">[docs]</a>    <span class="k">def</span> <span class="nf">_is_exist</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">catlog_or_collection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check if catlog_or_collection exists.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            catlog_or_collection (Union[pystac.Catalog, pystac.Collection]): STAC catalog or collection</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True when the catalog or the collection exists otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">catlog_or_collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="StacRecordsTransformer.to_stac"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer.to_stac">[docs]</a>    <span class="k">def</span> <span class="nf">to_stac</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_records</span><span class="p">:</span> <span class="n">PdsRecordsWs</span><span class="p">,</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create STAC catalogs with its children for all collections.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_records (PdsRecordsWs): Web service that handles the query to get the responses for a given collection</span>
+<span class="sd">            pds_collections (List[PdsRegistryModel]): All PDS collections data</span>
+<span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">),</span>
+            <span class="n">iterable</span><span class="o">=</span><span class="n">pds_collections</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Processing collection&quot;</span><span class="p">,</span>
+            <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">progress_logger</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">cast</span><span class="p">(</span>
+                <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span> <span class="n">progress_logger</span>
+            <span class="p">):</span>
+                <span class="n">progress_logger</span><span class="o">.</span><span class="n">write_msg</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Processing the collection </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Create items</span>
+                <span class="n">items_stac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_items_stac</span><span class="p">(</span>
+                    <span class="n">pds_records</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">progress_logger</span><span class="o">.</span><span class="n">write_msg</span><span class="p">(</span>
+                        <span class="s2">&quot;No new item, skip the STAC catalogs creation&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">progress_logger</span><span class="o">.</span><span class="n">write_msg</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items_stac</span><span class="o">.</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items to add&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># load STAC collection if it exists</span>
+                <span class="n">stac_collection</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_collection_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># load STAC instrument if it exists</span>
+                <span class="n">stac_instru</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_instrument_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># load STAC plateform if it exists</span>
+                <span class="n">stac_host</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_plateform_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># load STAC mission if it exists</span>
+                <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">get_mission_id</span><span class="p">(),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># load STAC body if it exists</span>
+                <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                    <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">pds_collection</span><span class="o">.</span><span class="n">get_body_id</span><span class="p">()),</span>
+                <span class="p">)</span>
+
+                <span class="n">new_catalog</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+                    <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">]</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_body</span><span class="p">):</span>
+                    <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_body_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_body</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_body</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">):</span>
+                    <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_mission_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_mission</span>
+                    <span class="n">stac_body</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_host</span><span class="p">):</span>
+                    <span class="n">stac_host</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_platform_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_host</span>
+                    <span class="n">stac_mission</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_host</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_instru</span><span class="p">):</span>
+                    <span class="n">stac_instru</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_instru_catalog</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_instru</span>
+                    <span class="n">stac_host</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_instru</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">):</span>
+                    <span class="n">stac_collection</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_collection</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_collection</span>
+                    <span class="n">stac_instru</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_collection</span><span class="p">)</span>
+
+                <span class="n">stac_collection</span><span class="o">.</span><span class="n">add_items</span><span class="p">(</span><span class="n">items_stac</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">new_catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span>
+                        <span class="n">stac_collection</span>
+                    <span class="p">)</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+                        <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">stac_collection</span><span class="o">.</span><span class="n">get_parent</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="n">parent</span><span class="o">.</span><span class="n">save_object</span><span class="p">(</span><span class="n">include_self_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">normalize_and_save</span><span class="p">(</span><span class="n">new_catalog</span><span class="p">)</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">new_catalog</span><span class="o">.</span><span class="n">get_parent</span><span class="p">())</span>
+                    <span class="n">parent</span><span class="o">.</span><span class="n">save_object</span><span class="p">(</span><span class="n">include_self_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacRecordsTransformer.describe"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Describes the STAC catalog and its children as a tree&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StacRecordsTransformer.save"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacRecordsTransformer.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Nothing happens.</span>
+<span class="sd">        Averything is saved in to_stac method&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="StacCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">StacCatalogTransformer</span><span class="p">(</span><span class="n">StacTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts the catalogs to STAC.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StacCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialises the object with database to get access to the data.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__report</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__report</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StacCatalogTransformer.init"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise the catalog&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">_load_root_catalog</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__catalog</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span>
+            <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">root_catalog</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stac_pds_collection</span> <span class="o">=</span> <span class="n">StacPdsCollection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__catalog</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the root catalog</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pystac.Catalog: the root catalog</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__catalog</span>
+
+<div class="viewcode-block" id="StacCatalogTransformer._build_stac_cats_and_colls_for_all_pds_catalogs"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer._build_stac_cats_and_colls_for_all_pds_catalogs">[docs]</a>    <span class="k">def</span> <span class="nf">_build_stac_cats_and_colls_for_all_pds_catalogs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">catalogs_pds_collections</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Builds STAC catalogs and collections for all PDS collections</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            catalogs_pds_collections (Iterator[Dict[str, Any]]): Catalogs for all PDS collections</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">catalogs_pds_collection</span> <span class="ow">in</span> <span class="n">catalogs_pds_collections</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating STAC catalog for </span><span class="si">{</span><span class="n">catalogs_pds_collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__stac_pds_collection</span><span class="o">.</span><span class="n">catalogs</span> <span class="o">=</span> <span class="n">catalogs_pds_collection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__stac_pds_collection</span><span class="o">.</span><span class="n">to_stac</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StacCatalogTransformer.to_stac"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.to_stac">[docs]</a>    <span class="k">def</span> <span class="nf">to_stac</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pds_ode_catalogs</span><span class="p">:</span> <span class="n">PDSCatalogsDescription</span><span class="p">,</span>
+        <span class="n">pds_collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates the STAC catalog and its children.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pds_ode_catalogs (PDSCatalogsDescription): PDS3 objects</span>
+<span class="sd">            pds_collections (List[PdsRegistryModel]): PDS Collection data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">catalogs</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pds_ode_catalogs</span><span class="o">.</span><span class="n">get_ode_catalogs</span><span class="p">(</span>
+            <span class="n">pds_collections</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_stac_cats_and_colls_for_all_pds_catalogs</span><span class="p">(</span><span class="n">catalogs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StacCatalogTransformer.describe"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Describe the catalog&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StacCatalogTransformer.save"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.transformer.pds_to_stac.StacCatalogTransformer.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save on disk the catalog&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">stac_storage</span><span class="o">.</span><span class="n">root_normalize_and_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="p">)</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

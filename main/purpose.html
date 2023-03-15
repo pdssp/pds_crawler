@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Purpose of the Software &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="External view of the software" href="external_view.html" />
+    <link rel="prev" title="Conventions" href="conventions.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="_static/report.html">Tests</a></li>
+                <li><a href="_static/coverage/index.html">Coverage</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Purpose of the Software</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="conventions.html" title="Previous Chapter: Conventions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Conventions</span>
+    </a>
+  </li>
+  <li>
+    <a href="external_view.html" title="Next Chapter: External view of the software"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">External view... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/purpose.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="purpose-of-the-software">
+<h1>Purpose of the Software<a class="headerlink" href="#purpose-of-the-software" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this software is to crawl and extract planetary data from various sources,
+including a web service and a website, transform the data into the SpatioTemporal Asset
+Catalog (STAC) format, and store it in three different storage systems. The software also
+includes four models that represent the different types of data that the system manages.</p>
+<span class="target" id="module-pds_crawler"></span><p>The system architecture consists of several components that work together to crawl
+planetary data. The main component can be grouped in two layers:</p>
+<ul class="simple">
+<li><p>persistence layer that includes three storage systems: STAC_Storage, PDS_Storage, and HDF5_Storage, which store data in the File System.</p></li>
+<li><p>busisness layer contains the Extractor and Transformer components.</p></li>
+</ul>
+<p>The Extractor component extracts data from the Planetary Data System, which comprises
+a web service and a website and sends the retrieved data to both PDS and HDF5 storage.
+The Transformer component then transforms the data into the STAC format and stores it
+in the STAC_Storage.</p>
+<p>The Models component, used by layers, includes four groups of models:</p>
+<ul class="simple">
+<li><p>PDS3 objects - catalogs,</p></li>
+<li><p>ODE WS - collections,</p></li>
+<li><p>ODE WS - records,</p></li>
+<li><p>and STAC.</p></li>
+</ul>
+<p>The diagram below shows the control flow of the components</p>
+<div class="mermaid">
+            graph TB
+    STAC_Storage ==&gt; FileSystem
+    PDS_Storage ==&gt; FileSystem
+    HDF5_Storage ==&gt; FileSystem
+    Extractor ==&gt; PDS_Storage
+    Extractor ==&gt; HDF5_Storage
+    Transformer ==&gt; STAC_Storage
+    Extractor ==&gt; Planetary_Data_System
+    subgraph Planetary_Data_System
+        sq01[Website]
+        sq02[Web service]
+    end
+    subgraph PDS_crawler
+        subgraph Persistence
+            subgraph STAC_Storage
+                sq11[STAC storage]
+                sq12[Strategy]
+            end
+            subgraph PDS_Storage
+                sq21[PDS storage]
+                sq22[PDS objects]
+            end
+            subgraph HDF5_Storage
+                sq3[HDF5 storage]
+            end
+        end
+        subgraph FileSystem
+            sq3[File System]
+        end
+
+        subgraph Business
+
+            subgraph Extractor
+                subgraph ODE_Archive
+                    sq71[Website]
+                end
+                subgraph ODE_Web_Service
+                    sq81[Collections]
+                    sq82[Records]
+                end
+            end
+
+            subgraph Transformer
+                subgraph Stac_Transformation
+                    sq91[Transformation]
+                end
+            end
+        end
+
+        subgraph Models
+            sq4[PDS3 objects - catalogs]
+            sq5[ODE WS - collections]
+            sq6[ODE WS - records]
+            sq7[STAC]
+        end
+    end
+        </div><p>The diagram below shows the data flow</p>
+<div class="mermaid">
+            graph TD
+    A[PDS ODE Web Service - collection] --&gt; |JSON| D(Extraction)
+    B[PDS ODE Web Service - records] --&gt; |JSON| E(Extraction)
+    C[PDS ODE Web Site] --&gt; |REFERENCE_CATALOG, MISSION_CATALOG,&lt;br&gt;PERSONNEL_CATALOG, INSTRUMENT_CATALOG,&lt;br&gt;INSTRUMENT_HOST_CATALOG,DATA_SET_CATALOG,&lt;br&gt;VOL_DESC, DATA_SET_MAP_PROJECTION_CATALOG| F(Extraction)
+    E(Extraction) --&gt; |Files| H[Storage File System]
+    F(Extraction) --&gt; |Files| M[Storage File System]
+    D(Extraction) --&gt; |JSON PdsRegistryModel| I[HDF5]
+    I[HDF5] --&gt; |PdsRegistryModel| N[Transform]
+    M[Storage File System] --&gt; |PdsRecordsModel, DataSetMapProjectionModel,&lt;br&gt;MissionModel, ReferencesModel,&lt;br&gt;PersonnelsModel, VolumeModel,&lt;br&gt;InstrumentModel, InstrumentHostModel,&lt;br&gt;DataSetModel| L[Transform]
+    H[Storage File System] --&gt; |PdsRecordModel| N[Transform]
+    I[HDF5] --&gt; |PdsRegistryModel| L[Transform]
+    N[Transform] --&gt; |STAC Item, STAC Collection, STAC Catalog| O[STAC repository]
+    L[Transform] --&gt; |STAC Collection, STAC Catalog| O[STAC repository]
+        </div><p>In summary, the architecture consists of three storage systems, an extractor that
+retrieves data from various sources, a transformer that converts the data into the
+STAC format, and a web service and website component that provides access to catalogs.
+Finally, the models component includes four models that represent the different types
+of data that the system manages</p>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

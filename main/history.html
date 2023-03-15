@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>CHANGELOG &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="introduction.html" />
+    <link rel="prev" title="Welcome to pds-crawler’s documentation!" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="_static/report.html">Tests</a></li>
+                <li><a href="_static/coverage/index.html">Coverage</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">CHANGELOG</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: Welcome to pds-crawler’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to pd...</span>
+    </a>
+  </li>
+  <li>
+    <a href="introduction.html" title="Next Chapter: Introduction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Introduction &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/history.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="changelog">
+<h1>CHANGELOG<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<p>### Fix 2 bugs when STAC generation Add PDSSP data model (HEAD -&gt; main)
+&gt;Tue, 14 Mar 2023 07:59:35 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix a bug (origin/main)
+&gt;Mon, 13 Mar 2023 15:01:24 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add a log
+&gt;Mon, 13 Mar 2023 14:57:30 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add a timeout when parsing catalogs with Lark
+&gt;Mon, 13 Mar 2023 14:34:28 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Change conf.py for doc generation Add logs for STAC transformation
+&gt;Mon, 13 Mar 2023 10:39:42 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Change the way to lock the file
+&gt;Mon, 13 Mar 2023 09:36:13 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add multiversion doc (tag: latest, tag: 1.0.0rc1)
+&gt;Mon, 13 Mar 2023 04:59:14 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix option in tqdm
+&gt;Mon, 13 Mar 2023 03:48:28 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix log dsplay
+&gt;Mon, 13 Mar 2023 03:05:17 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add a progress bar using tqdm or logger
+&gt;Mon, 13 Mar 2023 02:46:51 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Parse web page to get the volumeid param based on the volume_id value
+&gt;Mon, 13 Mar 2023 02:40:10 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Handles multiple access to HDF5 by locking the file
+&gt;Mon, 13 Mar 2023 02:38:55 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix markdown issue
+&gt;Mon, 13 Mar 2023 02:37:28 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix a bug when writting in HDF5
+&gt;Sun, 12 Mar 2023 04:41:05 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix update of the dataset
+&gt;Sat, 11 Mar 2023 05:48:52 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix method to write in dataset
+&gt;Sat, 11 Mar 2023 05:08:18 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add a log
+&gt;Sat, 11 Mar 2023 02:59:19 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix save_urls in dataset when a dataset was already existed
+&gt;Sat, 11 Mar 2023 02:52:55 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix bug
+&gt;Fri, 10 Mar 2023 18:06:56 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add parameter to specify the number of records per page
+&gt;Fri, 10 Mar 2023 14:51:44 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add code to follow the redirection of a request
+&gt;Fri, 10 Mar 2023 14:37:35 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Remove some useless print
+&gt;Fri, 10 Mar 2023 11:32:01 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix bug when not volums_desc_url
+&gt;Fri, 10 Mar 2023 11:29:13 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add some logs Fix possible bugs
+&gt;Fri, 10 Mar 2023 10:58:38 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Change planet parameter to body since we manage the Moon Use a mean to extract a sample of records
+&gt;Thu, 9 Mar 2023 03:57:31 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add progress_bar as option
+&gt;Wed, 8 Mar 2023 01:46:05 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Update deploy.yml
+&gt;Mon, 6 Mar 2023 09:05:33 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:jcmalapert&#37;&#52;&#48;googlemail&#46;com">jcmalapert<span>&#64;</span>googlemail<span>&#46;</span>com</a>)</p>
+<p>&gt;Commiter: GitHub (<a class="reference external" href="mailto:noreply&#37;&#52;&#48;github&#46;com">noreply<span>&#64;</span>github<span>&#46;</span>com</a>)</p>
+<p>### Update deploy.yml
+&gt;Mon, 6 Mar 2023 09:01:56 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:jcmalapert&#37;&#52;&#48;googlemail&#46;com">jcmalapert<span>&#64;</span>googlemail<span>&#46;</span>com</a>)</p>
+<p>&gt;Commiter: GitHub (<a class="reference external" href="mailto:noreply&#37;&#52;&#48;github&#46;com">noreply<span>&#64;</span>github<span>&#46;</span>com</a>)</p>
+<p>Add plantuml to build UML diagram</p>
+<p>### Fix bug in packaging
+&gt;Tue, 28 Feb 2023 13:30:23 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Change make to make user to install the package in the local directory
+&gt;Tue, 28 Feb 2023 12:27:17 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add deploy for gitlab-ci
+&gt;Tue, 28 Feb 2023 12:25:42 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix a bug with the integration of time in pymarsseason Change configuratio file for sphinx
+&gt;Tue, 28 Feb 2023 02:44:56 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Added updating of PDS3 objects Added the creation of STAC based on JSON response without PDS3 objects Added documentation
+&gt;Tue, 28 Feb 2023 02:04:44 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Refactoring Improve documentation
+&gt;Sun, 26 Feb 2023 05:04:49 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Refactoring Add tests
+&gt;Wed, 22 Feb 2023 18:31:39 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add new storage strategy to handle a large number of items in one collection
+&gt;Mon, 20 Feb 2023 13:44:31 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix bug
+&gt;Sat, 18 Feb 2023 14:45:44 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix types
+&gt;Sat, 18 Feb 2023 06:17:59 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Fix small bugs
+&gt;Sat, 18 Feb 2023 06:17:27 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add strategy to custom directories name during STAC creation
+&gt;Sat, 18 Feb 2023 06:16:18 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Add comments and improve methods name
+&gt;Fri, 17 Feb 2023 13:14:00 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### Update README.md
+&gt;Thu, 16 Feb 2023 13:34:20 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:jcmalapert&#37;&#52;&#48;googlemail&#46;com">jcmalapert<span>&#64;</span>googlemail<span>&#46;</span>com</a>)</p>
+<p>&gt;Commiter: GitHub (<a class="reference external" href="mailto:noreply&#37;&#52;&#48;github&#46;com">noreply<span>&#64;</span>github<span>&#46;</span>com</a>)</p>
+<p>### Convert Readme.rst to markdown
+&gt;Thu, 16 Feb 2023 13:30:53 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>### First import of the project
+&gt;Thu, 16 Feb 2023 11:39:46 +0100</p>
+<p>&gt;Author: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+<p>&gt;Commiter: Jean-Christophe Malapert (<a class="reference external" href="mailto:Jean-christophe&#46;malapert&#37;&#52;&#48;cnes&#46;fr">Jean-christophe<span>&#46;</span>malapert<span>&#64;</span>cnes<span>&#46;</span>fr</a>)</p>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -1,0 +1,1204 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pds_crawler.load.pds_objects_parser &#8212; pds-crawler 0.1.dev1+ga4a9fb8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+    <script src="../../../_static/js/mermaid.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
+          pds-crawler library</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ga4a9fb8</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/pdssp/pds_crawler">Git</a></li>
+                <li><a href="../../../_static/report.html">Tests</a></li>
+                <li><a href="../../../_static/coverage/index.html">Coverage</a></li>
+                <li><a href="../../../glossary.html">Glossary</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Packages <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../introduction.html#context">Context</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../applicable_docs.html">Applicable and reference documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#applicable">Applicable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../applicable_docs.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Terms, definitions and abbreviated terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conventions.html">Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#use-case-diagram">Use case diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#class-diagram">Class diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../conventions.html#sequence-diagram">Sequence diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../purpose.html">Purpose of the Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../external_view.html">External view of the software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../external_view.html#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_environment.html">Operations environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#hardware-configuration">Hardware configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#software-configuration">Software configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_environment.html#operational-constraints">Operational constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operations_basics.html">Operations basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operations_basics.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operation_manual.html">Operations manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#setup-and-initialisation">Set‐up and initialisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#mode-selection-and-control">Mode selection and control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-operations">Normal operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#normal-termination">Normal termination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#error-conditions">Error conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../operation_manual.html#recover-runs">Recover runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_manual.html">Reference manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#extraction">Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#transformation">Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference_manual.html#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorial.html#command-line">Command line</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Section <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+  </div>
+</div>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <h1>Source code for pds_crawler.load.pds_objects_parser</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># pds-crawler - ETL to index PDS data to pdssp</span>
+<span class="c1"># Copyright (C) 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires)</span>
+<span class="c1"># This file is part of pds-crawler &lt;https://github.com/pdssp/pds_crawler&gt;</span>
+<span class="c1"># SPDX-License-Identifier: LGPL-3.0-or-later</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module Name:</span>
+<span class="sd">    pds_archive</span>
+
+<span class="sd">Description:</span>
+<span class="sd">    the pds_archive module parses the PDS3 catalogs by providing the parser and stores</span>
+<span class="sd">    the information in tha appropriate model.</span>
+
+<span class="sd">Classes:</span>
+<span class="sd">    GrammarEnum:</span>
+<span class="sd">        Abstract Enum to create a concrete grammar for Lark</span>
+<span class="sd">    PdsTransformer :</span>
+<span class="sd">        Common parser, used by others parsers.</span>
+<span class="sd">    MissionCatalogTransformer :</span>
+<span class="sd">        Parses the PDS3 mission catalog file that contains the mission information</span>
+<span class="sd">        and stores the information in the MissionModel class.</span>
+<span class="sd">    ReferenceCatalogTransformer :</span>
+<span class="sd">        Parses the PDS3 reference catalog file that contains the citations and</span>
+<span class="sd">        stores the information in the ReferencesModel class.</span>
+<span class="sd">    PersonCatalogTransformer :</span>
+<span class="sd">        Parses the PDS3 person catalog file that contains the points of contact and</span>
+<span class="sd">        stores the information in the PersonnelsModel model.</span>
+<span class="sd">    VolumeDescriptionTransformer :</span>
+<span class="sd">        Parses the PDS3 volume catalog file that contains the references to others</span>
+<span class="sd">        catalogs and stores the information in the VolumeModel model.</span>
+<span class="sd">    InstrumentCatalogTransformer :</span>
+<span class="sd">        Parses the PDS3 instrument catalog file that contains the instrument information</span>
+<span class="sd">        and stores the information in the InstrumentModel model.</span>
+<span class="sd">    InstrumentHostCatalogTransformer :</span>
+<span class="sd">        Parses the PDS3 platform catalog file that contains the platform description</span>
+<span class="sd">        and stores the information in the InstrumentHostModel model.</span>
+<span class="sd">    DataSetCatalogTransformer :</span>
+<span class="sd">        Parses the PDS3 dataset catalog file that contains the dataset description</span>
+<span class="sd">        and stores the information in the DataSetModel class.</span>
+<span class="sd">    PdsParserFactory :</span>
+<span class="sd">        Factory to select the right parser and the related Lark grammar.</span>
+
+
+<span class="sd">.. uml::</span>
+
+<span class="sd">    class PdsTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : Any</span>
+<span class="sd">    }</span>
+<span class="sd">    class ProjectionDescriptionTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : DataSetMapProjectionModel</span>
+<span class="sd">        -__result : DataSetMapProjectionModel</span>
+<span class="sd">    }</span>
+<span class="sd">    class MissionCatalogTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : MissionModel</span>
+<span class="sd">        -__result : MissionModel</span>
+<span class="sd">    }</span>
+<span class="sd">    class ReferenceCatalogTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : ReferencesModel</span>
+<span class="sd">        -__result : ReferencesModel</span>
+<span class="sd">    }</span>
+<span class="sd">    class PersonCatalogTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : PersonnelsModel</span>
+<span class="sd">        -__result : PersonnelsModel</span>
+<span class="sd">    }</span>
+<span class="sd">    class VolumeDescriptionTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : VolumeModel</span>
+<span class="sd">        -__result : VolumeModel</span>
+<span class="sd">    }</span>
+<span class="sd">    class InstrumentCatalogTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : InstrumentModel</span>
+<span class="sd">        -__result : InstrumentModel</span>
+<span class="sd">    }</span>
+<span class="sd">    class DataSetCatalogTransformer{</span>
+<span class="sd">        +__init__(visit_tokens: bool = True)</span>
+<span class="sd">        +result() : DataSetModel</span>
+<span class="sd">        -__result : DataSetModel</span>
+<span class="sd">    }</span>
+<span class="sd">    PdsTransformer &lt;|-- ProjectionDescriptionTransformer</span>
+<span class="sd">    PdsTransformer &lt;|-- MissionCatalogTransformer</span>
+<span class="sd">    PdsTransformer &lt;|-- ReferenceCatalogTransformer</span>
+<span class="sd">    PdsTransformer &lt;|-- PersonCatalogTransformer</span>
+<span class="sd">    PdsTransformer &lt;|-- VolumeDescriptionTransformer</span>
+<span class="sd">    PdsTransformer &lt;|-- InstrumentCatalogTransformer</span>
+<span class="sd">    PdsTransformer &lt;|-- DataSetCatalogTransformer</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Jean-Christophe Malapert</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractproperty</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">Lark</span>
+<span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">Transformer</span>
+<span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">v_args</span>
+
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">ParserTimeOutError</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">DataSetMapProjectionModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">DataSetModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">InstrumentHostModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">InstrumentModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">MissionModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">PersonnelsModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">ReferencesModel</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">VolumeModel</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">requests_retry_session</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GrammarEnum"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.GrammarEnum">[docs]</a><span class="k">class</span> <span class="nc">GrammarEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enum where we can add documentation and grammar.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_value_</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># keep the value of the enum</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="c1"># ignore the first param since it&#39;s already set by __new__</span>
+<div class="viewcode-block" id="GrammarEnum.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.GrammarEnum.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">grammar</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grammar_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">grammar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_class_name_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">class_name</span>
+        <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">doc</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grammar_</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_name_</span></div>
+
+
+<div class="viewcode-block" id="PdsTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsTransformer">[docs]</a><span class="k">class</span> <span class="nc">PdsTransformer</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Common parser, used by others parsers.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PdsTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span></div>
+
+    <span class="nd">@abstractproperty</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Method def result(self) not implemented&quot;</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">keyword</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">keyword_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">value_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">open_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">close_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">open_parenthesis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">close_parenthesis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">open_bracket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">close_bracket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">simple_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="c1"># if len(name) &lt; 1000:</span>
+        <span class="c1">#     name = name.replace(&quot;\n&quot;,&quot; -&quot;)</span>
+        <span class="c1">#     name = &quot; &quot;.join(name.split())</span>
+        <span class="c1"># return name.rstrip(&#39;\&quot;&#39;).lstrip(&#39;\&quot;&#39;)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">standard_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">+=</span> <span class="n">arg</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">tiret</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;-&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;.&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">multi_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">val_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">val_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">val_list</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">common_comma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;,&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">simple_value_comma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">multi_lines_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">date_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProjectionDescriptionTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.ProjectionDescriptionTransformer">[docs]</a><span class="k">class</span> <span class="nc">ProjectionDescriptionTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 projection catalog file that contains projection information.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProjectionDescriptionTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.ProjectionDescriptionTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">DataSetMapProjectionModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSetMapProjectionModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">data_set_map_projection_info</span><span class="p">,</span> <span class="n">stop</span>
+    <span class="p">):</span>
+        <span class="n">projection</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">projection</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+        <span class="n">projection</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data_set_map_projection_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">DataSetMapProjectionModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_info</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">data_set_map_projection_refs_info</span><span class="p">,</span> <span class="n">stop</span>
+    <span class="p">):</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data_set_map_projection_refs_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SET_MAP_PROJECTION_INFO&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_info_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_info_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_refs_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DS_MAP_PROJECTION_REF_INFO&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_ref_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_ref_info_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_map_projection_ref_info_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="MissionCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.MissionCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">MissionCatalogTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 mission catalog file that contains the mission information</span>
+<span class="sd">    and stores the information in the MissionModel class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MissionCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.MissionCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">MissionModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MissionModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">,</span>
+        <span class="n">mission_information</span><span class="p">,</span>
+        <span class="n">mission_host</span><span class="p">,</span>
+        <span class="n">mission_reference_informations</span><span class="p">,</span>
+        <span class="n">stop</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">mission</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">mission</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+        <span class="n">mission</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mission_information</span><span class="p">)</span>
+        <span class="n">mission</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mission_host</span><span class="p">)</span>
+        <span class="n">mission</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mission_reference_informations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">MissionModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">mission</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;MISSION_INFORMATION&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">mission_targets</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mission_targets</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;MISSION_HOST&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_host_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_host_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;MISSION_TARGET&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_target_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_target_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_reference_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;MISSION_REFERENCE_INFORMATION&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_reference_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_reference_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">mission_reference_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ReferenceCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.ReferenceCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">ReferenceCatalogTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 reference catalog file that contains the citations and</span>
+<span class="sd">    stores the information in the ReferencesModel class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReferenceCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.ReferenceCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">ReferencesModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReferencesModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">references</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">ReferencesModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;REFERENCES&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">})</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reference_start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reference_stop</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PersonCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PersonCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">PersonCatalogTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 person catalog file that contains the points of contact and</span>
+<span class="sd">    stores the information in the PersonnelsModel model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PersonCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PersonCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">PersonnelsModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PersonnelsModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">PersonnelsModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;PERSONNELS&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">})</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">,</span>
+        <span class="n">pds_user_id</span><span class="p">,</span>
+        <span class="n">personnel_information</span><span class="p">,</span>
+        <span class="n">personnel_electronic_mail</span><span class="p">,</span>
+        <span class="n">stop</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">personnel</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">personnel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pds_user_id</span><span class="p">)</span>
+        <span class="n">personnel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">personnel_information</span><span class="p">)</span>
+        <span class="n">personnel</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">personnel_electronic_mail</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">personnel</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pds_user_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pds_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;PDS_USER_ID&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;PERSONNEL_INFORMATION&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_electronic_mail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;PERSONNEL_ELECTRONIC_MAIL&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_electronic_mail_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">personnel_electronic_mail_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="VolumeDescriptionTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.VolumeDescriptionTransformer">[docs]</a><span class="k">class</span> <span class="nc">VolumeDescriptionTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 volume catalog file that contains the references to others</span>
+<span class="sd">    catalogs and stores the information in the VolumeModel model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="VolumeDescriptionTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.VolumeDescriptionTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">VolumeModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VolumeModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Tree</span><span class="p">):</span>
+                <span class="c1"># this is start or stop</span>
+                <span class="k">continue</span>
+            <span class="n">volume</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">VolumeModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">volume_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_producer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_PRODUCER&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_producer_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_producer_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;CATALOG&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">catalog_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">catalog_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_supplier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SUPPLIER&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_supplier_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_supplier_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;FILE&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">file_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">file_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">directories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">directory_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">directory_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="InstrumentCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.InstrumentCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">InstrumentCatalogTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 platform catalog file that contains the platform description</span>
+<span class="sd">    and stores the information in the InstrumentHostModel model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="InstrumentCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.InstrumentCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">InstrumentModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstrumentModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">,</span>
+        <span class="n">instrument_information</span><span class="p">,</span>
+        <span class="n">instrument_reference_infos</span><span class="p">,</span>
+        <span class="n">stop</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">instrument</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">instrument_information</span><span class="p">)</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">instrument_reference_infos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">InstrumentModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;INSTRUMENT_INFORMATION&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_reference_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;INSTRUMENT_REFERENCE_INFO&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_reference_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_reference_info_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_reference_info_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="InstrumentHostCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.InstrumentHostCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">InstrumentHostCatalogTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 platform catalog file that contains the platform description</span>
+<span class="sd">    and stores the information in the InstrumentHostModel model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="InstrumentHostCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.InstrumentHostCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">InstrumentHostModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstrumentHostModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">,</span>
+        <span class="n">instrument_host_information</span><span class="p">,</span>
+        <span class="n">instrument_host_reference_infos</span><span class="p">,</span>
+        <span class="n">stop</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">instrument_host</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">instrument_host</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+        <span class="n">instrument_host</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">instrument_host_information</span><span class="p">)</span>
+        <span class="n">instrument_host</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">instrument_host_reference_infos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">InstrumentHostModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">instrument_host</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;INSTRUMENT_HOST_INFORMATION&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_reference_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;INSTRUMENT_HOST_REFERENCE_INFO&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_reference_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_reference_info_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">instrument_host_reference_info_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="DataSetCatalogTransformer"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.DataSetCatalogTransformer">[docs]</a><span class="k">class</span> <span class="nc">DataSetCatalogTransformer</span><span class="p">(</span><span class="n">PdsTransformer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the PDS3 dataset catalog file that contains the dataset description</span>
+<span class="sd">    and stores the information in the DataSetModel class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSetCatalogTransformer.__init__"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.DataSetCatalogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visit_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">visit_tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span> <span class="n">DataSetModel</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSetModel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">dataset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataset</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">dataset</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">DataSetModel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SET_HOST&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_host_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_host_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">dataset_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SET_INFORMATION&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">dataset_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">dataset_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SET_TARGET&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_target_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_target_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_mission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SET_MISSION&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_mission_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_mission_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_reference_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;DATA_SET_REFERENCE_INFORMATION&quot;</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span> <span class="n">args</span><span class="p">}</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_reference_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_reference_information_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">data_set_reference_information_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PdsParserFactory"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsParserFactory">[docs]</a><span class="k">class</span> <span class="nc">PdsParserFactory</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Factory to select the right parser and the related Lark grammar.&quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_PARSER_TIMEOUT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">30</span>  <span class="c1"># default timeout in seconds to parse a resource</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="PdsParserFactory.FileGrammary"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsParserFactory.FileGrammary">[docs]</a>    <span class="k">class</span> <span class="nc">FileGrammary</span><span class="p">(</span><span class="n">GrammarEnum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mapping between enum, Lark grammar and implementation class.&quot;&quot;&quot;</span>
+
+        <span class="n">REFERENCE_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;REFERENCE_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_ref_cat.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ReferenceCatalogTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for reference catalog&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">MISSION_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;MISSION_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_mission_cat.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;MissionCatalogTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for mission catalog&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">PERSONNEL_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;PERSONNEL_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_person_cat.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PersonCatalogTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for person catalog&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">INSTRUMENT_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;INSTRUMENT_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_inst_cat.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;InstrumentCatalogTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for instrument catalog&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">INSTRUMENT_HOST_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;INSTRUMENT_HOST_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_inst_host.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;InstrumentHostCatalogTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for instrument host catalog&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">DATA_SET_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;DATA_SET_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_ds_cat.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;DataSetCatalogTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for dataset catalog&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">VOL_DESC</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;VOL_DESC&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_vol_desc.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;VolumeDescriptionTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for volume description&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">DATA_SET_MAP_PROJECTION_CATALOG</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;DATA_SET_MAP_PROJECTION_CATALOG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;grammar_projection.lark&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ProjectionDescriptionTransformer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grammary for volume description&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="nd">@staticmethod</span>
+        <span class="k">def</span> <span class="nf">get_enum_from</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">members</span> <span class="o">=</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">FileGrammary</span><span class="o">.</span><span class="n">_member_map_</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File Grammary enum not found from </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PdsParserFactory.parse"><a class="viewcode-back" href="../../../reference_manual.html#pds_crawler.load.pds_objects_parser.PdsParserFactory.parse">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">type_file</span><span class="p">:</span> <span class="n">FileGrammary</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parse the content of a file provided an URI by using a Lark grammar.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            uri (str): URI of the file or directly content of the file</span>
+<span class="sd">            type_file (FileGrammary): Type of file</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: Unknown implementation class</span>
+
+<span class="sd">        Note: Other arguments will be passed to json dump (like indent=4)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Any: One of the models</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parser</span><span class="p">:</span> <span class="n">Lark</span>
+        <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="n">PdsParserFactory</span><span class="o">.</span><span class="n">DEFAULT_PARSER_TIMEOUT</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[PdsParserFactory] </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span> <span class="ow">and</span> <span class="s2">&quot;PDS_VERSION_ID&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">uri</span><span class="p">:</span>
+            <span class="c1"># Path(uri).is_file is not enough for the test</span>
+            <span class="c1"># for instance, some catalog starts like that</span>
+            <span class="c1"># &#39;CCSD3ZF0000100000001NJPL3IF0PDSX00000001</span>
+            <span class="c1"># instead of by PDS_VERSION_ID                       = PDS3</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;[PdsParserFactory] URI is a file&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">uri</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;[PdsParserFactory] URI is an URL&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">closing</span><span class="p">(</span>
+                <span class="n">requests_retry_session</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">uri</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">1800</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;[PdsParserFactory] URI is a content&quot;</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">uri</span>
+
+        <span class="n">grammary_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
+            <span class="s2">&quot;grammar&quot;</span><span class="p">,</span>
+            <span class="n">type_file</span><span class="o">.</span><span class="n">grammar</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">timeout_handler</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Parsing took too long!&quot;</span><span class="p">)</span>
+
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">timeout_handler</span><span class="p">)</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">Lark</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">grammary_file</span><span class="p">,</span> <span class="n">rel_to</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="n">transformer</span><span class="p">:</span> <span class="n">PdsTransformer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                <span class="n">module</span><span class="p">,</span> <span class="n">type_file</span><span class="o">.</span><span class="n">class_name</span>
+            <span class="p">)()</span>
+            <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">transformer</span><span class="o">.</span><span class="n">result</span>
+        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot load data products plugin with &quot;</span>
+                <span class="o">+</span> <span class="vm">__name__</span>
+                <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
+                <span class="o">+</span> <span class="n">type_file</span><span class="o">.</span><span class="n">class_name</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+            <span class="n">err_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Parsing </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2"> took too long!&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ParserTimeOutError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+  <!--<h2>My footer of awesomeness.</h2>-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023 - CNES (Jean-Christophe Malapert for Pôle Surfaces Planétaires).<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.1.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>
