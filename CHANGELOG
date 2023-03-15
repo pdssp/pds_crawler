@@ -1,4 +1,14 @@
-### Add tests Improve documentation Fix bugs (HEAD -> main)
+### Fix README (HEAD -> main)
+>Thu, 16 Mar 2023 00:02:19 +0100
+
+>Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Add tests Improve documentation Fix bugs
 >Wed, 15 Mar 2023 23:31:23 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -148,7 +158,7 @@
 
 
 
-### Add multiversion doc (tag: latest, tag: 1.0.0rc1)
+### Add multiversion doc
 >Mon, 13 Mar 2023 04:59:14 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
