@@ -169,6 +169,12 @@ class StacETL(ETL):
     """ETL to extract and transform PDS information to STAC"""
 
     def __init__(self, full_path_database_name: str) -> None:
+        """Initialize the class.
+
+        Args:
+            full_path_database_name (str): the full path to the database
+        """
+        # Create a new instance of the Database class
         db = Database(full_path_database_name)
         self.__report = CrawlerReport(db)
         self.__pds_registry = PdsRegistry(db, report=self.__report)
@@ -194,50 +200,74 @@ class StacETL(ETL):
 
     @property
     def nb_records_per_page(self) -> int:
+        """Getter for the number of records per page."""
         return self.__nb_records_per_page
 
     @nb_records_per_page.setter
     def nb_records_per_page(self, value: int):
+        """Setter for the number of records per page.
+
+        Args:
+            value (int): the new value for the number of records per page
+        """
         self.__nb_records_per_page = value
 
     @property
     def report(self) -> CrawlerReport:
+        """Getter for the CrawlerReport instance."""
         return self.__report
 
     @report.setter
     def report(self, value: CrawlerReport):
+        """Setter for the CrawlerReport instance.
+
+        Args:
+            value (CrawlerReport): the new CrawlerReport instance
+        """
         self.__report = value
 
     @property
     def pds_registry(self) -> PdsRegistry:
+        """Getter for the PdsRegistry instance."""
         return self.__pds_registry
 
     @property
     def pds_records(self) -> PdsRecordsWs:
+        """Getter for the PdsRecordsWs instance."""
         return self.__pds_records
 
     @property
     def pds_ode_catalogs(self) -> PDSCatalogsDescription:
+        """Getter for the PDSCatalogsDescription instance."""
         return self.__pds_ode_catalogs
 
     @property
     def stac_catalog_transformer(self) -> StacCatalogTransformer:
+        """Getter for the StacCatalogTransformer instance."""
         return self.__stac_catalog_transformer
 
     @property
     def stac_records_transformer(self) -> StacRecordsTransformer:
+        """Getter for the StacRecordsTransformer instance."""
         return self.__stac_records_transformer
 
     @property
     def body(self) -> Optional[str]:
+        """Getter for the body attribute."""
         return self.__body
 
     @body.setter
     def body(self, name: str):
+        """Setter for the body attribute.
+
+        Args:
+            name (str): the new value for the solar body attribute
+        """
         self.__body = name
 
     @property
     def dataset_id(self) -> Optional[str]:
+        """Getter for the dataset_id attribute."""
         return self.__dataset_id
 
     @dataset_id.setter
@@ -246,6 +276,7 @@ class StacETL(ETL):
 
     @property
     def nb_workers(self) -> int:
+        """Getter for the nbumber of parallel workers."""
         return self.__nb_workers
 
     @nb_workers.setter
@@ -254,6 +285,7 @@ class StacETL(ETL):
 
     @property
     def time_sleep(self) -> int:
+        """Getter for the time sleep attribute."""
         return self.__time_sleep
 
     @time_sleep.setter
@@ -262,6 +294,7 @@ class StacETL(ETL):
 
     @property
     def progress_bar(self) -> bool:
+        """Getter for the progress_bar attribute."""
         return self.__progress_bar
 
     @progress_bar.setter
@@ -270,6 +303,7 @@ class StacETL(ETL):
 
     @property
     def is_sample(self) -> bool:
+        """Getter for the is_sample attribute."""
         return self.__is_sample
 
     @is_sample.setter
@@ -278,6 +312,7 @@ class StacETL(ETL):
 
     @property
     def parser_timeout(self) -> int:
+        """Getter for the parser timeout attribute."""
         return self.__parser_timeout
 
     @parser_timeout.setter
@@ -355,6 +390,15 @@ class StacETL(ETL):
     def _check_collections_to_ingest(
         self, cached_pds_collections: List[PdsRegistryModel]
     ) -> int:
+        """This method checks the number of PDS collections that need to be ingested into the
+        database from the cache.
+
+        Args:
+            cached_pds_collections (List[PdsRegistryModel]): List of PDS collections in the cache.
+
+        Returns:
+            int: Number of collections to ingest from cache.
+        """
         db: Database = self.stac_records_transformer.database
         root_stac_catalog: Catalog = cast(
             Catalog, db.stac_storage.root_catalog
@@ -377,6 +421,16 @@ class StacETL(ETL):
         pds_collections: List[PdsRegistryModel],
         pds_collections_cache: List[PdsRegistryModel],
     ) -> int:
+        """
+        This method checks the number of PDS collections that need to be updated in the database from the PDS.
+
+        Args:
+            pds_collections (List[PdsRegistryModel]): List of PDS collections.
+            pds_collections_cache (List[PdsRegistryModel]): List of PDS collections in the cache.
+
+        Returns:
+            int: Number of collections to update in the database.
+        """
         nb_to_update: int = 0
         for pds_collection_cache in pds_collections_cache:
             try:
@@ -391,6 +445,16 @@ class StacETL(ETL):
         pds_collections: List[PdsRegistryModel],
         pds_collections_cache: List[PdsRegistryModel],
     ) -> Tuple[int, int]:
+        """
+        This method checks the number of PDS collections that need to be ingested into the database from the PDS.
+
+        Args:
+            pds_collections (List[PdsRegistryModel]): List of PDS collections.
+            pds_collections_cache (List[PdsRegistryModel]): List of PDS collections in the cache.
+
+        Returns:
+            Tuple[int, int]: Tuple containing the number of collections to ingest and the total number of records.
+        """
         nb_to_ingest: int = 0
         nb_records: int = 0
         for pds_collection in pds_collections:
@@ -404,6 +468,17 @@ class StacETL(ETL):
 
     @UtilsMonitoring.timeit
     def check_update(self, source: CheckUpdateEnum, *args, **kwargs):
+        """
+        This method checks if there are any updates from the PDS or in the cache.
+
+        Args:
+            source (CheckUpdateEnum): The source of the check (cache or PDS).
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Raises:
+            NotImplementedError: If the source is not supported.
+        """
         match source:
             case CheckUpdateEnum.CHECK_CACHE:
                 pds_collections: List[

@@ -23,12 +23,27 @@ class Crawler:
     """The library"""
 
     def __init__(self, options_cli, *args, **kwargs):
+        """
+        Initializes a Crawler object.
+
+        Args:
+            options_cli: An object with attributes that correspond to the command
+                         line options passed to the program.
+            args: Additional positional arguments.
+            kwargs: Additional keyword arguments.
+        """
         self.__options_cli = options_cli
         Crawler._parse_level(options_cli.level)
         # logging.getLogger().setLevel(level="CRITICAL")
 
     @property
     def options_cli(self):
+        """
+        The command line options passed to the program.
+
+        Returns:
+            An object with attributes that correspond to the command line options.
+        """
         return self.__options_cli
 
     @staticmethod
@@ -59,6 +74,9 @@ class Crawler:
             logger.setLevel(logging.INFO)
 
     def run(self):
+        """
+        Runs the crawler.
+        """
         database_name = self.options_cli.database
         logger.info(f"Using {database_name} as database")
         etl = StacETL(database_name)

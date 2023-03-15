@@ -22,7 +22,7 @@ comprises one node with the following minimum characteristics:
 * >= ??? GB RAM
 * Available Disk Space of ??? GB
 
-The software is installed on the :term:`PDSSP` plateform at :term:`IDOC``
+The software is installed on the :term:`PDSSP` plateform at :term:`IDOC`
 
 .. list-table:: Storage capacity
    :header-rows: 0

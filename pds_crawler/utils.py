@@ -55,16 +55,43 @@ class DocEnum(Enum):
 
 
 class UtilsMath:
+    """
+    The UtilsMath class provides some utility functions for working with data types:
+
+    - is_integer: determines whether a given value is an integer or not.
+    - is_float: determines whether a given value is a float or not.
+    - is_bool: determines whether a given value is a boolean or not.
+    - convert_dt: attempts to convert a given string value to an appropriate data type (integer, float, boolean or string) if possible.
+    """
+
     @staticmethod
     def is_integer(value: str) -> bool:
+        """Determines whether the given value is an integer or not.
+        Args:
+            value (str): Value to check.
+        Returns:
+            bool: True if the value is an integer, False otherwise.
+        """
         return isint(value)
 
     @staticmethod
     def is_float(value: str) -> bool:
-        return isfloat(str)
+        """Determines whether the given value is a float or not.
+        Args:
+            value (str): Value to check.
+        Returns:
+            bool: True if the value is a float, False otherwise.
+        """
+        return isfloat(value) and not isint(value)
 
     @staticmethod
     def is_bool(value: str) -> bool:
+        """Determines whether the given value is a boolean or not.
+        Args:
+            value (str): Value to check.
+        Returns:
+            bool: True if the value is a boolean, False otherwise.
+        """
         if not isinstance(value, str):
             return False
         return value.lower() in [
@@ -80,6 +107,12 @@ class UtilsMath:
 
     @staticmethod
     def convert_dt(value: str) -> Any:
+        """Converts the given string value to the appropriate data type if possible.
+        Args:
+            value (str): Value to convert.
+        Returns:
+            Any: The converted value.
+        """
         result: Any
         if not isinstance(value, str):
             result = value
@@ -88,22 +121,57 @@ class UtilsMath:
         elif isfloat(value):
             result = ffloat(value)
         elif UtilsMath.is_bool(value):
-            result = bool(value)
+            result = value.lower() in ("yes", "true", "t")
         else:
             result = value
         return result
 
 
 def cache_download(func):
-    """Decorator parallel_requests to check if the download has been done."""
+    """Decorator to check if the download has been previously done and avoid redownloading.
+
+    This decorator checks if a file has already been downloaded before calling the `parallel_requests` function.
+    If the file has been downloaded previously, it is not downloaded again, and the cached file is used instead.
+    If the file has not been downloaded, the function calls `parallel_requests` to download the file.
+
+    Args:
+        func (callable): The function to be decorated. It should be `parallel_requests`.
+
+    Returns:
+        callable: A decorated function.
+
+    Raises:
+        NotImplementedError: If the function being decorated is not `parallel_requests`.
+    """
 
     @wraps(func)
     def cache_download_wrapper(*args, **kwargs):
+        """Wrapper function that checks for cached downloads before downloading.
+
+        This wrapper function checks if the URL of each file in the input `urls` list has been downloaded
+        previously and skips the download if the file is found in the cache. If the file has not been
+        downloaded, the function calls `parallel_requests` to download the file.
+
+        Args:
+            *args: Arguments passed to the decorated function.
+            **kwargs: Keyword arguments passed to the decorated function.
+
+        Returns:
+            The result of the decorated function.
+
+        Raises:
+            NotImplementedError: If the function being decorated is not `parallel_requests`.
+        """
+        # Ensure that the function being wrapped is 'parallel_requests'
         if func.__name__ != "parallel_requests":
             raise NotImplementedError()
+
+        # Get the directory and list of URLs to be downloaded
         directory: str = args[0]
         urls: List[str] = args[1]
         urls_copy: List[str] = urls.copy()
+
+        # Check if each URL has already been downloaded and remove from urls_copy if so
         for url in urls:
             filepath: str = compute_downloaded_filepath(directory, url)
             if os.path.exists(filepath):
@@ -111,6 +179,8 @@ def cache_download(func):
                 urls_copy.remove(url)
             else:
                 logger.info(f"Downloading {url} in progress")
+
+        # Call the original function with the new list of URLs
         if len(args) == 3:
             new_args = (args[0], urls_copy, args[2])
         else:
@@ -137,7 +207,7 @@ def requests_retry_session(
         retries (int, optional): number of retries. Defaults to 3.
         backoff_factor (int, optional): backoff factor. Defaults to 3.
         status_forcelist (tuple, optional): status for which the retry must be done. Defaults to (500, 502, 504).
-        session (_type_, optional): http/https session. Defaults to None.
+        session (Session, optional): http/https session. Defaults to None.
 
     Returns:
         requests.Session: session
@@ -157,16 +227,29 @@ def requests_retry_session(
 
 
 def simple_download(url: str, filepath: str, timeout):
+    """Downloads the contents of the given URL and saves it to a file.
+
+    Args:
+    - url (str): The URL to download.
+    - filepath (str): The file path to save the downloaded contents.
+    - timeout: The maximum number of seconds to wait for a response from the server.
+    """
+    # Send a GET request to the URL with the given timeout.
     response = requests.get(
         url, allow_redirects=True, verify=False, timeout=timeout
     )
+
+    # If the response status code is 200 (OK), save the contents to a file.
     if response.status_code == 200:
+        # Check if the response content type is HTML.
         if "text/html" in response.headers.get("content-type", ""):
+            # If the content type is HTML, check if the response contains a "refresh" meta tag.
             soup = BeautifulSoup(response.content, "html.parser")
             redirect_elt = soup.find(
                 "meta", attrs={"http-equiv": "refresh", "content": True}
             )
             if redirect_elt is not None:
+                # If a "refresh" tag is found, extract the redirect URL and send another GET request to it.
                 redirect_tag = cast(Tag, redirect_elt)
                 redirect_tag_value: str = cast(str, redirect_tag["content"])
                 redirect_url = (
@@ -178,6 +261,7 @@ def simple_download(url: str, filepath: str, timeout):
                     verify=False,
                     timeout=timeout,
                 )
+        # Write the response content to the given file path.
         outfile: Path = Path(filepath)
         outfile.write_bytes(response.content)
     else:
@@ -195,7 +279,29 @@ def parallel_requests(
     time_sleep=2,
     progress_bar=False,
 ):
+    """Download files from a list of URLs using a ThreadPoolExecutor with a given number of workers.
+
+    Args:
+    - directory (str): the directory where to save the downloaded files
+    - urls (List[str]): a list of URLs to download
+    - nb_workers (int): the number of workers for the ThreadPoolExecutor
+    - timeout (int): the maximum time to wait for a response from the server, in seconds
+    - time_sleep (int): the time to sleep between two requests, in seconds
+    - progress_bar (bool): whether to show a progress bar or not
+
+    Raises:
+    - requests.exceptions.ConnectionError: if a connection error occurs while downloading a file
+    """
+
     def scrape(url):
+        """Download a file from a URL.
+
+        Args:
+        - url (str): the URL to download
+
+        Returns:
+        - url (str): the URL that has been downloaded
+        """
         start = time.time()
         filepath: str = compute_downloaded_filepath(directory, url)
         with requests_retry_session():
@@ -243,25 +349,64 @@ def parallel_requests(
 
 
 def compute_downloaded_filepath(directory: str, url: str) -> str:
+    """Computes the file path where a downloaded file will be saved based on the provided URL and directory.
+
+    Args:
+        directory (str): The directory where the downloaded file will be saved.
+        url (str): The URL of the downloaded file.
+
+    Returns:
+        str: The file path where the downloaded file will be saved.
+    """
+    # Parse the URL to extract any query parameters
     parsed_url = urlparse(url)
     params: Dict[str, str] = parse_qs(parsed_url.query)  # type: ignore
+
+    # Generate the filename based on the query parameters or the URL path
     filename: str
     if "ihid" in params:
+        # If the URL contains "ihid" parameter, create a filename using "target", "ihid", "iid", "pt", and "offset" parameters
         filename = f"{params['target'][0]}_{params['ihid'][0]}_{params['iid'][0]}_{params['pt'][0]}_{params['offset'][0]}.json"
         filename = filename.replace(os.path.sep, "_")
     else:
+        # If the URL doesn't contain "ihid" parameter, create a filename using the URL path
         path: str = parsed_url.path
         filename: str = os.path.basename(path).lower()
+
+    # Return the full file path where the downloaded file will be saved
     return os.path.join(directory, filename)
 
 
 def compute_download_directory_path(
     directory: str, target: str, ihid: str, iid: str, pt: str, ds: str
 ) -> str:
+    """Computes the path where the file is downloaded based on a base directory and a metadata coming from the PDS.
+
+    Args:
+        directory (str): base direcory
+        target (str): solar body
+        ihid (str): plateform
+        iid (str): instrument
+        pt (str): product type
+        ds (str): collection
+
+    Returns:
+        str: the path of the directory
+    """
+    # Create a list with the names of the five required folders/files
     items = [
-        item.lower().replace(os.path.sep, "_")
-        for item in [target, ihid, iid, pt, ds]
+        item.lower().replace(
+            os.path.sep, "_"
+        )  # Replace occurrences of os.path.sep with underscores in each name
+        for item in [
+            target,
+            ihid,
+            iid,
+            pt,
+            ds,
+        ]  # For each required name, make a lowercase copy
     ]
+    # Join all required names using os.path.sep as path separator and add the base path
     return os.path.join(directory, os.path.sep.join(items))
 
 
@@ -445,6 +590,8 @@ class UtilsMonitoring:  # noqa: R0205
 
 
 class ProgressLogger:
+    """A progress logger that can be used with or without tqdm."""
+
     def __init__(
         self,
         total: int,
@@ -455,6 +602,20 @@ class ProgressLogger:
         *args,
         **kwargs,
     ):
+        """A progress logger that can be used with or without tqdm.
+
+        Args:
+            total (int): The total number of items to be processed.
+            logger (logging.Logger): The logger to use for progress updates.
+            iterable (Union[Iterable, None]): The iterable to be processed.
+            description (str): The description of the progress bar.
+            disable_tqdm (bool): Whether to disable tqdm progress bar.
+            *args: Additional positional arguments to be passed to tqdm.
+            **kwargs: Additional keyword arguments to be passed to tqdm.
+
+        Returns:
+            None
+        """
         self.total = total
         self.disable_tqdm = disable_tqdm
         self.description = description
@@ -472,11 +633,17 @@ class ProgressLogger:
             self._send_message()
 
     def _send_message(self):
+        """Sends progress update messages to the logger at regular intervals."""
         if self.disable_tqdm and self.nb % 10 == 0:
             msg = f"{self.description} : {int(self.nb/self.total)}%"
             self.logger.info(msg)
 
     def __enter__(self):
+        """Called when the 'with' statement is entered. Initializes the progress bar.
+
+        Returns:
+            self: The ProgressLogger instance.
+        """
         self.pbar = tqdm(
             total=self.total,
             desc=self.description,
@@ -487,10 +654,25 @@ class ProgressLogger:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        """Called when the 'with' statement is exited. Closes the progress bar.
+
+        Args:
+            exc_type (type): The type of the exception, if one occurred.
+            exc_value (Exception): The exception object, if one occurred.
+            traceback (traceback): The traceback object, if one occurred.
+        """
         if self.pbar:
             self.pbar.close()
 
     def __iter__(self):
+        """Iterates over the iterable and updates the progress bar.
+
+        Args:
+            None
+
+        Yields:
+            i: The next item in the iterable.
+        """
         if self.iterable and not self.disable_tqdm:
             for i in self.iterable:
                 self.pbar.update(1)
@@ -504,6 +686,11 @@ class ProgressLogger:
             yield None
 
     def update(self, n: int):
+        """Updates the progress bar with the specified number of items.
+
+        Args:
+            n (int): The number of items to update.
+        """
         if self.disable_tqdm:
             self.nb += 1
             self._send_message()
@@ -511,6 +698,7 @@ class ProgressLogger:
             self.pbar.update(n=n)
 
     def write_msg(self, msg: str):
+        """Write a message using tqdm or the logger according if tqdm is used or not."""
         if self.disable_tqdm:
             logger.info(msg)
         else:
@@ -518,25 +706,52 @@ class ProgressLogger:
 
     @staticmethod
     def write(msg: str, logger: logging.Logger):
+        """Write a message using the logger."""
         logger.info(msg)
 
     def close(self):
+        """Close the tqdm progress bar."""
         if self.pbar:
             self.pbar.close()
 
 
 class Locking:
+    """Utility class for locking a file"""
+
     @staticmethod
     def lock_file(file):
+        """Creates a lock file with the same name as the input file, but with ".lock" appended to the end.
+        This method can be used to prevent other processes from accessing the same file simultaneously.
+
+        Args:
+            file (str): The name of the file to lock.
+
+        Returns:
+            None
+        """
+        # Create a lock file by appending ".lock" to the input file name
         lock_file = file + ".lock"
+
+        # Initialize the locking flag to False
         locking = False
+
+        # While the file is not locked, keep trying to create the lock file
         while not locking:
             try:
+                # Try to create the lock file using the mkdir method
                 os.mkdir(lock_file)
+
+                # If successful, set the locking flag to True and exit the loop
                 locking = True
             except OSError:
+                # If the lock file already exists, wait for 0.1 seconds and try again
                 time.sleep(0.1)
 
     @staticmethod
-    def unlock_file(file):
+    def unlock_file(file: str):
+        """Remove the lock file
+
+        Args:
+            file (str): The name of the file to unlock.
+        """
         os.rmdir(file + ".lock")

@@ -540,13 +540,13 @@ class Hdf5Storage:
         store_hdf = f.get(group_path, None)
         if store_hdf is None:
             logger.debug(
-                "[StacStorage] _save_collection - store_hdf does not exist"
+                "[Hdf5Storage] _save_collection - store_hdf does not exist"
             )
             store_hdf = f.create_group(group_path)
             pds_collection.to_hdf5(store_hdf)
             is_saved = True
         elif self._has_changed(store_hdf, pds_collection):
-            logger.info("[StacStorage] _save_collection - Update HDF5")
+            logger.info("[Hdf5Storage] _save_collection - Update HDF5")
             pds_collection.to_hdf5(store_hdf)
             is_saved = True
         else:

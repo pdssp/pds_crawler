@@ -11,8 +11,10 @@ This package contains a collection of modules to extract information from PDS WS
 
 Exported components:
 
-* `pds_ode_website`: A module that parses the PDS3 Dataset explorer to get the different catalogs.
-* `pds_ode_ws`: A module that provides the metadata for the observations and collections by querying ODE web services.
+* `PdsRegistry`: A module that provides classes to extract the list of PDS3 collections.
+* `PdsRecordsWs`: A module that provides classes to extract metadata of the observations and collections by querying ODE web services.
+* `PDSCatalogDescription`: A module that provides PDS3 catalogs for a given collection
+* `PDSCatalogsDescription`: A module that provides PDS3 catalogs for collections
 
 Usage:
 To use this package, you can import and use the exported components as follows:

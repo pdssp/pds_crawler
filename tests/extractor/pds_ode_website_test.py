@@ -4,12 +4,16 @@ import shutil
 from os.path import abspath
 from os.path import dirname
 from typing import Optional
+from unittest.mock import patch
 
 import pytest
+from bs4 import BeautifulSoup
 
+from pds_crawler.exception import NoFileExistInFolder
 from pds_crawler.extractor import PDSCatalogDescription
 from pds_crawler.extractor import PdsRecordsWs
 from pds_crawler.extractor import PdsRegistry
+from pds_crawler.extractor.pds_ode_website import Crawler
 from pds_crawler.load import Database
 from pds_crawler.models import PdsRecordsModel
 
@@ -33,6 +37,39 @@ def setup_directory():
 
 def teardown_directory():
     shutil.rmtree(result_dir)
+
+
+# Test that is_file returns True for files and False for folders
+def test_is_file():
+    assert Crawler.is_file("http://example.com/file.txt") is True
+    assert Crawler.is_file("http://example.com/folder") is False
+
+
+# Test that _get_subdirs_file returns links and names of subfolders and files
+def test_get_subdirs_file():
+    soup = BeautifulSoup(
+        """
+        <table>
+            <tr><td><a href="http://example.com/folder1">Folder 1</a></td></tr>
+            <tr><td><a href="http://example.com/file1.txt">File 1</a></td></tr>
+        </table>
+    """,
+        "html.parser",
+    )
+    assert Crawler("http://example.com")._get_subdirs_file(soup) == [
+        {"url": "http://example.com/folder1", "name": "Folder 1"},
+        {"url": "http://example.com/file1.txt", "name": "File 1"},
+    ]
+
+
+# Test that _get_content raises an exception if no file exists in the folder
+@patch("pds_crawler.extractor.pds_ode_website.Crawler.query")
+def test_get_content_no_files(mock_query):
+    mock_query.return_value = "No files exist in this folder"
+    with pytest.raises(NoFileExistInFolder):
+        Crawler("http://example.com")._get_content(
+            "http://example.com", "folder"
+        )
 
 
 def test_load_catalogs_urls():

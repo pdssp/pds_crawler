@@ -210,6 +210,7 @@ class StacRecordsTransformer(StacTransformer):
             pds_collections (List[PdsRegistryModel]): All PDS collections data
             progress_bar (bool, optional): Set progress bar. Defaults to True
         """
+        # Create a progress logger to track the processing of collections
         with ProgressLogger(
             total=len(pds_collections),
             iterable=pds_collections,
@@ -218,6 +219,7 @@ class StacRecordsTransformer(StacTransformer):
             position=0,
             disable_tqdm=not progress_bar,
         ) as progress_logger:
+            # Iterate over each PDS collection and process it
             for pds_collection in cast(
                 List[PdsRegistryModel], progress_logger
             ):
@@ -225,7 +227,7 @@ class StacRecordsTransformer(StacTransformer):
                     f"Processing the collection {pds_collection}"
                 )
 
-                # Create items
+                # Create items for the current collection
                 items_stac = self._create_items_stac(
                     pds_records, pds_collection, progress_bar=progress_bar
                 )
@@ -281,6 +283,7 @@ class StacRecordsTransformer(StacTransformer):
                     Union[pystac.Catalog, pystac.Collection]
                 ] = None
 
+                # Create the STAC catalog for the body if it doesn't exist
                 if not self._is_exist(stac_body):
                     stac_body: pystac.Catalog = (
                         pds_collection.create_stac_body_catalog()
@@ -289,6 +292,7 @@ class StacRecordsTransformer(StacTransformer):
                         new_catalog = stac_body
                     self.catalog.add_child(stac_body)
 
+                # Create the STAC catalog for the mission if it doesn't exist
                 if not self._is_exist(stac_mission):
                     stac_mission: pystac.Catalog = (
                         pds_collection.create_stac_mission_catalog()
