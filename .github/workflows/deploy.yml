@@ -17,18 +17,14 @@ jobs:
     - name: Install dependencies for development/documentation
       run: |
         pip install -r requirements_dev.txt
-    - name: Generate and deploy documentation for each tag to GH Pages 🚀
+    - name: Generate the documentation for each tag
+      run: |
+        make doc    
+    - name: Deploy documentation to GH Pages 🚀
+      uses: crazy-max/ghaction-github-pages@v1
+      with:
+        target_branch: gh-pages
+        build_dir: docs/build/html
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        make doc
-        cd docs/build/html && \
-        git config --global init.defaultBranch master        
-        git init && \
-        git add . && \
-        git -c user.name='GitHub Actions' -c user.email='actions@github.com' \
-        commit -m "Deploy Sphinx documentation" && \
-        git remote add origin https://github.com/${GITHUB_REPOSITORY}.git && \
-        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY} && \
-        git push origin gh-pages        
         
