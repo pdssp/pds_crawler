@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+ge9fe739 documentation</title>
+    <title>pds_crawler.transformer.pds_to_stac &#8212; pds-crawler 0.1.dev1+g0e9735c documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/my-styles.css" />
@@ -41,7 +41,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ge9fe739</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g0e9735c</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -396,6 +396,7 @@
 <span class="sd">            pds_collections (List[PdsRegistryModel]): All PDS collections data</span>
 <span class="sd">            progress_bar (bool, optional): Set progress bar. Defaults to True</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create a progress logger to track the processing of collections</span>
         <span class="k">with</span> <span class="n">ProgressLogger</span><span class="p">(</span>
             <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pds_collections</span><span class="p">),</span>
             <span class="n">iterable</span><span class="o">=</span><span class="n">pds_collections</span><span class="p">,</span>
@@ -404,6 +405,7 @@
             <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">disable_tqdm</span><span class="o">=</span><span class="ow">not</span> <span class="n">progress_bar</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">progress_logger</span><span class="p">:</span>
+            <span class="c1"># Iterate over each PDS collection and process it</span>
             <span class="k">for</span> <span class="n">pds_collection</span> <span class="ow">in</span> <span class="n">cast</span><span class="p">(</span>
                 <span class="n">List</span><span class="p">[</span><span class="n">PdsRegistryModel</span><span class="p">],</span> <span class="n">progress_logger</span>
             <span class="p">):</span>
@@ -411,7 +413,7 @@
                     <span class="sa">f</span><span class="s2">&quot;Processing the collection </span><span class="si">{</span><span class="n">pds_collection</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
 
-                <span class="c1"># Create items</span>
+                <span class="c1"># Create items for the current collection</span>
                 <span class="n">items_stac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_items_stac</span><span class="p">(</span>
                     <span class="n">pds_records</span><span class="p">,</span> <span class="n">pds_collection</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span>
                 <span class="p">)</span>
@@ -467,6 +469,7 @@
                     <span class="n">Union</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Collection</span><span class="p">]</span>
                 <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
+                <span class="c1"># Create the STAC catalog for the body if it doesn&#39;t exist</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_body</span><span class="p">):</span>
                     <span class="n">stac_body</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_body_catalog</span><span class="p">()</span>
@@ -475,6 +478,7 @@
                         <span class="n">new_catalog</span> <span class="o">=</span> <span class="n">stac_body</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">stac_body</span><span class="p">)</span>
 
+                <span class="c1"># Create the STAC catalog for the mission if it doesn&#39;t exist</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_exist</span><span class="p">(</span><span class="n">stac_mission</span><span class="p">):</span>
                     <span class="n">stac_mission</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="n">pds_collection</span><span class="o">.</span><span class="n">create_stac_mission_catalog</span><span class="p">()</span>

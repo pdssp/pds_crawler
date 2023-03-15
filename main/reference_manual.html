@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reference manual &#8212; pds-crawler 0.1.dev1+ge9fe739 documentation</title>
+    <title>Reference manual &#8212; pds-crawler 0.1.dev1+g0e9735c documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/my-styles.css" />
@@ -44,7 +44,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/logo.png"></span>
           pds-crawler library</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+ge9fe739</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.dev1+g0e9735c</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -252,8 +252,10 @@
 This package contains a collection of modules to extract information from PDS WS and PDS web site.</p>
 <p>Exported components:</p>
 <ul class="simple">
-<li><p><cite>pds_ode_website</cite>: A module that parses the PDS3 Dataset explorer to get the different catalogs.</p></li>
-<li><p><cite>pds_ode_ws</cite>: A module that provides the metadata for the observations and collections by querying ODE web services.</p></li>
+<li><p><cite>PdsRegistry</cite>: A module that provides classes to extract the list of PDS3 collections.</p></li>
+<li><p><cite>PdsRecordsWs</cite>: A module that provides classes to extract metadata of the observations and collections by querying ODE web services.</p></li>
+<li><p><cite>PDSCatalogDescription</cite>: A module that provides PDS3 catalogs for a given collection</p></li>
+<li><p><cite>PDSCatalogsDescription</cite>: A module that provides PDS3 catalogs for collections</p></li>
 </ul>
 <p>Usage:
 To use this package, you can import and use the exported components as follows:</p>
@@ -1672,11 +1674,14 @@ Averything is saved in to_stac method</p>
 <p>Description:
 This package contains a collection of modules to store/load information in a database as well as
 module to parse PDS3 objects catalogs.</p>
-<p>Exported components:
-- <cite>database</cite>: A module that stores/loads data from ODE services.
-- <cite>PdsParserFactory</cite>: A module that parses any PDS3 catalogs by providing the parser and stores the
-information in the appropriate model.
-- <cite>PdsStorage</cite>: Storage directory to save downloaded files</p>
+<p>Exported components:</p>
+<ul class="simple">
+<li><p><cite>database</cite>: A module that stores/loads data from ODE services.</p></li>
+<li><p><cite>PdsParserFactory</cite>: A module that parses any PDS3 catalogs by providing the parser and stores the information in the appropriate model.</p></li>
+<li><p><cite>PdsStorage</cite>: General storage to save downloaded files</p></li>
+<li><p><cite>PdsCollectionStorage</cite>: Storage directory to save downloaded files</p></li>
+<li><p><cite>Hdf5Storage</cite>: HDF5</p></li>
+</ul>
 </section>
 <section id="module-pds_crawler.load.database">
 <span id="storage-module"></span><h3>Storage module<a class="headerlink" href="#module-pds_crawler.load.database" title="Permalink to this headline">¶</a></h3>
@@ -2608,7 +2613,27 @@ in a collection.</p>
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
 <section id="id4">
 <h3>Introduction<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<span class="target" id="module-pds_crawler.models"></span></section>
+<span class="target" id="module-pds_crawler.models"></span><p>Package: models</p>
+<p>Description:
+This package contains the collection of models that the pds_crawler uses.</p>
+<p>Exported components:</p>
+<ul class="simple">
+<li><p><cite>PdsRegistryModel</cite>: Model of the collections from the ODE webservice.</p></li>
+<li><p><cite>PdsRecordsModel</cite> : Model of the records from the ODE webservice</p></li>
+<li><p><cite>PdsRecordModel</cite> : Model for one record from the ODE webservice</p></li>
+<li><p><cite>DataSetModel</cite> : PDS3 model for dataset</p></li>
+<li><p><cite>InstrumentModel</cite> : PDS3 model for the instrument</p></li>
+<li><p><cite>InstrumentHostModel</cite> : PDS3 model for the plateform</p></li>
+<li><p><cite>MissionModel</cite> : PDS3 model for mission</p></li>
+<li><p><cite>PersonnelsModel</cite> : PDS3 model for the point of contacts</p></li>
+<li><p><cite>ReferencesModel</cite> : PDS3 model for the citations</p></li>
+<li><p><cite>VolumeModel</cite> : PDS3 model for the general description of the volume</p></li>
+<li><p><cite>DataSetMapProjectionModel</cite> : PDS3 model for the dataset projection</p></li>
+<li><p><cite>CatalogModel</cite> : PDS3 model for catalog</p></li>
+<li><p><cite>PdsspModel</cite> : PDSSP model</p></li>
+<li><p><cite>Labo</cite> : Labo mode</p></li>
+</ul>
+</section>
 <section id="module-pds_crawler.models.common">
 <span id="common-module"></span><h3>common module<a class="headerlink" href="#module-pds_crawler.models.common" title="Permalink to this headline">¶</a></h3>
 <p>Common data model for all models.</p>
@@ -2625,7 +2650,13 @@ in a collection.</p>
 </section>
 <section id="module-describing-the-models-of-ode-webservice">
 <h3>Module describing the models of ODE webservice<a class="headerlink" href="#module-describing-the-models-of-ode-webservice" title="Permalink to this headline">¶</a></h3>
-<p>ODE services models</p>
+<dl class="simple">
+<dt>Module Name:</dt><dd><p>ode_ws_models</p>
+</dd>
+<dt>Description:</dt><dd><p>ODE web service models</p>
+</dd>
+</dl>
+<p>Classes</p>
 <p class="plantuml">
 <img src="_images/plantuml-ccfc059538d80eb2e8e77f17e87704c8326ba78a.png" alt="class PdsRegistryModel {
     +ODEMetaDB: str
@@ -3413,7 +3444,13 @@ include a Label_Product_Type value as well</p>
 </section>
 <section id="module-describing-the-models-of-pds3-objects">
 <h3>Module describing the models of PDS3 objects<a class="headerlink" href="#module-describing-the-models-of-pds3-objects" title="Permalink to this headline">¶</a></h3>
-<p>PDS models for catalogs</p>
+<dl class="simple">
+<dt>Module Name:</dt><dd><p>pds_models</p>
+</dd>
+<dt>Description:</dt><dd><p>PDS3 models</p>
+</dd>
+</dl>
+<p>Classes</p>
 <p class="plantuml">
 <img src="_images/plantuml-6f664ad98dc63b54a9c45b97ad85d02cfcb66011.png" alt="class ReferenceModel {
     REFERENCE_KEY_ID: str
