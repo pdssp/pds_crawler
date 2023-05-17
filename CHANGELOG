@@ -1,4 +1,14 @@
-### Fix README (HEAD -> main)
+### Improvement of the writing performance of the items by using orjson and multi-threading Update precommit (HEAD -> main)
+>Wed, 17 May 2023 08:56:09 +0200
+
+>Author: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+>Commiter: Jean-Christophe Malapert (jean-christophe.malapert@cnes.fr)
+
+
+
+
+### Fix README (tag: v1.0.0, origin/main, origin/HEAD)
 >Thu, 16 Mar 2023 00:02:19 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)
@@ -18,7 +28,7 @@
 
 
 
-### Back to old deploy.yml (origin/main)
+### Back to old deploy.yml
 >Wed, 15 Mar 2023 12:08:58 +0100
 
 >Author: Jean-Christophe Malapert (Jean-christophe.malapert@cnes.fr)

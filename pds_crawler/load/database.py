@@ -144,6 +144,7 @@ from ..utils import parallel_requests
 from ..utils import UtilsMonitoring
 from .pds_objects_parser import PdsParserFactory
 from .strategy import LargeDataVolumeStrategy
+from .strategy import PdsspStacIO
 
 logger = logging.getLogger(__name__)
 
@@ -165,6 +166,7 @@ class StacStorage:
         )
         self.init_storage_directory()
         self._load_root_catalog()
+        self._large_data_volume = LargeDataVolumeStrategy()
 
     @property
     def directory(self) -> str:
@@ -233,14 +235,22 @@ class StacStorage:
             bool: True if an item (represented by a PdsRecordModel object) exists in
             the storage directory, otherwise False
         """
+        body_path = record.get_body_id().split(":")[-1]
+        mission_path = record.get_mission_id().split(":")[-1]
+        plateform_path = record.get_plateform_id().split(":")[-1]
+        instrument_path = record.get_instrument_id().split(":")[-1]
+        collection_path = record.get_collection_id().split(":")[-1]
+        idx = self._large_data_volume._hash_storage(record.get_id())
+
         directory: str = os.path.join(
             self.directory,
-            record.get_body_id(),
-            record.get_mission_id(),
-            record.get_plateform_id(),
-            record.get_instrument_id(),
-            record.get_collection_id(),
-            record.get_id(),
+            body_path,
+            mission_path,
+            plateform_path,
+            instrument_path,
+            collection_path,
+            idx,
+            record.get_id() + ".json",
         )
         logger.debug(f"[StacStorage] item_exists in {directory}")
         return os.path.exists(directory)
@@ -272,6 +282,7 @@ class StacStorage:
             self.directory,
             catalog_type=pystac.CatalogType.SELF_CONTAINED,
             strategy=self.__layout.get_strategy(),
+            stac_io=PdsspStacIO(),
         )
 
     @UtilsMonitoring.io_display(level=logging.DEBUG)
@@ -283,7 +294,7 @@ class StacStorage:
             cat_or_coll.self_href,
             strategy=self.__layout.get_strategy(),
         )
-        cat_or_coll.save()
+        cat_or_coll.save(stac_io=PdsspStacIO(), parallel_io=True),
 
     def __repr__(self) -> str:
         """Returns a string representation of the StacStorage object.

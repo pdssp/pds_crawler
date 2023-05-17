@@ -59,7 +59,7 @@ help:
 # -----------------------------------------------------
 #
 init:
-	python3 setup.py install && pip install git+https://github.com/pdssp/pymarsseason.git
+	python3 setup.py install && pip install git+https://github.com/pdssp/pymarsseason.git && pip install git+https://github.com/J-Christophe/pystac.git
 
 #
 # Sotware Installation for user

@@ -92,7 +92,7 @@ class PdsspModel:
             body_id (str): solar body
             ode_id (str): ODE ID
             lat (Optional[float]): latitude of the footprint
-            slong (Optional[float]): soalr longitude
+            slong (Optional[float]): solar longitude
             datetime (datetime): observation date
 
         Returns:
@@ -110,7 +110,7 @@ class PdsspModel:
             Time(date.isoformat(), format="isot", scale="utc")
         )
         if slong is None:
-            mars["Solar_longitude"] = py_mars_season["ls"]
+            mars["Solar_longitude"] = float(py_mars_season["ls"])
 
         hemisphere: Hemisphere = (
             Hemisphere.NORTH if float(lat) > 0 else Hemisphere.SOUTH

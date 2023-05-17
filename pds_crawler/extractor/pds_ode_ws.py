@@ -22,7 +22,11 @@ Classes:
 Author:
     Jean-Christophe Malapert
 """
-import json
+try:
+    import orjson
+except ImportError:
+    orjson = None  # type: ignore[assignment]
+    import json
 import logging
 import os
 import urllib.parse
@@ -542,6 +546,39 @@ class PdsRecordsWs(Observable):
                     progress_bar=progress_bar,
                 )
 
+    def _json_loads(self, content) -> Any:
+        """
+        Deserialize JSON-formatted content into a Python object, using a custom decoder to
+        convert the JSON data into a specific type.
+
+        Args:
+            content (str): A string containing JSON-formatted data to deserialize.
+
+        Returns:
+            Any: A Python object representing the deserialized JSON data.
+
+        Raises:
+            ValueError: If the provided content is not valid JSON.
+
+        """
+
+        def dsRecordsModelDecoder(dct):
+            if "ODEResults" in dct and dct["ODEResults"]["Count"] != "0":
+                products_dict = dct["ODEResults"]["Products"]["Product"]
+                if not isinstance(products_dict, list):
+                    products_dict = [products_dict]
+                return PdsRecordsModel.from_dict(products_dict)
+            elif "ODEResults" in dct and dct["ODEResults"]["Count"] == "0":
+                return None
+            return dct
+
+        if orjson:
+            json_text = orjson.loads(content)
+            result = dsRecordsModelDecoder(json_text)
+        else:
+            result = json.loads(content, object_hook=dsRecordsModelDecoder)
+        return result
+
     def parse_pds_collection_from_cache(
         self, pds_collection: PdsRegistryModel, progress_bar: bool = True
     ) -> Iterator[PdsRecordsModel]:
@@ -596,9 +633,7 @@ class PdsRecordsWs(Observable):
                 with open(file, encoding="utf8", errors="ignore") as f:
                     content = f.read()
                     try:
-                        result = json.loads(
-                            content, object_hook=dsRecordsModelDecoder
-                        )
+                        result = self._json_loads(content)
                         if result is not None:
                             yield result
                     except json.JSONDecodeError as err:

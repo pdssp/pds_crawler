@@ -86,6 +86,9 @@ class Crawler:
             if self.options_cli.body:
                 etl.body = self.options_cli.body
 
+            if self.options_cli.dataset_id:
+                etl.dataset_id = self.options_cli.dataset_id
+
             if self.options_cli.parser_timeout:
                 etl.parser_timeout = self.options_cli.parser_timeout
 

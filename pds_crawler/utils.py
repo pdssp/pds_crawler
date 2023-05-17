@@ -683,6 +683,7 @@ class ProgressLogger:
                 self._send_message()
                 yield i
         else:
+            print("This is None !!!")
             yield None
 
     def update(self, n: int):
